@@ -21,7 +21,7 @@ Authors@R:
       given = "Jon", family = "Raberg", 
       email = "Jonathan.Raberg@colorado.edu", 
       role = c("aut"), 
-      comment = c(ORCID = ""))
+      comment = c(ORCID = "0000-0003-2959-3631"))
   )
 Description: This package makes it easy to create overlapping ggplots. This plotting style is particularly common in paleoclimatology and oceanography research communities.
 License: MIT + file LICENSE
