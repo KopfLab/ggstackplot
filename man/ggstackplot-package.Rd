@@ -15,6 +15,7 @@ Authors:
 \itemize{
   \item Tristan Caro \email{tristan.caro@colorado.edu}
   \item Jamie McFarlin \email{jamie.mcfarlin@uwyo.edu}
+  \item Jon Raberg \email{Jonathan.Raberg@colorado.edu}
 }
 
 }
