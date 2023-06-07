@@ -29,9 +29,12 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    roxygen2
+    roxygen2,
+    testhat
 Imports: 
     cli,
     lifecycle,
-    rlang (>= 0.4.11)
+    rlang (>= 0.4.11),
+    tidyselect,
+    dplyr
 VignetteBuilder: knitr
