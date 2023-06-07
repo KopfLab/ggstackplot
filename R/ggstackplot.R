@@ -5,7 +5,7 @@
 #' @param x the x variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
-#' @param color which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the `template` to overwrite this aesthetic)
+#' @param color which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the `template` to overwrite this aesthetic), either one value for or one color per variable. Pick `NA` to not set colors (in case you want to use them yourself in the aesthetics).
 #' @param overlap fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots
 #' @param axis_size what fraction of a plot to allocate for the fixed axis
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
@@ -15,7 +15,7 @@
 #' @export
 ggstackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = "black", overlap = 0, axis_size = 0.2,
+    color = NA, overlap = 0, axis_size = 0.2,
     alternate_axes = TRUE, switch_axes = FALSE,
     template = ggplot() +
       geom_line() +
@@ -38,7 +38,7 @@ ggstackplot <- function(
 #' @export
 prepare_stackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = "black", overlap = 0, axis_size = 0.2,
+    color = NA, overlap = 0, axis_size = 0.2,
     alternate_axes = TRUE, switch_axes = TRUE,
     template = ggplot() +
       geom_line() +
@@ -73,7 +73,7 @@ combine_stackplot <- function(prepared_stackplot) {
     # the right number for the last plot depends on how tall you're saving the plot
     # this basically accounts for the additional x axis that's part of the last plot
     # fi this for x axis
-    rel_heights = c(rep(1, times = length(plots) - 1), 1.2)
+    rel_heights = prepared_stackplot |> dplyr::select(.data$config) |> tidyr::unnest(.data$config) |> dplyr::pull(.data$.plot_sizes)
   )
 }
 
@@ -81,7 +81,7 @@ combine_stackplot <- function(prepared_stackplot) {
 # internal function to prepare the data for a ggstackplot
 prepare_data <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = "black", overlap = 0, axis_size = 0.2,
+    color = NA, overlap = 0, axis_size = 0.2,
     alternate_axes = TRUE, switch_axes = TRUE) {
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
@@ -144,7 +144,8 @@ prepare_data <- function(
         dplyr::rename(dplyr::all_of(x), dplyr::all_of(y)) |>
         tidyr::pivot_longer(cols = dplyr::all_of(names(y)), names_to = ".var", values_to = ".y") |>
         dplyr::mutate(.x = !!sym(names(!!x)[1]))
-    }
+    } |>
+    dplyr::filter(!is.na(.data$.x), !is.na(.data$.y))
 
   # prep config
   config <- dplyr::tibble(
@@ -153,7 +154,7 @@ prepare_data <- function(
   )
 
   # do we have a valid length for color?
-  if (!is.character(color) || !length(color) %in% c(1L, nrow(config))) {
+  if (!(is.character(color) || all(is.na(color))) || !length(color) %in% c(1L, nrow(config))) {
     abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)))
   }
 
@@ -167,8 +168,9 @@ prepare_data <- function(
   config <- config |>
     dplyr::mutate(
       .color = !!color,
-      .overlap_bottom = c(!!overlap, 0),
-      .overlap_top = c(0, !!overlap),
+      .overlap_after = c(!!overlap, 0),
+      .overlap_before = c(0, !!overlap),
+      .plot_sizes = calculate_plot_sizes(.overlap_after, .overlap_before),
       .axis_switch = calculate_axis_switch(
         var = if (!!direction == "horizontal") .data$.x else .data$.y,
         alternate = !!alternate_axes,
@@ -200,15 +202,24 @@ prepare_data <- function(
 prepare_plots <- function(prepared_data, template) {
   # individual plot
   make_plot <- function(config, data) {
-    template %+%
+    # add data and x/y aesthetics
+    plot <-
+      template %+%
       dplyr::cross_join(
-        # join to get plotting config like color in there
+        # join to get plotting in there
         dplyr::select(config, -.data$.x, -.data$.y),
         data
       ) %+%
-      aes(.data$.x, .data$.y, color = .data$.color, fill = .data$.color) +
+      aes(.data$.x, .data$.y)
+
+    # add color aesthetics if set
+    if (!is.na(config$.color))
+      plot <- plot %+% aes(color = .data$.color, fill = .data$.color) +
       scale_color_identity() +
-      scale_fill_identity() +
+      scale_fill_identity()
+
+    # set axis mods (FIXME)
+    plot <- plot +
       scale_y_continuous(
         breaks = scales::pretty_breaks(5),
         # FIXME: add the dup axis to an existing y axis if there is already one in plot
@@ -216,6 +227,7 @@ prepare_plots <- function(prepared_data, template) {
       ) +
       # only do this if the common axis is not set yet!
       labs(x = config$.x, y = config$.y)
+    return(plot)
   }
 
   # compute plots
@@ -231,18 +243,19 @@ prepare_themes <- function(prepared_data) {
   make_theme <- function(config) {
     theme(
       plot.margin = margin(
-        t = if (config$.first) 0 else -config$.overlap_top,
-        b = if (config$.last) 0 else -config$.overlap_bottom,
+        t = if (config$.first) 0 else -config$.overlap_before,
+        b = if (config$.last) 0 else -config$.overlap_after,
         unit = "npc"
       )
     ) +
       theme_remove_background() +
       theme_modify_axes(
-        change_y_color = config$.color,
+        change_y_color = if (!is.na(config$.color)) config$.color else NULL,
         remove_y_left = config$.axis_switch,
         remove_y_right = !config$.axis_switch,
-        remove_x_top = !config$.first,
-        remove_x_bottom = !config$.last
+        #remove_x_top = !config$.first,
+        #remove_x_bottom = !config$.last
+        remove_x_top = TRUE, remove_x_bottom = TRUE
       )
   }
 

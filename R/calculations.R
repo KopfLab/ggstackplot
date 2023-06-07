@@ -25,3 +25,16 @@ calculate_axis_switch <- function(var, alternate, switch) {
     return(var %% 2L == 1L)
   }
 }
+
+# helper function to calculate plot sizes taking overlap into consideration
+calculate_plot_sizes <- function(overlap_before, overlap_after) {
+  # safety checks
+  stopifnot(
+    "`overlap_before` must be numeric" = !missing(overlap_before) && is_double(overlap_before),
+    "`overlap_after` must be numeric" = !missing(overlap_after) && is_double(overlap_after)
+  )
+
+  # calculation
+  #return( 1 - overlap_before/2 - overlap_after/2)
+  return( 1/ (1 + overlap_before/2 + overlap_after/2))
+}

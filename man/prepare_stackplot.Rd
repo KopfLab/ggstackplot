@@ -9,7 +9,7 @@ prepare_stackplot(
   x,
   y,
   direction = c("guess", "horizontal", "vertical"),
-  color = "black",
+  color = NA,
   overlap = 0,
   axis_size = 0.2,
   alternate_axes = TRUE,
@@ -26,7 +26,7 @@ prepare_stackplot(
 
 \item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
 
-\item{color}{which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the \code{template} to overwrite this aesthetic)}
+\item{color}{which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the \code{template} to overwrite this aesthetic), either one value for or one color per variable. Pick \code{NA} to not set colors (in case you want to use them yourself in the aesthetics).}
 
 \item{overlap}{fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots}
 
