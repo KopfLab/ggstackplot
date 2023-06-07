@@ -2,7 +2,7 @@ title: ggstackplot
 url: https://ggstackplot.kopflab.org
 template:
   bootstrap: 5
-  bootswatch: litera
+  bootswatch: flatly
 
 development:
   mode: auto
