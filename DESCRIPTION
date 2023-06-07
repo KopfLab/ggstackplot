@@ -30,7 +30,7 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2,
-    testhat
+    testthat
 Imports: 
     cli,
     lifecycle,
