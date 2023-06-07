@@ -30,10 +30,11 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2,
-    testthat
+    testthat,
+    lifecycle
 Imports: 
     rlang (>= 0.4.11),
-    lifecycle,
     tidyselect,
-    dplyr
+    dplyr,
+    tidyr
 VignetteBuilder: knitr
