@@ -64,8 +64,47 @@
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>data</dt>
+<dd><p>the data frame to plot</p></dd>
 
-  </main></div>
+
+<dt>x</dt>
+<dd><p>the x variable(s) to plot, accepts <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> syntax</p></dd>
+
+
+<dt>y</dt>
+<dd><p>the y variable(s) to plot, accepts <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> syntax</p></dd>
+
+
+<dt>direction</dt>
+<dd><p>whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)</p></dd>
+
+
+<dt>color</dt>
+<dd><p>which color to make the plots</p></dd>
+
+
+<dt>overlap</dt>
+<dd><p>fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots</p></dd>
+
+
+<dt>axis_size</dt>
+<dd><p>what fraction of a plot to allocate for the fixed axis</p></dd>
+
+
+<dt>alternate_axes</dt>
+<dd><p>whether to alternate the sides on which the stacked axes are plotted</p></dd>
+
+
+<dt>plot_template</dt>
+<dd><p>a template plot (ggplot object) to use for the stacked plots</p></dd>
+
+</dl></div>
+
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
