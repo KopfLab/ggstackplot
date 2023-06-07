@@ -60,7 +60,8 @@
 <span>  overlap <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  axis_size <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  plot_template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span>
+<span>  switch_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -98,7 +99,11 @@
 <dd><p>whether to alternate the sides on which the stacked axes are plotted</p></dd>
 
 
-<dt>plot_template</dt>
+<dt>switch_axes</dt>
+<dd><p>whether to switch the stacked axis</p></dd>
+
+
+<dt>template</dt>
 <dd><p>a template plot (ggplot object) to use for the stacked plots</p></dd>
 
 </dl></div>
