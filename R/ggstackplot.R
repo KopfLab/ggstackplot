@@ -16,7 +16,7 @@
 ggstackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
     color = "black", overlap = 0, axis_size = 0.2,
-    alternate_axes = TRUE, switch_axes = TRUE,
+    alternate_axes = TRUE, switch_axes = FALSE,
     template = ggplot() +
       geom_line() +
       geom_point() +
