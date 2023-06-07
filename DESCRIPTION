@@ -34,5 +34,6 @@ Imports:
     rlang (>= 0.4.11),
     tidyselect,
     dplyr,
-    tidyr
+    tidyr,
+    forcats
 VignetteBuilder: knitr

@@ -103,10 +103,17 @@ prepare_data <- function(
     abort(sprintf("`overlap` must be either a single numeric value between 0 and 1 or one for each variable (%d)", nrow(config)))
   }
 
-  # stopifnot(length(y) == length(color))
-  # if (length(overlap) == 1L)
-  #   overlap <- rep(overlap, length(y) - 1L)
-  # stopifnot(length(y) == (length(overlap) + 1L))
+  # finish config
+  config <- config |>
+    dplyr::mutate()
+      #   y = forcats::as_factor(y),
+      #   color = color,
+      #   overlap_bottom = c(overlap/2, NA),
+      #   overlap_top = c(NA, overlap/2),
+      #   axis_right = as.integer(y) %% 2L == 0L,
+      #   first = as.integer(y) == 1L,
+      #   last = as.integer(y) == length(levels(y))
+
   # tibble::tibble(
   #   y = forcats::as_factor(y),
   #   color = color,
