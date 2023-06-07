@@ -1,6 +1,6 @@
 Package: ggstackplot
 Title: Create overlapping stacked ggplots
-Version: 0.0.0.9000
+Version: 0.1
 Authors@R: 
   c(person(
       given = "Sebastian", family = "Kopf", 
@@ -36,5 +36,6 @@ Imports:
     dplyr,
     tidyr,
     forcats,
-    ggplot2
+    ggplot2,
+    cowplot
 VignetteBuilder: knitr

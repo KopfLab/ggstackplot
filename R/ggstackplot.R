@@ -1,18 +1,6 @@
 #' Stack a ggplot vertical
 #'
 #' `r lifecycle::badge('experimental')`
-#' @inheritParams prepare_data
-#' @param plot_template a template plot (ggplot object) to use for the stacked plots
-#' @export
-ggstackplot <- function(
-    data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE,
-    plot_template = ggplot() + geom_line() + geom_point() + theme_bw()) {
-
-
-}
-
-#' Intternal function to prepare the data for a ggstackplot
 #' @param data the data frame to plot
 #' @param x the x variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
@@ -21,6 +9,23 @@ ggstackplot <- function(
 #' @param overlap fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots
 #' @param axis_size what fraction of a plot to allocate for the fixed axis
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
+#' @param plot_template a template plot (ggplot object) to use for the stacked plots
+#' @export
+ggstackplot <- function(
+    data, x, y, direction = c("guess", "horizontal", "vertical"),
+    color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE,
+    plot_template = ggplot() + geom_line() + geom_point() + theme_bw()) {
+
+  # put everything together
+  data |>
+    prepare_data({{ x }}, {{ y }}, direction, color, overlap, axis_size, alternate_axes) |>
+    prepare_plots(plot_template = plot_template) |>
+    prepare_themes() |>
+    combine_plots()
+}
+
+#' Internal function to prepare the data for a ggstackplot
+#' @inheritParams ggstackplot
 #' @return a nested data frame with each of stacked variables (.var), their plot configuration, and their data+
 prepare_data <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
@@ -91,8 +96,8 @@ prepare_data <- function(
 
   # prep config
   config <- dplyr::tibble(
-    x = forcats::as_factor(names(x)),
-    y = forcats::as_factor(names(y))
+    .x = forcats::as_factor(names(x)),
+    .y = forcats::as_factor(names(y))
   )
 
   # do we have a valid length for color?
@@ -109,25 +114,25 @@ prepare_data <- function(
   # finish config
   config <- config |>
     dplyr::mutate(
-        color = !!color,
-        overlap_bottom = c(!!overlap/2, NA),
-        overlap_top = c(NA, !!overlap/2),
-        axis_switch =
+        .color = !!color,
+        .overlap_bottom = c(!!overlap, NA),
+        .overlap_top = c(NA, !!overlap),
+        .axis_switch =
           if(!!alternate_axes && !!direction == "horizontal") {
-            as.integer(x) %% 2L == 0L
+            as.integer(.x) %% 2L == 0L
           } else if (!!alternate_axes && !!direction == "vertical") {
-            as.integer(y) %% 2L == 0L
+            as.integer(.y) %% 2L == 0L
           } else {
             FALSE
           },
-        first =
-          (direction == "horizontal" & as.integer(x) == 1L) |
-          (direction == "vertical" & as.integer(y) == 1L),
-        last =
-          (direction == "horizontal" & as.integer(x) == length(levels(x))) |
-          (direction == "vertical" & as.integer(y) == length(levels(y))),
-        .var = if(direction == "horizontal") x else y,
-        direction = !!direction
+        .first =
+          (direction == "horizontal" & as.integer(.x) == 1L) |
+          (direction == "vertical" & as.integer(.y) == 1L),
+        .last =
+          (direction == "horizontal" & as.integer(.x) == length(levels(.x))) |
+          (direction == "vertical" & as.integer(.y) == length(levels(.y))),
+        .var = if(direction == "horizontal") .x else .y,
+        .direction = !!direction
     )
 
   # complete prepped data
@@ -141,11 +146,101 @@ prepare_data <- function(
   )
 }
 
-prepare_plots <- function() {
+
+#' Internal function to prepare plots to stack
+#' @param prepared_data the prepared data output from [prepare_data()]
+#' @inheritParams ggstackplot
+#' @return the prepared tibble with a plot column added
+prepare_plots <- function(prepared_data, plot_template) {
+
+  # individual plot
+  make_plot <- function(config, data) {
+    plot_template %+%
+      dplyr::cross_join(
+        # join to get plotting config like color in there
+        dplyr::select(config, -.data$.x, -.data$.y),
+        data
+      ) %+%
+      aes(.x, .y, color = .color) +
+      scale_color_identity() +
+      scale_y_continuous(
+        breaks = scales::pretty_breaks(5),
+        # FIXME: add the dup axis to an existing y axis if there is already one in plot
+        sec.axis = dup_axis()
+      ) +
+      # only do this if the common axis is not set yet!
+      labs(x = config$.x, y = config$.y)
+  }
+
+  # compute plots
+  prepared_data |>
+    dplyr::mutate(
+      plot = map2(config, data, make_plot)
+    )
 
 }
 
-combine_plots <- function() {
+#' Internal function to prepare the themes for the stacked plots
+#' @inheritParams prepare_plots
+#' @return the prepared tibble with a theme column added
+prepare_themes <- function(prepared_data) {
 
+  # individual theme
+  make_theme <- function(config) {
+    theme(
+      panel.grid = element_blank(),
+      text = element_text(size = 16),
+      axis.title.y.left = if(config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.text.y.left = if(config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.line.y.left = if(config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.ticks.y.left = if(config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.title.y.right = if(!config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.text.y.right = if(!config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.line.y.right = if(!config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.ticks.y.right = if(!config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.title.x = if(!config$.last) element_blank() else element_text(),
+      axis.text.x = if(!config$.last) element_blank() else element_text(),
+      axis.line.x = if(!config$.last) element_blank() else element_line(),
+      axis.ticks.x = if(!config$.last) element_blank() else element_line(),
+      panel.border = element_blank(),
+      panel.background = element_blank(),
+      plot.background = element_blank(),
+      plot.margin = margin(
+        t = if (config$.first) 0 else -config$.overlap_top,
+        b = if (config$.last) 0 else -config$.overlap_bottom,
+        unit = "npc")
+    )
+  }
+
+  # compute themes
+  prepared_data |>
+    dplyr::mutate(
+      theme = map(config, make_theme)
+    )
 }
+
+#' Internal function to combine the plots and themes into one big plot
+#' @inheritParams prepare_plots
+#' @return an object generated by [cowplot::plot_grid()]
+combine_plots <- function(prepared_data) {
+
+  # final plots <-
+  plots <- prepared_data |>
+    dplyr::mutate(
+      final_plot = map2(plot, theme, ~.x + .y)
+    ) |>
+    dplyr::pull(final_plot)
+
+  # combine it all
+  cowplot::plot_grid(
+    plotlist = plots,
+    ncol = 1,
+    align = "v",
+    # the right number for the last plot depends on how tall you're saving the plot
+    # this basically accounts for the additional x axis that's part of the last plot
+    # fi this for x axis
+    rel_heights = c(rep(1, times = length(plots) - 1), 1.2)
+  )
+}
+
 

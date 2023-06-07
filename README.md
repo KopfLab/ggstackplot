@@ -32,5 +32,12 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(ggstackplot)
-## basic example code
+ggstackplot(
+  mtcars, x = mpg, 
+  y = c(`weight [g]` = wt, qsec, drat, disp), 
+  color = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"), 
+  overlap = c(0.1, 0.3, 0)
+)
 ```
+
+<img src="man/figures/README-example-1.png" width="100%" />

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggstackplot.R
 \name{prepare_data}
 \alias{prepare_data}
-\title{Intternal function to prepare the data for a ggstackplot}
+\title{Internal function to prepare the data for a ggstackplot}
 \usage{
 prepare_data(
   data,
@@ -36,5 +36,5 @@ prepare_data(
 a nested data frame with each of stacked variables (.var), their plot configuration, and their data+
 }
 \description{
-Intternal function to prepare the data for a ggstackplot
+Internal function to prepare the data for a ggstackplot
 }
