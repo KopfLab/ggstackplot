@@ -1,0 +1,37 @@
+Package: ggstackplot
+Title: Create overlapping stacked ggplots
+Version: 0.0.0.9000
+Authors@R: 
+  c(person(
+      given = "Sebastian", family = "Kopf", 
+      email = "sebastian.kopf@colorado.edu", 
+      role = c("aut", "cre"), 
+      comment = c(ORCID = "0000-0002-2044-0201")),
+  person(
+      given = "Tristan", family = "Caro", 
+      email = "tristan.caro@colorado.edu", 
+      role = c("aut"), 
+      comment = c(ORCID = "")),
+  person(
+      given = "Jamie", family = "McFarlin", 
+      email = "jamie.mcfarlin@uwyo.edu", 
+      role = c("aut"), 
+      comment = c(ORCID = ""))
+  )
+Description: 
+  This package makes it easy to create overlapping ggplots. 
+  This plotting style is particularly common in paleoclimatology and oceanography research communities.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Suggests: 
+    covr,
+    knitr,
+    rmarkdown,
+    roxygen2
+Imports: 
+    cli,
+    lifecycle,
+    rlang (>= 0.4.11)
+VignetteBuilder: knitr

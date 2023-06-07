@@ -1,0 +1,20 @@
+title: ggstackplot
+url: https://ggstackplot.kopflab.org
+template:
+  bootstrap: 5
+  bootswatch: litera
+
+development:
+  mode: auto
+
+navbar:
+  title: ggstackplot
+  type: default
+  left:
+  - text: Examples
+    href: articles/examples.html
+  - text: Reference
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/kopflab/ggstackplot
