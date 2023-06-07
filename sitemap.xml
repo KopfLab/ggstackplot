@@ -34,7 +34,7 @@
     <loc>https://ggstackplot.kopflab.org/news/index.html</loc>
   </url>
   <url>
-    <loc>https://ggstackplot.kopflab.org/reference/combine_plots.html</loc>
+    <loc>https://ggstackplot.kopflab.org/reference/combine_stackplot.html</loc>
   </url>
   <url>
     <loc>https://ggstackplot.kopflab.org/reference/ggstackplot-package.html</loc>
@@ -46,13 +46,7 @@
     <loc>https://ggstackplot.kopflab.org/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://ggstackplot.kopflab.org/reference/prepare_data.html</loc>
-  </url>
-  <url>
-    <loc>https://ggstackplot.kopflab.org/reference/prepare_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://ggstackplot.kopflab.org/reference/prepare_themes.html</loc>
+    <loc>https://ggstackplot.kopflab.org/reference/prepare_stackplot.html</loc>
   </url>
   <url>
     <loc>https://ggstackplot.kopflab.org/reference/tidyeval.html</loc>
