@@ -26,7 +26,7 @@ prepare_stackplot(
 
 \item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
 
-\item{color}{which color to make the plots}
+\item{color}{which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the \code{template} to overwrite this aesthetic)}
 
 \item{overlap}{fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots}
 

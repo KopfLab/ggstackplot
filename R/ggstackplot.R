@@ -5,7 +5,7 @@
 #' @param x the x variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
-#' @param color which color to make the plots
+#' @param color which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the `template` to overwrite this aesthetic)
 #' @param overlap fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots
 #' @param axis_size what fraction of a plot to allocate for the fixed axis
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
@@ -167,8 +167,8 @@ prepare_data <- function(
   config <- config |>
     dplyr::mutate(
       .color = !!color,
-      .overlap_bottom = c(!!overlap, NA),
-      .overlap_top = c(NA, !!overlap),
+      .overlap_bottom = c(!!overlap, 0),
+      .overlap_top = c(0, !!overlap),
       .axis_switch = calculate_axis_switch(
         var = if (!!direction == "horizontal") .data$.x else .data$.y,
         alternate = !!alternate_axes,
@@ -206,8 +206,9 @@ prepare_plots <- function(prepared_data, template) {
         dplyr::select(config, -.data$.x, -.data$.y),
         data
       ) %+%
-      aes(.data$.x, .data$.y, color = .data$.color) +
+      aes(.data$.x, .data$.y, color = .data$.color, fill = .data$.color) +
       scale_color_identity() +
+      scale_fill_identity() +
       scale_y_continuous(
         breaks = scales::pretty_breaks(5),
         # FIXME: add the dup axis to an existing y axis if there is already one in plot
