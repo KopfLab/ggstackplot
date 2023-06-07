@@ -26,11 +26,14 @@ prepare_data(
 
 \item{color}{which color to make the plots}
 
-\item{overlap}{whether to overlap the plots}
+\item{overlap}{fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots}
 
 \item{axis_size}{what fraction of a plot to allocate for the fixed axis}
 
 \item{alternate_axes}{whether to alternate the sides on which the stacked axes are plotted}
+}
+\value{
+a nested data frame with each of stacked variables (.var), their plot configuration, and their data+
 }
 \description{
 Intternal function to prepare the data for a ggstackplot

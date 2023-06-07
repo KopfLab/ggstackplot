@@ -1,7 +1,8 @@
 #' Stack a ggplot vertical
 #'
 #' `r lifecycle::badge('experimental')`
-#' @importFrom prepared_data
+#' @inheritParams prepare_data
+#' @param plot_template a template plot (ggplot object) to use for the stacked plots
 #' @export
 ggstackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
@@ -17,9 +18,10 @@ ggstackplot <- function(
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
 #' @param color which color to make the plots
-#' @param overlap whether to overlap the plots
+#' @param overlap fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots
 #' @param axis_size what fraction of a plot to allocate for the fixed axis
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
+#' @return a nested data frame with each of stacked variables (.var), their plot configuration, and their data+
 prepare_data <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
     color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE) {
@@ -102,30 +104,41 @@ prepare_data <- function(
   if (!is.numeric(overlap) || !all(overlap >= 0) || !all(overlap <= 1) || !length(overlap) %in% c(1L, nrow(config) - 1L)) {
     abort(sprintf("`overlap` must be either a single numeric value between 0 and 1 or one for each variable (%d)", nrow(config)))
   }
+  if(length(overlap) == 1L) overlap <- rep(overlap, times = nrow(config) - 1L)
 
   # finish config
   config <- config |>
-    dplyr::mutate()
-      #   y = forcats::as_factor(y),
-      #   color = color,
-      #   overlap_bottom = c(overlap/2, NA),
-      #   overlap_top = c(NA, overlap/2),
-      #   axis_right = as.integer(y) %% 2L == 0L,
-      #   first = as.integer(y) == 1L,
-      #   last = as.integer(y) == length(levels(y))
+    dplyr::mutate(
+        color = !!color,
+        overlap_bottom = c(!!overlap/2, NA),
+        overlap_top = c(NA, !!overlap/2),
+        axis_switch =
+          if(!!alternate_axes && !!direction == "horizontal") {
+            as.integer(x) %% 2L == 0L
+          } else if (!!alternate_axes && !!direction == "vertical") {
+            as.integer(y) %% 2L == 0L
+          } else {
+            FALSE
+          },
+        first =
+          (direction == "horizontal" & as.integer(x) == 1L) |
+          (direction == "vertical" & as.integer(y) == 1L),
+        last =
+          (direction == "horizontal" & as.integer(x) == length(levels(x))) |
+          (direction == "vertical" & as.integer(y) == length(levels(y))),
+        .var = if(direction == "horizontal") x else y,
+        direction = !!direction
+    )
 
-  # tibble::tibble(
-  #   y = forcats::as_factor(y),
-  #   color = color,
-  #   overlap_bottom = c(overlap/2, NA),
-  #   overlap_top = c(NA, overlap/2),
-  #   axis_right = as.integer(y) %% 2L == 0L,
-  #   first = as.integer(y) == 1L,
-  #   last = as.integer(y) == length(levels(y))
-  # )
-
-
-  return(config)
+  # complete prepped data
+  return(
+    config |>
+      tidyr::nest(config = -.data$.var) |>
+      dplyr::left_join(
+        tidyr::nest(data_long, data = -.data$.var),
+        by = ".var"
+      )
+  )
 }
 
 prepare_plots <- function() {

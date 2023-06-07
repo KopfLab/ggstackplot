@@ -16,6 +16,25 @@ ggstackplot(
   plot_template = ggplot() + geom_line() + geom_point() + theme_bw()
 )
 }
+\arguments{
+\item{data}{the data frame to plot}
+
+\item{x}{the x variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax}
+
+\item{y}{the y variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax}
+
+\item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
+
+\item{color}{which color to make the plots}
+
+\item{overlap}{fractional overlap with next plot (by default no overlap), if providing multiple values, should be 1 shorter than the number of stacked plots}
+
+\item{axis_size}{what fraction of a plot to allocate for the fixed axis}
+
+\item{alternate_axes}{whether to alternate the sides on which the stacked axes are plotted}
+
+\item{plot_template}{a template plot (ggplot object) to use for the stacked plots}
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

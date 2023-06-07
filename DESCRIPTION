@@ -35,5 +35,6 @@ Imports:
     tidyselect,
     dplyr,
     tidyr,
-    forcats
+    forcats,
+    ggplot2
 VignetteBuilder: knitr
