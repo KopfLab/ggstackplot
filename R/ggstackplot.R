@@ -12,14 +12,28 @@ prepare_data <- function(data, x, y, direction = c("guess", "horizontal", "verti
 
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data))
-    cli::cli_abort(c("x" = "`data` must be a data frame or tibble"))
+    abort("`data` must be a data frame or tibble.")
 
-  # tidy eval x and y
-  x <- tidyselect::eval_select(rlang::enexpr(x), df) |> names()
-  y <- tidyselect::eval_select(rlang::enexpr(y), df) |> names()
-  direction <- match.arg(direction)
+  # do we have value x and y
+  x <- try_fetch(
+    tidyselect::eval_select(rlang::enexpr(x), data) |> names(),
+    error = function(cnd) abort(
+      "`x` must be a valid tidyselect expression.",
+      parent = cnd
+    ))
+  y <- try_fetch(
+    tidyselect::eval_select(rlang::enexpr(y), data) |> names(),
+    error = function(cnd) abort(
+      "`y` must be a valid tidyselect expression.",
+      parent = cnd
+    ))
 
-  if(direction == "x") stop("not implemented yet", call. = FALSE)
+  print(x)
+  print(y)
+
+   #direction <- match.arg(direction)
+
+  #if(direction == "x") stop("not implemented yet", call. = FALSE)
 
 
 }

@@ -32,9 +32,8 @@ Suggests:
     roxygen2,
     testthat
 Imports: 
-    cli,
-    lifecycle,
     rlang (>= 0.4.11),
+    lifecycle,
     tidyselect,
     dplyr
 VignetteBuilder: knitr
