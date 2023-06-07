@@ -4,7 +4,17 @@
 \alias{ggstackplot}
 \title{Stack a ggplot vertical}
 \usage{
-ggstackplot(data, x, y, direction = c("guess", "horizontal", "vertical"))
+ggstackplot(
+  data,
+  x,
+  y,
+  direction = c("guess", "horizontal", "vertical"),
+  color = "black",
+  overlap = 0,
+  axis_size = 0.2,
+  alternate_axes = TRUE,
+  plot_template = ggplot() + geom_line() + geom_point() + theme_bw()
+)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

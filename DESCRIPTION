@@ -18,9 +18,7 @@ Authors@R:
       role = c("aut"), 
       comment = c(ORCID = ""))
   )
-Description: 
-  This package makes it easy to create overlapping ggplots. 
-  This plotting style is particularly common in paleoclimatology and oceanography research communities.
+Description: This package makes it easy to create overlapping ggplots. This plotting style is particularly common in paleoclimatology and oceanography research communities.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

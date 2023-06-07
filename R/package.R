@@ -1,7 +1,4 @@
 #' @keywords internal
-"_PACKAGE"
-
-## usethis namespace: start
+#' @aliases ggstackplot-package
 #' @import rlang
-## usethis namespace: end
-NULL
+"_PACKAGE"

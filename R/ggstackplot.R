@@ -1,14 +1,29 @@
 #' Stack a ggplot vertical
 #'
 #' `r lifecycle::badge('experimental')`
-#'
+#' @importFrom prepared_data
 #' @export
-ggstackplot <- function(data, x, y, direction = c("guess", "horizontal", "vertical")) {
+ggstackplot <- function(
+    data, x, y, direction = c("guess", "horizontal", "vertical"),
+    color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE,
+    plot_template = ggplot() + geom_line() + geom_point() + theme_bw()) {
 
 
 }
 
-prepare_data <- function(data, x, y, direction = c("guess", "horizontal", "vertical")) {
+#' Intternal function to prepare the data for a ggstackplot
+#' @param data the data frame to plot
+#' @param x the x variable(s) to plot, accepts [dplyr::select()] syntax
+#' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
+#' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
+#' @param color which color to make the plots
+#' @param overlap whether to overlap the plots
+#' @param axis_size what fraction of a plot to allocate for the fixed axis
+#' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
+prepare_data <- function(
+    data, x, y, direction = c("guess", "horizontal", "vertical"),
+    color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE) {
+
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
     abort("`data` must be a data frame or tibble.")
@@ -63,16 +78,47 @@ prepare_data <- function(data, x, y, direction = c("guess", "horizontal", "verti
     if (direction == "horizontal") {
       data |>
         dplyr::rename(dplyr::all_of(x), dplyr::all_of(y)) |>
-        tidyr::pivot_longer(cols = dplyr::all_of(names(x))) |>
-        dplyr::mutate(.x = .data$value, .y = !!sym(names(!!y)[1]))
+        tidyr::pivot_longer(cols = dplyr::all_of(names(x)), names_to = ".var", values_to = ".x") |>
+        dplyr::mutate(.y = !!sym(names(!!y)[1]))
     } else {
       data |>
         dplyr::rename(dplyr::all_of(x), dplyr::all_of(y)) |>
-        tidyr::pivot_longer(cols = dplyr::all_of(names(y))) |>
-        dplyr::mutate(.y = .data$value, .x = !!sym(names(!!x)[1]))
+        tidyr::pivot_longer(cols = dplyr::all_of(names(y)), names_to = ".var", values_to = ".y") |>
+        dplyr::mutate(.x = !!sym(names(!!x)[1]))
     }
 
-  return(data_long)
+  # prep config
+  config <- dplyr::tibble(
+    x = forcats::as_factor(names(x)),
+    y = forcats::as_factor(names(y))
+  )
+
+  # do we have a valid length for color?
+  if (!is.character(color) || !length(color) %in% c(1L, nrow(config))) {
+    abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)))
+  }
+
+  # do we have a valid overlap value?
+  if (!is.numeric(overlap) || !all(overlap >= 0) || !all(overlap <= 1) || !length(overlap) %in% c(1L, nrow(config) - 1L)) {
+    abort(sprintf("`overlap` must be either a single numeric value between 0 and 1 or one for each variable (%d)", nrow(config)))
+  }
+
+  # stopifnot(length(y) == length(color))
+  # if (length(overlap) == 1L)
+  #   overlap <- rep(overlap, length(y) - 1L)
+  # stopifnot(length(y) == (length(overlap) + 1L))
+  # tibble::tibble(
+  #   y = forcats::as_factor(y),
+  #   color = color,
+  #   overlap_bottom = c(overlap/2, NA),
+  #   overlap_top = c(NA, overlap/2),
+  #   axis_right = as.integer(y) %% 2L == 0L,
+  #   first = as.integer(y) == 1L,
+  #   last = as.integer(y) == length(levels(y))
+  # )
+
+
+  return(config)
 }
 
 prepare_plots <- function() {
@@ -83,14 +129,3 @@ combine_plots <- function() {
 
 }
 
-# internal
-make_plot_data <- function(df, x, y) {
-  # for single x, multiple y!
-  # stopifnot(length(x) == 1L)
-  # stopifnot(length(y) > 1L)
-  # df |>
-  #   dplyr::select(x = dplyr::any_of(x), dplyr::all_of(y)) |>
-  #   tidyr::pivot_longer(cols = dplyr::all_of(y)) |>
-  #   dplyr::mutate(y = .data$name) |>
-  #   tidyr::nest(data = -name)
-}
