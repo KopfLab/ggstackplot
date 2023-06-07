@@ -2,7 +2,6 @@ context("ggstackplot")
 
 
 test_that("test prepare_data() parameters", {
-
   # data
   expect_error(
     prepare_data(),
@@ -76,7 +75,4 @@ test_that("test prepare_data() parameters", {
     prepare_data(mtcars, x = c(mpg, wt, vs), y = disp, overlap = c(0.5, 0.5, 0.5)),
     "`overlap` must be either a single numeric value between 0 and 1 or one for each variable"
   )
-
-
-
 })

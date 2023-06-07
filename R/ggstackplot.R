@@ -14,8 +14,10 @@
 ggstackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
     color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE,
-    plot_template = ggplot() + geom_line() + geom_point() + theme_bw()) {
-
+    plot_template = ggplot() +
+      geom_line() +
+      geom_point() +
+      theme_bw()) {
   # put everything together
   data |>
     prepare_data({{ x }}, {{ y }}, direction, color, overlap, axis_size, alternate_axes) |>
@@ -30,7 +32,6 @@ ggstackplot <- function(
 prepare_data <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
     color = "black", overlap = 0, axis_size = 0.2, alternate_axes = TRUE) {
-
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
     abort("`data` must be a data frame or tibble.")
@@ -109,30 +110,30 @@ prepare_data <- function(
   if (!is.numeric(overlap) || !all(overlap >= 0) || !all(overlap <= 1) || !length(overlap) %in% c(1L, nrow(config) - 1L)) {
     abort(sprintf("`overlap` must be either a single numeric value between 0 and 1 or one for each variable (%d)", nrow(config)))
   }
-  if(length(overlap) == 1L) overlap <- rep(overlap, times = nrow(config) - 1L)
+  if (length(overlap) == 1L) overlap <- rep(overlap, times = nrow(config) - 1L)
 
   # finish config
   config <- config |>
     dplyr::mutate(
-        .color = !!color,
-        .overlap_bottom = c(!!overlap, NA),
-        .overlap_top = c(NA, !!overlap),
-        .axis_switch =
-          if(!!alternate_axes && !!direction == "horizontal") {
-            as.integer(.x) %% 2L == 0L
-          } else if (!!alternate_axes && !!direction == "vertical") {
-            as.integer(.y) %% 2L == 0L
-          } else {
-            FALSE
-          },
-        .first =
-          (direction == "horizontal" & as.integer(.x) == 1L) |
-          (direction == "vertical" & as.integer(.y) == 1L),
-        .last =
-          (direction == "horizontal" & as.integer(.x) == length(levels(.x))) |
-          (direction == "vertical" & as.integer(.y) == length(levels(.y))),
-        .var = if(direction == "horizontal") .x else .y,
-        .direction = !!direction
+      .color = !!color,
+      .overlap_bottom = c(!!overlap, NA),
+      .overlap_top = c(NA, !!overlap),
+      .axis_switch =
+        if (!!alternate_axes && !!direction == "horizontal") {
+          as.integer(.data$.x) %% 2L == 0L
+        } else if (!!alternate_axes && !!direction == "vertical") {
+          as.integer(.data$.y) %% 2L == 0L
+        } else {
+          FALSE
+        },
+      .first =
+        (direction == "horizontal" & as.integer(.data$.x) == 1L) |
+          (direction == "vertical" & as.integer(.data$.y) == 1L),
+      .last =
+        (direction == "horizontal" & as.integer(.data$.x) == length(levels(.data$.x))) |
+          (direction == "vertical" & as.integer(.data$.y) == length(levels(.data$.y))),
+      .var = if (direction == "horizontal") .data$.x else .data$.y,
+      .direction = !!direction
     )
 
   # complete prepped data
@@ -152,7 +153,6 @@ prepare_data <- function(
 #' @inheritParams ggstackplot
 #' @return the prepared tibble with a plot column added
 prepare_plots <- function(prepared_data, plot_template) {
-
   # individual plot
   make_plot <- function(config, data) {
     plot_template %+%
@@ -161,7 +161,7 @@ prepare_plots <- function(prepared_data, plot_template) {
         dplyr::select(config, -.data$.x, -.data$.y),
         data
       ) %+%
-      aes(.x, .y, color = .color) +
+      aes(.data$.x, .data$.y, color = .data$.color) +
       scale_color_identity() +
       scale_y_continuous(
         breaks = scales::pretty_breaks(5),
@@ -175,47 +175,46 @@ prepare_plots <- function(prepared_data, plot_template) {
   # compute plots
   prepared_data |>
     dplyr::mutate(
-      plot = map2(config, data, make_plot)
+      plot = map2(.data$config, .data$data, make_plot)
     )
-
 }
 
 #' Internal function to prepare the themes for the stacked plots
 #' @inheritParams prepare_plots
 #' @return the prepared tibble with a theme column added
 prepare_themes <- function(prepared_data) {
-
   # individual theme
   make_theme <- function(config) {
     theme(
       panel.grid = element_blank(),
       text = element_text(size = 16),
-      axis.title.y.left = if(config$.axis_switch) element_blank() else element_text(color = config$.color),
-      axis.text.y.left = if(config$.axis_switch) element_blank() else element_text(color = config$.color),
-      axis.line.y.left = if(config$.axis_switch) element_blank() else element_line(color = config$.color),
-      axis.ticks.y.left = if(config$.axis_switch) element_blank() else element_line(color = config$.color),
-      axis.title.y.right = if(!config$.axis_switch) element_blank() else element_text(color = config$.color),
-      axis.text.y.right = if(!config$.axis_switch) element_blank() else element_text(color = config$.color),
-      axis.line.y.right = if(!config$.axis_switch) element_blank() else element_line(color = config$.color),
-      axis.ticks.y.right = if(!config$.axis_switch) element_blank() else element_line(color = config$.color),
-      axis.title.x = if(!config$.last) element_blank() else element_text(),
-      axis.text.x = if(!config$.last) element_blank() else element_text(),
-      axis.line.x = if(!config$.last) element_blank() else element_line(),
-      axis.ticks.x = if(!config$.last) element_blank() else element_line(),
+      axis.title.y.left = if (config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.text.y.left = if (config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.line.y.left = if (config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.ticks.y.left = if (config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.title.y.right = if (!config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.text.y.right = if (!config$.axis_switch) element_blank() else element_text(color = config$.color),
+      axis.line.y.right = if (!config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.ticks.y.right = if (!config$.axis_switch) element_blank() else element_line(color = config$.color),
+      axis.title.x = if (!config$.last) element_blank() else element_text(),
+      axis.text.x = if (!config$.last) element_blank() else element_text(),
+      axis.line.x = if (!config$.last) element_blank() else element_line(),
+      axis.ticks.x = if (!config$.last) element_blank() else element_line(),
       panel.border = element_blank(),
       panel.background = element_blank(),
       plot.background = element_blank(),
       plot.margin = margin(
         t = if (config$.first) 0 else -config$.overlap_top,
         b = if (config$.last) 0 else -config$.overlap_bottom,
-        unit = "npc")
+        unit = "npc"
+      )
     )
   }
 
   # compute themes
   prepared_data |>
     dplyr::mutate(
-      theme = map(config, make_theme)
+      theme = map(.data$config, make_theme)
     )
 }
 
@@ -223,13 +222,12 @@ prepare_themes <- function(prepared_data) {
 #' @inheritParams prepare_plots
 #' @return an object generated by [cowplot::plot_grid()]
 combine_plots <- function(prepared_data) {
-
   # final plots <-
   plots <- prepared_data |>
     dplyr::mutate(
-      final_plot = map2(plot, theme, ~.x + .y)
+      final_plot = map2(.data$plot, .data$theme, ~ .x + .y)
     ) |>
-    dplyr::pull(final_plot)
+    dplyr::pull(.data$final_plot)
 
   # combine it all
   cowplot::plot_grid(
@@ -242,5 +240,3 @@ combine_plots <- function(prepared_data) {
     rel_heights = c(rep(1, times = length(plots) - 1), 1.2)
   )
 }
-
-

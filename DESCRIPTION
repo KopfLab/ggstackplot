@@ -37,5 +37,6 @@ Imports:
     tidyr,
     forcats,
     ggplot2,
-    cowplot
+    cowplot,
+    scales
 VignetteBuilder: knitr
