@@ -40,7 +40,6 @@ Imports:
     tidyselect,
     dplyr,
     tidyr,
-    forcats,
     ggplot2,
     cowplot,
     scales

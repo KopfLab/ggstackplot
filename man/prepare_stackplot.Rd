@@ -13,7 +13,8 @@ prepare_stackplot(
   overlap = 0,
   axis_size = 0.2,
   alternate_axes = TRUE,
-  plot_template = ggplot() + geom_line() + geom_point() + theme_bw()
+  switch_axes = TRUE,
+  template = ggplot() + geom_line() + geom_point() + theme_bw()
 )
 }
 \arguments{
@@ -33,7 +34,9 @@ prepare_stackplot(
 
 \item{alternate_axes}{whether to alternate the sides on which the stacked axes are plotted}
 
-\item{plot_template}{a template plot (ggplot object) to use for the stacked plots}
+\item{switch_axes}{whether to switch the stacked axis}
+
+\item{template}{a template plot (ggplot object) to use for the stacked plots}
 }
 \value{
 a nested data frame with all stacked variables (.var), their plot configuration, data, plot object, and theme object
