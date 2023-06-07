@@ -16,7 +16,7 @@ Authors@R:
       given = "Jamie", family = "McFarlin", 
       email = "jamie.mcfarlin@uwyo.edu", 
       role = c("aut"), 
-      comment = c(ORCID = "")),
+      comment = c(ORCID = "0000-0002-8185-8185")),
   person(
       given = "Jon", family = "Raberg", 
       email = "Jonathan.Raberg@colorado.edu", 
