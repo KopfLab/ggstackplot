@@ -1,8 +1,8 @@
 ---
-title: "Examples"
+title: "ggstackplot examples"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{examples}
+  %\VignetteIndexEntry{ggstackplot examples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
