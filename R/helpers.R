@@ -116,7 +116,7 @@ make_plot <- function(config, data, template) {
     )
   } else {
     # has one, see if it needs edits
-    if (config$.direction == "horizontal" && is(plot$scales$scales[[which(plot$scales$find("x"))[1]]]$secondary.axis, "waiver")) {
+    if (config$.direction == "horizontal" && methods::is(plot$scales$scales[[which(plot$scales$find("x"))[1]]]$secondary.axis, "waiver")) {
       # add secondary axis
       plot$scales$scales[[which(plot$scales$find("x"))[1]]]$secondary.axis <- dup_axis()
     }
@@ -135,7 +135,7 @@ make_plot <- function(config, data, template) {
     )
   } else {
     # has one, see if it needs edits
-    if (config$.direction == "vertical" && is(plot$scales$scales[[which(plot$scales$find("y"))[1]]]$secondary.axis, "waiver")) {
+    if (config$.direction == "vertical" && methods::is(plot$scales$scales[[which(plot$scales$find("y"))[1]]]$secondary.axis, "waiver")) {
       # add secondary axis
       plot$scales$scales[[which(plot$scales$find("y"))[1]]]$secondary.axis <- dup_axis()
     }
@@ -212,8 +212,8 @@ align_gtables <- function(gtables) {
     dplyr::mutate(
       gtable = cowplot::align_plots(
         plotlist = .data$gtable,
-        align = if(.direction[1] == "horizontal") "h" else "v",
-        axis = if(.direction[1] == "horizontal") "tb" else "lr"
+        align = if(.data$.direction[1] == "horizontal") "h" else "v",
+        axis = if(.data$.direction[1] == "horizontal") "tb" else "lr"
       )
     )
 }
