@@ -23,7 +23,7 @@
 ggstackplot <- function(
     data, x, y, remove_na = TRUE, color = NA,
     direction = c("guess", "horizontal", "vertical"),
-    both_axes = FALSE, alternate_axes = TRUE, switch_axes = TRUE,
+    both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
     overlap = 0, simplify_shared_axis = TRUE, shared_axis_size = 0.2,
     template = ggplot() +
       geom_line() +
@@ -57,7 +57,7 @@ ggstackplot <- function(
 prepare_stackplot <- function(
     data, x, y, remove_na = TRUE, color = NA,
     direction = c("guess", "horizontal", "vertical"),
-    both_axes = FALSE, alternate_axes = TRUE, switch_axes = TRUE,
+    both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
     template = ggplot() +
       geom_line() +
       geom_point() +
