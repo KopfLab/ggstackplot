@@ -8,8 +8,9 @@
 #' @param data the data frame to plot
 #' @param x the x variable(s) to plot, accepts [dplyr::select()] syntax
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax
-#' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
+#' @param remove_na whether to remove `NA` values in the x/y plot, setting this to `FALSE` can lead to unintended side-effects for interrupted lines so check your plot carefully if you change this
 #' @param color which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the `template` to overwrite this aesthetic), either one value for or one color per variable. Pick `NA` to not set colors (in case you want to use them yourself in the aesthetics).
+#' @param direction whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)
 #' @param both_axes whether to have the stacked axes on both sides (overrides alternate_axes and switch_axes)
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
 #' @param switch_axes whether to switch the stacked axes
@@ -20,8 +21,9 @@
 #' @param debug debug flag to print the stackplot tibble and gtable intermediates
 #' @export
 ggstackplot <- function(
-    data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = NA, both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
+    data, x, y, remove_na = TRUE, color = NA,
+    direction = c("guess", "horizontal", "vertical"),
+    both_axes = FALSE, alternate_axes = TRUE, switch_axes = TRUE,
     overlap = 0, simplify_shared_axis = TRUE, shared_axis_size = 0.2,
     template = ggplot() +
       geom_line() +
@@ -33,7 +35,8 @@ ggstackplot <- function(
   data |>
     prepare_stackplot(
       x = {{ x }}, y = {{ y }},
-      direction = direction, color = color,
+      remove_na = remove_na, color = color,
+      direction = direction,
       both_axes = both_axes, alternate_axes = alternate_axes,
       switch_axes = switch_axes, template = template,
       debug = debug) |>
@@ -52,8 +55,9 @@ ggstackplot <- function(
 #' @rdname ggstackplot
 #' @export
 prepare_stackplot <- function(
-    data, x, y, direction = c("guess", "horizontal", "vertical"),
-    color = NA, both_axes = FALSE, alternate_axes = TRUE, switch_axes = TRUE,
+    data, x, y, remove_na = TRUE, color = NA,
+    direction = c("guess", "horizontal", "vertical"),
+    both_axes = FALSE, alternate_axes = TRUE, switch_axes = TRUE,
     template = ggplot() +
       geom_line() +
       geom_point() +
@@ -64,10 +68,9 @@ prepare_stackplot <- function(
   prepared_stackplot <- data |>
     # prepare plotting data
     create_stackplot_tibble(
-      x = {{ x }},
-      y = {{ y }},
+      x = {{ x }}, y = {{ y }},
+      remove_na = remove_na, color = color,
       direction = direction,
-      color = color,
       both_axes = both_axes,
       alternate_axes = alternate_axes,
       switch_axes = switch_axes
@@ -93,7 +96,7 @@ prepare_stackplot <- function(
 
 # internal function to prepare the data for a ggstackplot
 create_stackplot_tibble <- function(
-    data, x, y, direction = c("guess", "horizontal", "vertical"), color, both_axes, alternate_axes, switch_axes) {
+    data, x, y, remove_na = TRUE, color = NA, direction = c("guess", "horizontal", "vertical"), both_axes = FALSE, alternate_axes = FALSE, switch_axes = FALSE) {
 
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
@@ -129,6 +132,14 @@ create_stackplot_tibble <- function(
     ))
   }
 
+  # do we have valid remove_na, both_axes, alternate_axes, and switch_axes (the booleans)
+  stopifnot(
+    "`remove_na` must be TRUE or FALSE" = is_bool(remove_na),
+    "`both_axes` must be TRUE or FALSE" = is_bool(both_axes),
+    "`alternate_axes` must be TRUE or FALSE" = is_bool(alternate_axes),
+    "`switch_axes` must be TRUE or FALSE" = is_bool(switch_axes)
+  )
+
   # do we have a valid direction picked?
   direction <- arg_match(direction)
 
@@ -156,8 +167,10 @@ create_stackplot_tibble <- function(
         dplyr::rename(dplyr::all_of(x), dplyr::all_of(y)) |>
         tidyr::pivot_longer(cols = dplyr::all_of(names(y)), names_to = ".var", values_to = ".y") |>
         dplyr::mutate(.x = !!sym(names(!!x)[1]))
-    } |>
-    dplyr::filter(!is.na(.data$.x), !is.na(.data$.y))
+    }
+
+  # remove na
+  if (remove_na) data_long <- data_long |> dplyr::filter(!is.na(.data$.x), !is.na(.data$.y))
 
   # prep config
   config <- dplyr::tibble(
@@ -166,12 +179,9 @@ create_stackplot_tibble <- function(
   )
 
   # do we have a valid length for color?
-  if (missing(color) || !(is.character(color) || all(is.na(color))) || !length(color) %in% c(1L, nrow(config))) {
+  if (!(is.character(color) || all(is.na(color))) || !length(color) %in% c(1L, nrow(config))) {
     abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)))
   }
-
-  # do we have valid both_axes? (alternate_axes and switch_axes gets evaluated in calculate_axis_switch)
-  stopifnot("`both_axes` must be TRUE or FALSE" = !missing(both_axes) && is_bool(both_axes))
 
   # finish config
   config <- config |>

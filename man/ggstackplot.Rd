@@ -10,11 +10,12 @@ ggstackplot(
   data,
   x,
   y,
-  direction = c("guess", "horizontal", "vertical"),
+  remove_na = TRUE,
   color = NA,
+  direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
-  switch_axes = FALSE,
+  switch_axes = TRUE,
   overlap = 0,
   simplify_shared_axis = TRUE,
   shared_axis_size = 0.2,
@@ -26,8 +27,9 @@ prepare_stackplot(
   data,
   x,
   y,
-  direction = c("guess", "horizontal", "vertical"),
+  remove_na = TRUE,
   color = NA,
+  direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
   switch_axes = TRUE,
@@ -50,9 +52,11 @@ assemble_stackplot(
 
 \item{y}{the y variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax}
 
-\item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
+\item{remove_na}{whether to remove \code{NA} values in the x/y plot, setting this to \code{FALSE} can lead to unintended side-effects for interrupted lines so check your plot carefully if you change this}
 
 \item{color}{which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the \code{template} to overwrite this aesthetic), either one value for or one color per variable. Pick \code{NA} to not set colors (in case you want to use them yourself in the aesthetics).}
+
+\item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
 
 \item{both_axes}{whether to have the stacked axes on both sides (overrides alternate_axes and switch_axes)}
 
