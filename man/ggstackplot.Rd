@@ -15,7 +15,7 @@ ggstackplot(
   direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
-  switch_axes = TRUE,
+  switch_axes = FALSE,
   overlap = 0,
   simplify_shared_axis = TRUE,
   shared_axis_size = 0.2,
@@ -32,7 +32,7 @@ prepare_stackplot(
   direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
-  switch_axes = TRUE,
+  switch_axes = FALSE,
   template = ggplot() + geom_line() + geom_point() + theme_stackplot(),
   debug = FALSE
 )
