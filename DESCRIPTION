@@ -28,8 +28,14 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Depends:
-    ggplot2
+Imports: 
+    rlang (>= 0.4.11),
+    tidyselect,
+    dplyr,
+    tidyr,
+    ggplot2,
+    cowplot,
+    scales
 Suggests: 
     covr,
     knitr,
@@ -37,11 +43,4 @@ Suggests:
     roxygen2,
     testthat,
     lifecycle
-Imports: 
-    rlang (>= 0.4.11),
-    tidyselect,
-    dplyr,
-    tidyr,
-    cowplot,
-    scales
 VignetteBuilder: knitr
