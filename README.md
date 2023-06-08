@@ -1,3 +1,8 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,9 +17,15 @@ status](https://www.r-pkg.org/badges/version/ggstackplot)](https://CRAN.R-projec
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 [![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
+
 <!-- badges: end -->
 
-The goal of ggstackplot is to …
+Have you ever wanted to compare multiple panels of line plots that do
+not share coordinate schemes? These kinds of plots are ubiquitous in the
+Earth sciences, but there does not seem to be a straightforward way to
+create them within the ggplot framework. The goal of `ggstackplot` is to
+simplify the process of creating multi-line plots. These are useful for
+paleo-record data, stratigraphic data, spectral data, and more.
 
 ## Installation
 
@@ -41,4 +52,4 @@ ggstackplot(
 )
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" width="100%"/>
