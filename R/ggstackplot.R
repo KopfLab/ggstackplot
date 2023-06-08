@@ -48,9 +48,8 @@ ggstackplot <- function(
 #' Prepare the stackplot
 #'
 #' @details
-#' `prepare_stackplot()` is usually not called directly but can be used to assemble the parts of a stackplot first and then look at them or edit them individually before combining them with `assemble_stackplot()]`
+#' `prepare_stackplot()` is usually not called directly but can be used to assemble the parts of a stackplot first and then look at them or edit them individually before combining them with `assemble_stackplot()]`. Returns a nested data frame with all stacked variables (.var), their plot configuration, data, plot object, and theme object.
 #' @rdname ggstackplot
-#' @return a nested data frame with all stacked variables (.var), their plot configuration, data, plot object, and theme object
 #' @export
 prepare_stackplot <- function(
     data, x, y, direction = c("guess", "horizontal", "vertical"),
