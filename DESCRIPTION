@@ -1,6 +1,6 @@
 Package: ggstackplot
 Title: Create overlapping stacked ggplots
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
   c(person(
       given = "Sebastian", family = "Kopf", 
@@ -42,5 +42,6 @@ Suggests:
     rmarkdown,
     roxygen2,
     testthat,
-    lifecycle
+    lifecycle,
+    scales
 VignetteBuilder: knitr
