@@ -11,10 +11,10 @@ navbar:
   title: ggstackplot
   type: default
   left:
+  - text: Features
+    href: articles/features.html
   - text: Examples
     href: articles/examples.html
-  - text: SK-Examples
-    href: articles/sk-examples.html
   - text: Reference
     href: reference/index.html
   right:
