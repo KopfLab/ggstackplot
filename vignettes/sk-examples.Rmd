@@ -1,0 +1,270 @@
+---
+title: "sk-examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sk-examples}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+```{r setup}
+library(ggstackplot)
+```
+
+# Arguments
+
+## `x` and `y` arguments
+
+```{r}
+# select any number of variables to make the stack
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec, drat)
+  )
+
+# the selection order translates into stack order
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(drat, wt, qsec)
+  )
+
+# use any valid tidyselect selection syntax
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(4, "carb", starts_with("d"))
+  )
+
+# use any valid tidyselect renaming syntax to rename stack panels
+mtcars |> 
+  ggstackplot(
+    x = c(`mpg [units]` = mpg), 
+    y = c(`weight [tons]` = wt, `speed` = qsec, drat)
+  )
+```
+
+## `color` argument
+
+```{r}
+# select any specific colors for each plot
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8")
+  )
+```
+
+## `remove_na` argument
+
+```{r, suppressMessages = TRUE}
+library(dplyr)
+
+# default (NAs are removed so lines are not interrupted)
+mtcars |> 
+  add_row(mpg = 22, wt = 5, qsec = NA) |>
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8")
+  )
+
+# explicit `remove_na` = FALSE
+mtcars |> 
+  add_row(mpg = 22, wt = 5, qsec = NA) |>
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    remove_na = FALSE
+  )
+```
+
+## `both_axes` argument
+
+```{r}
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    both_axes = TRUE
+  )
+```
+
+## `alternate_axes` argument
+
+```{r}
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    alternate_axes = FALSE
+  )
+```
+
+## `switch_axes` argument
+
+```{r}
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    switch_axes = TRUE
+  )
+
+# and in combinatoin with alternate_axes = FALSE
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    alternate_axes = FALSE,
+    switch_axes = TRUE
+  )
+```
+
+## `overlap` argument
+
+```{r}
+# define any overlap between 0 and 1
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0.3
+  )
+
+# full overlap
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 1
+  )
+
+# different overlap between stack panels
+mtcars |> 
+  ggstackplot(
+    x = mpg, 
+    y = c(qsec, drat, wt, hp),
+    color = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"),
+    overlap = c(1, 0, 1)
+  )
+```
+
+## `shared_axis_size` argument
+
+The size of the shared axis needs to be adjusted depending on which aspect ratio is intended.
+
+```{r}
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 1,
+    # can be smaller because we're not actually stacking but overlapping
+    shared_axis_size = 0.1
+  )
+```
+
+## `simplify_shared_axis` argument
+
+Sometimes it's better to keep the shared axis on each panel.
+
+```{r}
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    simplify_shared_axis = FALSE
+  )
+```
+
+## `template` argument
+
+This is the most powerful argument. It defines which ggplot to use as the template for all plots in the stack. This can be an actual plot (just the data will be replaced) or a ggplot that doesn't have data associated yet. The possibilities are pretty much endless. Just make sure to always add the `theme_stacked_plot()` base theme (you can modify it more from there on). A few examples below:
+
+### theme modifications
+
+Add any modification to the overlying theme as you see fit.
+
+```{r}
+library(ggplot2)
+
+# increase y axis test sizetext size
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = 
+      ggplot() + 
+      geom_line() +
+      theme_stackplot() +
+      theme(axis.text.y = element_text(size = 20))
+  )
+```
+
+### custom geom data
+
+```{r}
+# use different geoms for different panels
+# you can refer to y-stack panel variables with `.yvar`
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 1,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot()
+  )
+```
+
+### additional plot elements
+
+```{r}
+# add some vertical bars
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0.2, 
+    template = 
+      ggplot() + 
+      geom_vline(xintercept = 20, linewidth = 4, color = "gray80") +
+      geom_line() +
+      theme_stackplot() 
+  )
+```
+
+## axis modifications
+
+```{r}
+# secondary x axis (can be the same with dup_axis() or more specific, e.g.:)
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    both_axes = TRUE,
+    overlap = 0.1, 
+    template = 
+      ggplot() + 
+      geom_line() +
+      scale_x_continuous(
+        sec.axis = sec_axis(
+          trans = sqrt, 
+          name = expression(sqrt(mpg)), 
+          breaks = scales::pretty_breaks(5)
+        )
+      ) +
+      theme_stackplot() 
+  )
+```
+

@@ -13,6 +13,8 @@ navbar:
   left:
   - text: Examples
     href: articles/examples.html
+  - text: SK-Examples
+    href: articles/sk-examples.html
   - text: Reference
     href: reference/index.html
   right:
