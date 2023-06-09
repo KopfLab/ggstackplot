@@ -14,8 +14,8 @@ This package makes it easy to create overlapping ggplots. This plotting style is
 Authors:
 \itemize{
   \item Tristan Caro \email{tristan.caro@colorado.edu}
-  \item Jamie McFarlin \email{jamie.mcfarlin@uwyo.edu}
-  \item Jon Raberg \email{Jonathan.Raberg@colorado.edu}
+  \item Jamie McFarlin \email{jamie.mcfarlin@uwyo.edu} (\href{https://orcid.org/0000-0002-8185-8185}{ORCID})
+  \item Jon Raberg \email{Jonathan.Raberg@colorado.edu} (\href{https://orcid.org/0000-0003-2959-3631}{ORCID})
 }
 
 }

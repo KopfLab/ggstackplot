@@ -12,7 +12,6 @@ ggstackplot(
   y,
   remove_na = TRUE,
   color = NA,
-  direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
   switch_axes = FALSE,
@@ -29,7 +28,6 @@ prepare_stackplot(
   y,
   remove_na = TRUE,
   color = NA,
-  direction = c("guess", "horizontal", "vertical"),
   both_axes = FALSE,
   alternate_axes = TRUE,
   switch_axes = FALSE,
@@ -48,21 +46,19 @@ assemble_stackplot(
 \arguments{
 \item{data}{the data frame to plot}
 
-\item{x}{the x variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax}
+\item{x}{the x variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax. The order of variables is plotted from left to right (if multiple \code{x}).}
 
-\item{y}{the y variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax}
+\item{y}{the y variable(s) to plot, accepts \code{\link[dplyr:select]{dplyr::select()}} syntax. The order of variables in plotted from top to bottom (if multiple \code{y}).}
 
 \item{remove_na}{whether to remove \code{NA} values in the x/y plot, setting this to \code{FALSE} can lead to unintended side-effects for interrupted lines so check your plot carefully if you change this}
 
 \item{color}{which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the \code{template} to overwrite this aesthetic), either one value for or one color per variable. Pick \code{NA} to not set colors (in case you want to use them yourself in the aesthetics).}
 
-\item{direction}{whether to make a horizontal or vertical ggstackplot (default is for the function to get based on the number of x and y variables provided)}
-
 \item{both_axes}{whether to have the stacked axes on both sides (overrides alternate_axes and switch_axes)}
 
 \item{alternate_axes}{whether to alternate the sides on which the stacked axes are plotted}
 
-\item{switch_axes}{whether to switch the stacked axes}
+\item{switch_axes}{whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if \code{alternate_axes = TRUE}). Setting \code{switch_axes = TRUE}, leads to the opposite, i.e. first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms).}
 
 \item{overlap}{fractional overlap between adjacent plots. The max of 1 means plots are perfectly overlaid. The min of 0 means there is no overlap. If providing multiple values, must be 1 less than the number of stacked plots (since it's describing the overlap/gap between adjacent plots). By default there is no overlap between plots}
 

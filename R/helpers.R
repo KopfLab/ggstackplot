@@ -1,3 +1,5 @@
+# main theme ========
+
 #' Recommended base theme for stacked gg plots
 #'
 #'
@@ -227,3 +229,58 @@ combine_gtables <- function(gtables) {
   }
   return(p)
 }
+
+# factor functions =======
+
+# helper function to create factors with levels in the order of data appeareance
+# this is a simple implementation forcats::fct_inorder and behaves the same as forcats::as_factor
+# this means we don't need the forcats dependency
+factor_in_order <- function(x) {
+  if (!is.factor(x)) x <- as.factor(x)
+  idx <- as.integer(x)[!duplicated(x)]
+  idx <- idx[!is.na(idx)]
+  return(factor(x, levels = levels(x)[idx]))
+}
+
+# helper function to reverse the order of a factor's levels
+# simple implementation of forcats::fct_rev
+reverse_factor <- function(x) {
+  levels(x) <- rev(levels(x))
+  return(x)
+}
+
+# calculations =======
+
+# helper function to calculate whether to do an axis switch
+# switch = from left to right for y-axis, from bottom to top for x axis
+# reverse - whether to reverse the order of var
+calculate_axis_switch <- function(var, alternate, switch, reverse) {
+  # safety checks
+  stopifnot(
+    "`var` must be character, factor, or integer" = !missing(var) && (is.factor(var) || is_character(var) || is_integer(var)),
+    "`alternate` must be TRUE or FALSE" = !missing(alternate) && is_bool(alternate),
+    "`switch` must be TRUE or FALSE" = !missing(switch) && is_bool(switch),
+    "`reverse` must be TRUE or FALSE" = !missing(reverse) && is_bool(reverse)
+  )
+
+  # convert var
+  var <- if(is.factor(var)) as.integer(var)
+  else if (is_character(var)) factor_in_order(var) |> as.integer()
+  else var
+
+  # reverse?
+  if (reverse) var <- rev(var)
+
+  # calculate
+  if (!alternate) {
+    # no alternating axis
+    return(rep(switch, length(var)))
+  } else if (!switch) {
+    # alternating axis not switched
+    return(var %% 2L == 0L)
+  } else {
+    # switched alternating axis
+    return(var %% 2L == 1L)
+  }
+}
+

@@ -1,8 +1,8 @@
 ---
-title: "sk-examples"
+title: "ggstackplot features"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{sk-examples}
+  %\VignetteIndexEntry{ggstackplot features}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -25,6 +25,8 @@ library(ggstackplot)
 # Arguments
 
 ## `x` and `y` arguments
+
+### vertical stack
 
 ```{r}
 # select any number of variables to make the stack
@@ -53,6 +55,17 @@ mtcars |>
   )
 ```
 
+### horizontal stack
+
+```{r}
+# all examples shown in this document work the same way for a horizontal stack simplfy by switching out the x and y assignments
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec, drat)
+  )
+```
+
+
 ## `color` argument
 
 ```{r}
@@ -63,6 +76,16 @@ mtcars |>
     color = c("#E41A1C", "#377EB8")
   )
 ```
+
+```{r}
+# likewise for the horizontal stack version
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8")
+  )
+```
+
 
 ## `remove_na` argument
 
@@ -96,6 +119,13 @@ mtcars |>
     color = c("#E41A1C", "#377EB8"),
     both_axes = TRUE
   )
+
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    both_axes = TRUE
+  )
 ```
 
 ## `alternate_axes` argument
@@ -104,6 +134,13 @@ mtcars |>
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    alternate_axes = FALSE
+  )
+
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
     color = c("#E41A1C", "#377EB8"),
     alternate_axes = FALSE
   )
@@ -119,10 +156,25 @@ mtcars |>
     switch_axes = TRUE
   )
 
-# and in combinatoin with alternate_axes = FALSE
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    switch_axes = TRUE
+  )
+
+# and in combination with alternate_axes = FALSE
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
+    color = c("#E41A1C", "#377EB8"),
+    alternate_axes = FALSE,
+    switch_axes = TRUE
+  )
+
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
     color = c("#E41A1C", "#377EB8"),
     alternate_axes = FALSE,
     switch_axes = TRUE
@@ -147,12 +199,25 @@ mtcars |>
     color = c("#E41A1C", "#377EB8"),
     overlap = 1
   )
+```
 
+### different overlaps
+
+```{r}
 # different overlap between stack panels
 mtcars |> 
   ggstackplot(
     x = mpg, 
     y = c(qsec, drat, wt, hp),
+    color = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"),
+    overlap = c(1, 0, 1)
+  )
+
+# and the horizontal version
+mtcars |> 
+  ggstackplot(
+    y = mpg, 
+    x = c(qsec, drat, wt, hp),
     color = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"),
     overlap = c(1, 0, 1)
   )
@@ -244,7 +309,7 @@ mtcars |>
   )
 ```
 
-## axis modifications
+### axis modifications
 
 ```{r}
 # secondary x axis (can be the same with dup_axis() or more specific, e.g.:)
@@ -266,5 +331,11 @@ mtcars |>
       ) +
       theme_stackplot() 
   )
+```
+
+# Advanced features
+
+```{r}
+# TODO: add example of custom prepare_stackplot, then modify, then assemble_stackpllot
 ```
 

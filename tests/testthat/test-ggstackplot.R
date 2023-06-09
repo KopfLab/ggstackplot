@@ -29,6 +29,10 @@ test_that("test create_stackplot_tibble() parameters", {
     create_stackplot_tibble(mtcars, y = mpg),
     "insufficient number of columns"
   )
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = c(disp, drat)),
+    "too many columns"
+  )
 
   # remove_na and other bools
   expect_error(
@@ -57,25 +61,6 @@ test_that("test create_stackplot_tibble() parameters", {
     create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, color = c("a", "b", "c")),
     "`color` must be either a single color or one for each variable"
   )
-
-  # direction
-  expect_error(
-    create_stackplot_tibble(mtcars, x = mpg, y = disp, direction = "DNE"),
-    "`direction` must be one of"
-  )
-  expect_error(
-    create_stackplot_tibble(mtcars, x = mpg, y = c(disp, wt), direction = "horizontal"),
-    "`y` must be just 1 column"
-  )
-  expect_error(
-    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, direction = "vertical"),
-    "`x` must be just 1 column"
-  )
-  expect_error(
-    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = c(disp, qsec)),
-    "either `x` or `y` must be just 1 column"
-  )
-
 
 })
 
