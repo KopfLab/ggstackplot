@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 library(ggstackplot)
 ```
 
-# Arguments
+# Main Arguments
 
 ## `x` and `y` arguments
 
@@ -225,7 +225,7 @@ mtcars |>
 
 ## `shared_axis_size` argument
 
-The size of the shared axis needs to be adjusted depending on which aspect ratio is intended.
+The size of the shared axis often needs to be adjusted depending on which aspect ratio is intended. It is defined as fraction of a full panel.
 
 ```{r}
 mtcars |> 
@@ -233,7 +233,7 @@ mtcars |>
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
     overlap = 1,
-    # can be smaller because we're not actually stacking but overlapping
+    # can be only 10% of a plot size as we're overlapping plots
     shared_axis_size = 0.1
   )
 ```
@@ -249,20 +249,29 @@ mtcars |>
     color = c("#E41A1C", "#377EB8"),
     simplify_shared_axis = FALSE
   )
+
+# also goes well with changing `both_axes`, `switch_axes` and/or `alternate_axes`
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    simplify_shared_axis = FALSE,
+    alternate_axes = FALSE
+  )
 ```
 
-## `template` argument
+# The `template` argument
 
 This is the most powerful argument. It defines which ggplot to use as the template for all plots in the stack. This can be an actual plot (just the data will be replaced) or a ggplot that doesn't have data associated yet. The possibilities are pretty much endless. Just make sure to always add the `theme_stacked_plot()` base theme (you can modify it more from there on). A few examples below:
 
-### theme modifications
+## theme modifications
 
 Add any modification to the overlying theme as you see fit.
 
 ```{r}
 library(ggplot2)
 
-# increase y axis test sizetext size
+# increase y axis text size
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
@@ -271,15 +280,33 @@ mtcars |>
       ggplot() + 
       geom_line() +
       theme_stackplot() +
-      theme(axis.text.y = element_text(size = 20))
+      theme(
+        axis.title.y = element_text(size = 20),
+        axis.text.y = element_text(size = 16)
+      )
+  )
+
+# increase the panel margins
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = 
+      ggplot() + 
+      geom_line() +
+      theme_stackplot() +
+      theme(
+        # increase left margin to 20% and top/bottom margins to 10%
+        plot.margin = margin(l = 0.2, t = 0.1, b = 0.1, unit = "npc")
+      )
   )
 ```
 
-### custom geom data
+## custom geom data
 
 ```{r}
 # use different geoms for different panels
-# you can refer to y-stack panel variables with `.yvar`
+# you can refer to y-stack panel variables with `.yvar` and x-stack panel variables with `.xvar`
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
@@ -292,7 +319,7 @@ mtcars |>
   )
 ```
 
-### additional plot elements
+## additional plot elements
 
 ```{r}
 # add some vertical bars
@@ -309,10 +336,10 @@ mtcars |>
   )
 ```
 
-### axis modifications
+## axis modifications
 
 ```{r}
-# secondary x axis (can be the same with dup_axis() or more specific, e.g.:)
+# add secondary x axis
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
@@ -323,6 +350,9 @@ mtcars |>
       ggplot() + 
       geom_line() +
       scale_x_continuous(
+        # change axis name
+        name = "this is my elaborate\nmpg axis",
+        # this can be the same with dup_axis() or as here have a transformed axis
         sec.axis = sec_axis(
           trans = sqrt, 
           name = expression(sqrt(mpg)), 
@@ -332,6 +362,25 @@ mtcars |>
       theme_stackplot() 
   )
 ```
+
+## additional aesthetics
+
+```{r}
+# add aesthetics to the plot
+mtcars |>
+  ggstackplot(
+    x = mpg,  y = c(wt, qsec, drat),
+    alternate_axes = FALSE,
+    template = 
+      ggplot() +
+      aes(color = factor(cyl), linetype = factor(cyl), shape = factor(cyl)) +
+      geom_line() +
+      geom_point(size = 3) +
+      theme_bw() +
+      theme_stackplot() 
+  )
+```
+
 
 # Advanced features
 
