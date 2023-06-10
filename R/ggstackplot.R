@@ -191,6 +191,12 @@ create_stackplot_tibble <- function(
             switch = {{ switch_axes }},
             reverse = !!direction == "vertical"
           ),
+      .shared_axis_min =
+        if (!!direction == "horizontal") min(data_long$.y, na.rm = TRUE)
+        else min(data_long$.x, na.rm = TRUE),
+      .shared_axis_max =
+        if (!!direction == "horizontal") max(data_long$.y, na.rm = TRUE)
+        else max(data_long$.x, na.rm = TRUE),
       .first =
         (direction == "horizontal" & as.integer(.data$.xvar) == 1L) |
           (direction == "vertical" & as.integer(.data$.yvar) == 1L),

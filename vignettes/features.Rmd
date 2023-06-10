@@ -351,7 +351,7 @@ mtcars |>
       geom_line() +
       scale_x_continuous(
         # change axis name
-        name = "this is my elaborate\nmpg axis",
+        name = "this is my elaborate mpg axis",
         # this can be the same with dup_axis() or as here have a transformed axis
         sec.axis = sec_axis(
           trans = sqrt, 
@@ -387,4 +387,35 @@ mtcars |>
 ```{r}
 # TODO: add example of custom prepare_stackplot, then modify, then assemble_stackpllot
 ```
+
+
+# legend mods example
+
+```{r}
+library(ggplot2)
+library(ggstackplot)
+
+# prep plot
+stackplot <- 
+  mtcars |>
+  prepare_stackplot(
+    x = mpg,  y = c(wt, qsec, drat),
+    template = 
+      ggplot() +
+      aes(color = factor(cyl), linetype = factor(cyl), shape = factor(cyl)) +
+      geom_line() +
+      geom_point(size = 3) +
+      theme_bw() +
+      theme_stackplot() 
+  )
+
+# modify themes (or plots) manually
+stackplot$theme[[1]] <- stackplot$theme[[1]] + theme(legend.position = c(0.8, 0.7))
+stackplot$theme[[2]] <- stackplot$theme[[2]] + theme(legend.position = "left")
+
+# assemble
+stackplot |>
+  assemble_stackplot()
+```
+
 

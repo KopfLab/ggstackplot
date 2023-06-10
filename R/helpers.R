@@ -110,21 +110,28 @@ make_plot <- function(config, data, template) {
       scale_fill_identity()
 
   # set the x axis
+  limits <- c(config$.shared_axis_min, config$.shared_axis_max)
   if (!plot$scales$has_scale("x")) {
     # none yet
     plot <- plot + scale_x_continuous(
       name = config$.xvar,
-      sec.axis = if(config$.direction == "horizontal") dup_axis() else waiver()
+      sec.axis = if(config$.direction == "horizontal") dup_axis() else waiver(),
+      limits = if(config$.direction == "vertical") limits else NULL
     )
   } else {
     # has one, see if it needs edits
-    if (config$.direction == "horizontal" && methods::is(plot$scales$scales[[which(plot$scales$find("x"))[1]]]$secondary.axis, "waiver")) {
+    x_scale_idx <- which(plot$scales$find("x"))[1]
+    if (config$.direction == "horizontal" && methods::is(plot$scales$scales[[x_scale_idx]]$secondary.axis, "waiver")) {
       # add secondary axis
-      plot$scales$scales[[which(plot$scales$find("x"))[1]]]$secondary.axis <- dup_axis()
+      plot$scales$scales[[x_scale_idx]]$secondary.axis <- dup_axis()
     }
-    if (methods::is(plot$scales$scales[[which(plot$scales$find("x"))[1]]]$name, "waiver")) {
+    if (methods::is(plot$scales$scales[[x_scale_idx]]$name, "waiver")) {
       # add name
-      plot$scales$scales[[which(plot$scales$find("x"))[1]]]$name <- config$.xvar
+      plot$scales$scales[[x_scale_idx]]$name <- config$.xvar
+    }
+    if (config$.direction == "vertical" && is.null(plot$scales$scales[[x_scale_idx]]$limits)) {
+      # add limits
+      plot$scales$scales[[x_scale_idx]]$limits <- limits
     }
   }
 
@@ -133,17 +140,23 @@ make_plot <- function(config, data, template) {
     # none yet
     plot <- plot + scale_y_continuous(
       name = config$.yvar,
-      sec.axis = if(config$.direction == "vertical") dup_axis() else waiver()
+      sec.axis = if(config$.direction == "vertical") dup_axis() else waiver(),
+      limits = if(config$.direction == "horizontal") limits else NULL
     )
   } else {
     # has one, see if it needs edits
-    if (config$.direction == "vertical" && methods::is(plot$scales$scales[[which(plot$scales$find("y"))[1]]]$secondary.axis, "waiver")) {
+    y_scale_idx <- which(plot$scales$find("y"))[1]
+    if (config$.direction == "vertical" && methods::is(plot$scales$scales[[y_scale_idx]]$secondary.axis, "waiver")) {
       # add secondary axis
-      plot$scales$scales[[which(plot$scales$find("y"))[1]]]$secondary.axis <- dup_axis()
+      plot$scales$scales[[y_scale_idx]]$secondary.axis <- dup_axis()
     }
-    if (methods::is(plot$scales$scales[[which(plot$scales$find("y"))[1]]]$name, "waiver")) {
+    if (methods::is(plot$scales$scales[[y_scale_idx]]$name, "waiver")) {
       # add name
-      plot$scales$scales[[which(plot$scales$find("y"))[1]]]$name <- config$.yvar
+      plot$scales$scales[[y_scale_idx]]$name <- config$.yvar
+    }
+    if (config$.direction == "horizontal" && is.null(plot$scales$scales[[y_scale_idx]]$limits)) {
+      # add limits
+      plot$scales$scales[[y_scale_idx]]$limits <- c(config$.shared_axis_min, config$.shared_axis_max)
     }
   }
 
