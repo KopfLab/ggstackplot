@@ -210,9 +210,9 @@ create_stackplot_tibble <- function(
   # complete prepped data
   return(
     config |>
-      tidyr::nest(config = -.data$.var) |>
+      tidyr::nest(config = -".var") |>
       dplyr::left_join(
-        tidyr::nest(data_long, data = -.data$.var),
+        tidyr::nest(data_long, data = -".var"),
         by = ".var"
       )
   )
