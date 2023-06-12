@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggstackplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
 <span>  simplify_shared_axis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  shared_axis_size <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -80,6 +81,7 @@
 <span>  alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  switch_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -140,6 +142,10 @@
 
 <dt>template</dt>
 <dd><p>a template plot (ggplot object) to use for the stacked plots</p></dd>
+
+
+<dt>add</dt>
+<dd><p>a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)</p></dd>
 
 
 <dt>debug</dt>

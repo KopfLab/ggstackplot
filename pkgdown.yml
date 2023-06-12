@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   examples: examples.html
   features: features.html
-last_built: 2023-06-10T04:15Z
+last_built: 2023-06-12T05:07Z
 urls:
   reference: https://ggstackplot.kopflab.org/reference
   article: https://ggstackplot.kopflab.org/articles
