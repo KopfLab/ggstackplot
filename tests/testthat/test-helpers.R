@@ -24,3 +24,11 @@ test_that("test calculate_axis_switch()", {
   expect_equal(calculate_axis_switch(1:5, TRUE, TRUE, TRUE), c(TRUE, FALSE, TRUE, FALSE, TRUE))
 })
 
+test_that("test process_add_ons()", {
+
+  expect_error(process_add_ons(dplyr::tibble(), add = mean()), "`add` must be a list")
+  expect_error(process_add_ons(dplyr::tibble(.var = c("a", "b", "c")), add = list("NDE" = list())), "no match for `add` component")
+  expect_error(process_add_ons(dplyr::tibble(.var = c("a")), add = list(list(), list())), "`add` component.*index out of range")
+  expect_error(process_add_ons(dplyr::tibble(.var = c("a")), add = list(list(), a = list())), "multiple `add` component")
+
+})

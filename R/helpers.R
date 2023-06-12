@@ -163,13 +163,93 @@ make_plot <- function(config, data, template) {
   return(plot)
 }
 
-# combine plot and theme =============
+# parse add ons =======
+
+process_add_ons <- function(prepared_stackplot, add) {
+
+  # parse add
+  add_expr <- enexpr(add)
+  stopifnot("`add` must be a list" = call_name(add_expr) == "list")
+
+  # prep data frame
+  prepared_stackplot$add <- rep(list(expr(NULL)), nrow(prepared_stackplot))
+
+  # find indices from names (or position if unnamed)
+  add_names <- call_args_names(add_expr)
+
+  if (length(add_names) > 0) {
+    add_indices <- map2_int(
+      add_names, seq_along(add_names),
+      ~{
+        # find matching var
+        if (nchar(.x) > 0L) which(prepared_stackplot$.var == .x)
+        # return index
+        else .y
+      }
+    )
+
+    # check for missing names
+    if (any(is.na(add_indices))) {
+      sprintf("no match for `add` component(s) '%s' in variables ('%s')",
+              paste(add_names[is.na(add_indices)], collapse = "', '"),
+              paste(prepared_stackplot$.var, collapse = "', '")) |>
+        abort()
+    }
+
+    # check for indices outside what's possible
+    if (any(out_of_range <- !add_indices %in% seq_along(prepared_stackplot$.var))) {
+      sprintf("`add` component(s) index out of range: %s",
+              paste(add_indices[out_of_range], collapse = ", ")) |>
+        abort()
+    }
+
+    # check for duplicates
+    if (any(dups <- duplicated(add_indices))) {
+      sprintf("multiple `add` component definitions for variable(s) '%s'",
+              paste(prepared_stackplot$.var[unique(add_indices[dups])], collapse = "', '" )) |>
+        abort()
+    }
+
+    # store adds
+    add_calls <- call_args(add_expr)
+    for (i in seq_along(add_indices)) {
+      prepared_stackplot$add[add_indices[i]] <- list(expr(!!add_calls[[i]]))
+    }
+  }
+
+  # return
+  return(prepared_stackplot)
+}
+
+# combine plot components=============
+
+# internal recursive function to get the components
+get_ggplot_call_components <- function(gg_call) {
+  if (call_name(gg_call) == "+")
+    return(call_args(gg_call) |> map(get_ggplot_call_components) |> unlist())
+  return(list(gg_call))
+}
+
+# internal function to reroot a ggplot call for adding components
+reroot_ggplot_call <- function(new_root, gg_call) {
+  # components
+  components <- get_ggplot_call_components(gg_call)
+
+  # reassemble
+  reassembly <- new_root
+  for (comp in components)
+    reassembly <- expr(!!reassembly + !!comp)
+
+  # return
+  return(reassembly)
+}
 
 # internal function to combine plots with themes considering whether shared axis should be simplified
-combine_plot_and_theme <- function(prepared_stackplot, simplify_shared_axis) {
+combine_plot_theme_add <- function(prepared_stackplot, simplify_shared_axis, include_adds) {
   # safety checks
   stopifnot(
-    "`simplify_shared_axis` must be TRUE or FALSE" = !missing(simplify_shared_axis) && is_bool(simplify_shared_axis)
+    "`simplify_shared_axis` must be TRUE or FALSE" = !missing(simplify_shared_axis) && is_bool(simplify_shared_axis),
+    "`include_adds` must be TRUE or FALSE" = !missing(include_adds) && is_bool(include_adds)
   )
 
   # which axis to simplify (if any)?
@@ -178,16 +258,34 @@ combine_plot_and_theme <- function(prepared_stackplot, simplify_shared_axis) {
   else if(simplify_shared_axis && prepared_stackplot$config[[1]]$.direction == "vertical") "x"
   else NULL
 
-  # combine plot and theme
+  # combine plot and theme and add
   prepared_stackplot <-
     prepared_stackplot |>
     dplyr::mutate(
-      plot_w_theme = map2(.data$plot, .data$theme, ~{
-        plot <- .x + .y
-        if(!is.null(simplify_axis))
-          plot <- plot + theme_modify_axes(simplify_axis, remove_primary = TRUE, remove_secondary = TRUE)
-        return(plot)
-      })
+      plot_w_theme = pmap(
+        list(var = .data$.var, plot = .data$plot, theme = .data$theme, add = .data$add),
+        function(var, plot, theme, add) {
+
+          # plot and theme
+          out <- plot + theme
+
+          # simplify axis?
+          if(!is.null(simplify_axis))
+            out <- out + theme_modify_axes(simplify_axis, remove_primary = TRUE, remove_secondary = TRUE)
+
+          # any add ons?
+          if (include_adds && !is.null(add)) {
+            tryCatch(
+              out <- eval_bare(reroot_ggplot_call(expr(out), add)),
+              error = function(e) {
+                sprintf("failed to parse added code for panel '%s': '%s'",
+                        var, as_label(add)) |>
+                  warn(parent = e)
+              }
+            )
+          }
+          return(out)
+        })
     )
 
   # return the augmented tibble with the new plot_w_theme column
