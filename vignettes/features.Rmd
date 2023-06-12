@@ -58,7 +58,8 @@ mtcars |>
 ### horizontal stack
 
 ```{r}
-# all examples shown in this document work the same way for a horizontal stack simplfy by switching out the x and y assignments
+# all examples shown in this document work the same way for a horizontal
+# stack simplfy by switching out the x and y assignments
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec, drat)
@@ -89,7 +90,7 @@ mtcars |>
 
 ## `remove_na` argument
 
-```{r, suppressMessages = TRUE}
+```{r,  message=FALSE}
 library(dplyr)
 
 # default (NAs are removed so lines are not interrupted)
@@ -376,46 +377,107 @@ mtcars |>
       aes(color = factor(cyl), linetype = factor(cyl), shape = factor(cyl)) +
       geom_line() +
       geom_point(size = 3) +
-      theme_bw() +
       theme_stackplot() 
   )
 ```
 
 
-# Advanced features
+# The `add` argument
+
+For even more specific plot refinements, the `add` argument provides an easy way to add ggplot components to specific panels in the stack plot. A few examples below:
+
+## custom geoms
 
 ```{r}
-# TODO: add example of custom prepare_stackplot, then modify, then assemble_stackpllot
+# similar to the example `custom geom data`, the `add` argument can also
+# be used to add specific geoms only to specific panels
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = ggplot() + theme_stackplot(),
+    add = list(
+      # panel by name
+      qsec = geom_line(), 
+      drat = geom_rect(
+        xmin = 20, xmax = 25, ymin = 3.2, ymax = 4.2, fill = "gray90") + 
+        geom_point()
+    )
+  )
 ```
 
-
-# legend mods example
+## custom themes
 
 ```{r}
-library(ggplot2)
-library(ggstackplot)
+# likewise custom themes can be added to individual panels with `add`
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = ggplot() + geom_line() + theme_stackplot(),
+    add = list(
+      # panel by index
+      geom_point() + theme(axis.title.y = element_text(size = 30))
+    )
+  )
+```
 
-# prep plot
-stackplot <- 
-  mtcars |>
-  prepare_stackplot(
+## custom scales
+
+```{r, message=FALSE}
+# particularly useful is also the possibility to modify individual scales
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = ggplot() + geom_line() + theme_stackplot(),
+    add = list(
+      # panel by index
+      NULL,
+      scale_y_continuous("$$ drat", labels = scales::label_dollar()) + 
+        theme(axis.title.y = element_text(size = 30)) 
+    )
+  )
+```
+
+## legend positioning
+
+```{r}
+# another example of theme modification is the use of the `add` argument
+# to specify legend positioning
+mtcars |>
+  ggstackplot(
     x = mpg,  y = c(wt, qsec, drat),
+    color = c("#E41A1C", "#377EB8", "#4DAF4A"),
     template = 
-      ggplot() +
-      aes(color = factor(cyl), linetype = factor(cyl), shape = factor(cyl)) +
-      geom_line() +
-      geom_point(size = 3) +
-      theme_bw() +
-      theme_stackplot() 
+      ggplot() + aes(linetype = factor(vs)) +
+      geom_line() + theme_stackplot(),
+    # switch legend position for middle plot
+    add = list(qsec = theme(legend.position = "left"))
   )
 
-# modify themes (or plots) manually
-stackplot$theme[[1]] <- stackplot$theme[[1]] + theme(legend.position = c(0.8, 0.7))
-stackplot$theme[[2]] <- stackplot$theme[[2]] + theme(legend.position = "left")
-
-# assemble
-stackplot |>
-  assemble_stackplot()
+mtcars |>
+  ggstackplot(
+    x = mpg,  y = c(wt, qsec, drat),
+    color = c("#E41A1C", "#377EB8", "#4DAF4A"),
+    template = 
+      ggplot() + aes(linetype = factor(vs)) +
+      geom_line() + theme_stackplot() +
+      theme(legend.position = "none"),
+    # re-include the middle panel legend on the plot
+    # with some additional styling
+    add = list(
+      qsec = 
+        theme(
+          legend.position = c(0.2, 0.9),
+          legend.title = element_text(size = 20),
+          legend.text = element_text(size = 16),
+          legend.background = element_rect(
+            color = "black", fill = "gray90", linewidth = 0.5),
+          legend.key = element_blank(),
+          legend.direction = "horizontal"
+        ) +
+        labs(linetype = "VS")
+    )
+  )
 ```
-
-

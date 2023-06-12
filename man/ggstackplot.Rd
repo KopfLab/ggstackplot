@@ -19,6 +19,7 @@ ggstackplot(
   simplify_shared_axis = TRUE,
   shared_axis_size = 0.2,
   template = ggplot() + geom_line() + geom_point() + theme_stackplot(),
+  add = list(),
   debug = FALSE
 )
 
@@ -32,6 +33,7 @@ prepare_stackplot(
   alternate_axes = TRUE,
   switch_axes = FALSE,
   template = ggplot() + geom_line() + geom_point() + theme_stackplot(),
+  add = list(),
   debug = FALSE
 )
 
@@ -67,6 +69,8 @@ assemble_stackplot(
 \item{shared_axis_size}{if simplify_shared_axes is true, this determines the size of the shared axis relative to the size of a single plot}
 
 \item{template}{a template plot (ggplot object) to use for the stacked plots}
+
+\item{add}{a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)}
 
 \item{debug}{debug flag to print the stackplot tibble and gtable intermediates}
 

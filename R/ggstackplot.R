@@ -19,7 +19,12 @@
 #' @param simplify_shared_axis whether to simplify the shared axis to only be on the last plot (+ first plot if a duplicate secondary axis is set)
 #' @param shared_axis_size if simplify_shared_axes is true, this determines the size of the shared axis relative to the size of a single plot
 #' @param template a template plot (ggplot object) to use for the stacked plots
+#' @param add a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)
 #' @param debug debug flag to print the stackplot tibble and gtable intermediates
+#' @examples
+#'
+#'
+#'
 #' @export
 ggstackplot <- function(
     data, x, y, remove_na = TRUE, color = NA,
@@ -29,6 +34,7 @@ ggstackplot <- function(
       geom_line() +
       geom_point() +
       theme_stackplot(),
+    add = list(),
     debug = FALSE) {
 
   # put everything together
@@ -37,7 +43,7 @@ ggstackplot <- function(
       x = {{ x }}, y = {{ y }},
       remove_na = remove_na, color = color,
       both_axes = both_axes, alternate_axes = alternate_axes,
-      switch_axes = switch_axes, template = template,
+      switch_axes = switch_axes, template = template, add = {{ add }},
       debug = debug) |>
     assemble_stackplot(
       overlap = overlap,
@@ -60,6 +66,7 @@ prepare_stackplot <- function(
       geom_line() +
       geom_point() +
       theme_stackplot(),
+    add = list(),
     debug = FALSE) {
 
   # prep the stackplot
@@ -75,7 +82,9 @@ prepare_stackplot <- function(
     # prepare plots
     dplyr::mutate(plot = map2(.data$config, .data$data, make_plot, template)) |>
     # prepare themes
-    dplyr::mutate(theme = map(.data$config, make_color_axis_theme))
+    dplyr::mutate(theme = map(.data$config, make_color_axis_theme)) |>
+    # process add ons
+    process_add_ons(add = {{ add }})
 
   # debug
   if (debug) {
@@ -210,9 +219,9 @@ create_stackplot_tibble <- function(
   # complete prepped data
   return(
     config |>
-      tidyr::nest(config = -.data$.var) |>
+      tidyr::nest(config = -".var") |>
       dplyr::left_join(
-        tidyr::nest(data_long, data = -.data$.var),
+        tidyr::nest(data_long, data = -".var"),
         by = ".var"
       )
   )
@@ -270,7 +279,7 @@ create_stackplot_gtables <- function(prepared_stackplot, overlap, simplify_share
 
   # combine plots and themes and assembel the gtables
   gtables <- prepared_stackplot |>
-    combine_plot_and_theme(simplify_shared_axis = simplify_shared_axis) |>
+    combine_plot_theme_add(simplify_shared_axis = simplify_shared_axis, include_adds = TRUE) |>
     tidyr::unnest(.data$config) |>
     dplyr::select(".var", ".direction", "plot_w_theme") |>
     # could think about relative sizing here with size_adjust but that doesn't seem like a feature we need
@@ -288,7 +297,7 @@ create_stackplot_gtables <- function(prepared_stackplot, overlap, simplify_share
   if (simplify_shared_axis) {
     # x axes (could get these from any of the pre-final plots)
     shared_axis_plot <- prepared_stackplot[1,] |>
-      combine_plot_and_theme(simplify_shared_axis = FALSE)
+      combine_plot_theme_add(simplify_shared_axis = FALSE, include_adds = FALSE)
 
     # primary axis present?
     primary_axis_components <-
