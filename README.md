@@ -1,3 +1,8 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -12,9 +17,10 @@ status](https://www.r-pkg.org/badges/version/ggstackplot)](https://CRAN.R-projec
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 [![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
+
 <!-- badges: end -->
 
-The goal of ggstackplot is to …
+The goal of ggstackplot is to ...
 
 ## Installation
 
@@ -39,8 +45,8 @@ ggstackplot(
 )
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" width="100%"/>
 
 ## Next steps
 
-- check out the `Features` and `Examples` vignettes on …
+-   check out the `Features` and `Examples` vignettes on ...

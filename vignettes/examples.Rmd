@@ -3,8 +3,10 @@ title: "ggstackplot examples"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{ggstackplot examples}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -16,4 +18,66 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(ggstackplot)
+library(tidyverse)
 ```
+
+# Load example data
+
+The data in this example are from measurements acquired on a scientific high altitude balloon flight. Caro, T.A., Wendeln, M., Freeland, M. et al. Ultraviolet light measurements (280–400 nm) acquired from stratospheric balloon flight to assess influence on bioaerosols. Aerobiologia 35, 771–776 (2019). https://doi.org/10.1007/s10453-019-09597-9
+
+```{r}
+hab_data <- readRDS("HAB_example_data.RDS")
+hab_data <- slice(hab_data, 1:100)
+
+head(hab_data)
+```
+
+```{r}
+hab_data |> 
+  ggstackplot(
+    x = `alt (m)`,
+    y = c(`Temperature (C)`, `Pressure (hPa)`, `speed`, `Total UV Flux (mW/cm)`),
+    color = c("darkblue", "darkgreen", "black", "red"),
+    alternate_axes = FALSE,
+    switch_axes = TRUE,
+    shared_axis_size = 0.3,
+    overlap = 0.1,
+    template =
+      ggplot() +
+      scale_x_continuous(
+        name = "Altitude (m)",
+        n.breaks = 12,
+        sec.axis = sec_axis(
+          name = "Altitude (km)",
+          trans = ~ . / 1000
+        )
+        ) +
+      geom_rect(ymin = -Inf, ymax = Inf,
+                xmin = 0, xmax = 7500,
+                fill = "lightgray",
+                color = "lightgray",
+                alpha = 0.1) +
+      geom_rect(ymin = -Inf, ymax = Inf,
+                xmin = 7500, xmax = 35000,
+                fill = "lightblue1",
+                color = "lightblue1",
+                alpha = 0.1) +
+      theme_stackplot() +
+      theme(
+        axis.title = element_text(size = 6),
+        axis.text = element_text(size = 6)
+      )
+      ,
+    add = list(
+      `Temperature (C)` = geom_path(),
+      `Pressure (hPa)` = 
+        geom_path() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 0)),
+      speed = geom_path(),
+      `Total UV Flux (mW/cm)` = 
+        scale_y_continuous(limits = c(0, 10)) + # this causes the axis to totally disappear
+        geom_path() 
+    )
+  )
+```
+
