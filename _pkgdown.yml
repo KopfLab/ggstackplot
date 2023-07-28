@@ -1,11 +1,15 @@
 title: ggstackplot
 url: https://ggstackplot.kopflab.org
 template:
-  bootstrap: 5
-  bootswatch: flatly
+  params:
+    bootswatch: simplex
+    ganalytics: UA-106138361-3
 
 development:
-  mode: auto
+  mode: devel
+
+home:
+  strip_header: false
 
 navbar:
   title: ggstackplot
