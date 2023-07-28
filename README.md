@@ -43,3 +43,4 @@ ggstackplot(
 
 - check out the `Features` vignette for details on all available
   functionality
+- check out the `Examples` vignette for scientific data examples

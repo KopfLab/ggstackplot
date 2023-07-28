@@ -330,6 +330,67 @@ mtcars |>
   )
 ```
 
+## Grid modifications
+
+Modifying the `panel.grid` argument can create gridlines for both the stacked variable axes and the shared axis. This can get a bit cluttered in a plot where `overlap = 1`.\
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 1,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme(
+        panel.grid.major = element_line(
+          color = "lightgray", 
+          linewidth = 0.8)
+      )
+  )
+```
+
+But, this can look reasonable if there is no overlap of the stacked plats, and/or if the lines are made inconspicuous:
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme(
+        panel.grid.major = element_line(
+          color = "lightgray", 
+          linetype = "dotted", 
+          size = 0.2)
+      )
+  )
+```
+
+## Other themes
+
+You aren't bound to our theme's aesthetic choices :), you can always add another theme or theme modifications on top of `theme_stackplot()`! Here we add the classic `theme_bw()` to get those nice clean gridlines back, as well as a panel border.
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme_bw() # give us that good theme!
+  )
+```
+
 ## Custom geom data
 
 It is possible to use different geoms for different stacked panels. Here, we use both lines and points. These geoms are defined in the `template` argument.
@@ -368,64 +429,7 @@ mtcars |>
   )
 ```
 
-### Grid modifications
 
-Modifying the `panel.grid` argument can create gridlines for both the stacked variable axes and the shared axis. This can get a bit cluttered in a plot where `overlap = 1`.\
-
-```{r}
-mtcars |>
-  ggstackplot(
-    x = mpg, y = c(qsec, drat),
-    color = c("#E41A1C", "#377EB8"),
-    overlap = 1,
-    template = ggplot() +
-      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
-      geom_point(data = function(df) filter(df, .yvar == "drat")) +
-      theme_stackplot() +
-      theme(
-        panel.grid.major = element_line(
-          color = "lightgray", 
-          size = 0.8)
-      )
-  )
-```
-
-But, this can look reasonable if there is no overlap of the stacked plats, and/or if the lines are made inconspicuous:
-
-```{r}
-mtcars |>
-  ggstackplot(
-    x = mpg, y = c(qsec, drat),
-    color = c("#E41A1C", "#377EB8"),
-    overlap = 0,
-    template = ggplot() +
-      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
-      geom_point(data = function(df) filter(df, .yvar == "drat")) +
-      theme_stackplot() +
-      theme(
-        panel.grid.major = element_line(
-          color = "lightgray", 
-          linetype = "dotted", 
-          size = 0.2)
-      )
-  )
-```
-
-You aren't bound to our theme's aesthetic choices :), you can always add another theme or theme modifications on top of `theme_stackplot()`! Here we add the classic `theme_bw()` to get those nice clean gridlines back, as well as a panel border.
-
-```{r}
-mtcars |>
-  ggstackplot(
-    x = mpg, y = c(qsec, drat),
-    color = c("#E41A1C", "#377EB8"),
-    overlap = 0,
-    template = ggplot() +
-      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
-      geom_point(data = function(df) filter(df, .yvar == "drat")) +
-      theme_stackplot() +
-      theme_bw() # give us that good theme!
-  )
-```
 
 ## Axis modifications
 
@@ -565,7 +569,6 @@ mtcars |>
 Another example of theme modification is the use of the \`add\` argument to specify legend positioning.
 
 ```{r}
-# 
 mtcars |>
   ggstackplot(
     x = mpg,  y = c(wt, qsec, drat),
@@ -609,14 +612,14 @@ mtcars |>
 
 # Putting it all together
 
-```{r}
+```{r, warning = FALSE}
 iris |> 
   ggstackplot(
     # define our shared y axis
     x = Sepal.Length,
     # define the stacked x axes
     y = c(Sepal.Width, Petal.Length, Petal.Width),
-    # We want to altnerate the axes:
+    # we want to alternate the axes:
     alternate_axes = TRUE,
     overlap = 0,
     # set the base ggplot options
@@ -625,14 +628,12 @@ iris |>
       ggplot() +
       # set color aesthetic to vary with species
       aes(color = Species, fill = Species) +
-      # primary geom will be points
-      #geom_point() +
       # we want the default stackplot theme
       theme_stackplot() +
       # add custom theme modifications
       theme(
         # we want each panel to have vertical gridlines
-        panel.grid.major.x = element_line(color = "lightgray", size = 0.2),
+        panel.grid.major.x = element_line(color = "lightgray", linewidth = 0.2),
         # and no repeated legends
         legend.position = "None"
       ) +
@@ -644,7 +645,6 @@ iris |>
     # make panel-specific additions
     add = list(
       # for Petal.Length panel:
-      ## >>>> add seems to have issues with labs argument
       Petal.Length = 
         geom_col() +
         labs(y = "Length of the Petal"),
@@ -656,68 +656,5 @@ iris |>
         coord_cartesian(ylim = c(-3, 5)) +
         labs(y = "Width of the Petal")
     )
-  )
-```
-
-# Caution
-
-Transformations to the shared axis will modify data but it will not be immediately apparent that the data does not correspond to the shared axis:
-
-```{r}
-mtcars |> 
-  ggstackplot(
-    x = mpg, y = c(wt, qsec, drat),
-    shared_axis_size = 0.8,
-  )
-
-# compare to this plot, where one of the stacked plots has a different scale on the shared axis. This plot is deceiving!
-mtcars |> 
-  ggstackplot(
-    x = mpg, y = c(wt, qsec, drat),
-    shared_axis_size = 0.8,
-    add = list(
-      wt = scale_x_continuous(limits = c(10, 15))
-    )
-  )
-```
-
-Similarly, one could scale the shared axis for one specific plot without. This misrepresents the data, as `wt` is on a log scale, while the shared x axis is a linear scale.
-
-```{r}
-mtcars |> 
-  ggstackplot(
-    x = mpg, y = c(wt, qsec, drat),
-    shared_axis_size = 0.8,
-    add = list(
-      wt = scale_x_log10()
-    )
-  )
-```
-
-To avoid this misrepresentation, add a secondary axis:
-
-```{r}
-mtcars |>
-  ggstackplot(
-    x = mpg, y = c(wt, qsec, drat),
-    overlap = 0.1, 
-    template = 
-      ggplot() + 
-      geom_line() +
-      scale_x_continuous(
-        # change axis name
-        name = "this is my mpg axis",
-        # this can be the same with dup_axis() or as here have a transformed axis
-        sec.axis = sec_axis(
-          trans = log10, 
-          name = "Log10 MPG only corresponds to wt panel", 
-          breaks = scales::pretty_breaks(5)
-        )
-      ) +
-      theme_stackplot(),
-    add = list(
-      # not sure why anyone would want to do this but ...
-      wt = scale_x_log10()
-        )
   )
 ```
