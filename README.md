@@ -1,8 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -10,29 +5,26 @@ editor_options:
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/ggstackplot)](https://CRAN.R-project.org/package=ggstackplot)
 [![R-CMD-check](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 [![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
-
+[![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 <!-- badges: end -->
 
-The goal of ggstackplot is to ...
+Have you ever wanted to compare multiple panels of line plots that do
+not share coordinate schemes? These kinds of plots are ubiquitous in the
+Earth sciences, but there is not an easy way to create them with ggplot
+facets.
 
 ## Installation
 
-You can install the development version of ggstackplot from
-[GitHub](https://github.com/) with:
+You can install ggstackplot from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
+if(!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 devtools::install_github("KopfLab/ggstackplot")
 ```
 
-## Example
+## Show me some code
 
 ``` r
 library(ggstackplot)
@@ -45,8 +37,9 @@ ggstackplot(
 )
 ```
 
-<img src="man/figures/README-example-1.png" width="100%"/>
+<img src="man/figures/README-example-1.png" width="100%" />
 
 ## Next steps
 
--   check out the `Features` and `Examples` vignettes on ...
+- check out the `Features` vignette for details on all available
+  functionality
