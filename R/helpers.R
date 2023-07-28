@@ -275,6 +275,16 @@ combine_plot_theme_add <- function(prepared_stackplot, simplify_shared_axis, inc
 
           # any add ons?
           if (include_adds && !is.null(add)) {
+
+            # safety check for shared axis
+            if(!is.null(simplify_axis)) {
+              if (any(grepl(sprintf("scale_%s_", simplify_axis), as.character(add)))) {
+                sprintf("invalid add-on for '%s' plot: `%s`. Modifications of the shared %s-axis are not allowed because it can lead to deceptive visualizations. You can modify the shared axis in the template or switch to `simplify_shared_axis = FALSE`.", var, as_label(add), simplify_axis) |>
+                abort()
+              }
+            }
+
+            # try to patch it all together
             tryCatch(
               out <- eval_bare(reroot_ggplot_call(expr(out), add)),
               error = function(e) {
