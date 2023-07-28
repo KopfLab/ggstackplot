@@ -97,6 +97,7 @@ theme_modify_axes <- function(axis = c("x", "y"), change_color = NULL, remove_pr
 
 # internal function to make individual plot from base plot, config and data
 make_plot <- function(config, data, template) {
+
   # add data and x/y aesthetics
   plot <-
     template %+%
@@ -114,10 +115,14 @@ make_plot <- function(config, data, template) {
   if (!plot$scales$has_scale("x")) {
     # none yet
     plot <- plot + scale_x_continuous(
-      name = config$.xvar,
       sec.axis = if(config$.direction == "horizontal") dup_axis() else waiver(),
       limits = if(config$.direction == "vertical") limits else NULL
     )
+    # check if template has x labels
+    if (is.null(template$labels$x))
+      plot <- plot + labs(x = config$.xvar)
+    else
+      plot <- plot + labs(x = template$labels$x)
   } else {
     # has one, see if it needs edits
     x_scale_idx <- which(plot$scales$find("x"))[1]
@@ -126,8 +131,11 @@ make_plot <- function(config, data, template) {
       plot$scales$scales[[x_scale_idx]]$secondary.axis <- dup_axis()
     }
     if (methods::is(plot$scales$scales[[x_scale_idx]]$name, "waiver")) {
-      # add name
-      plot$scales$scales[[x_scale_idx]]$name <- config$.xvar
+      # axis but no name - check if template has x labels
+      if (is.null(template$labels$x))
+        plot <- plot + labs(x = config$.xvar)
+      else
+        plot <- plot + labs(x = template$labels$x)
     }
     if (config$.direction == "vertical" && is.null(plot$scales$scales[[x_scale_idx]]$limits)) {
       # add limits
@@ -139,10 +147,14 @@ make_plot <- function(config, data, template) {
   if (!plot$scales$has_scale("y")) {
     # none yet
     plot <- plot + scale_y_continuous(
-      name = config$.yvar,
       sec.axis = if(config$.direction == "vertical") dup_axis() else waiver(),
       limits = if(config$.direction == "horizontal") limits else NULL
     )
+    # check if template has y labels
+    if (is.null(template$labels$y))
+      plot <- plot + labs(y = config$.yvar)
+    else
+      plot <- plot + labs(y = template$labels$y)
   } else {
     # has one, see if it needs edits
     y_scale_idx <- which(plot$scales$find("y"))[1]
@@ -151,8 +163,11 @@ make_plot <- function(config, data, template) {
       plot$scales$scales[[y_scale_idx]]$secondary.axis <- dup_axis()
     }
     if (methods::is(plot$scales$scales[[y_scale_idx]]$name, "waiver")) {
-      # add name
-      plot$scales$scales[[y_scale_idx]]$name <- config$.yvar
+      # axis but no name - check if template has x labels
+      if (is.null(template$labels$y))
+        plot <- plot + labs(y = config$.yvar)
+      else
+        plot <- plot + labs(y = template$labels$y)
     }
     if (config$.direction == "horizontal" && is.null(plot$scales$scales[[y_scale_idx]]$limits)) {
       # add limits
