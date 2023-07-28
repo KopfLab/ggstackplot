@@ -9,7 +9,7 @@ development:
   mode: devel
 
 home:
-  strip_header: false
+  strip_header: true
 
 navbar:
   title: ggstackplot

@@ -10,6 +10,8 @@
 [![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 <!-- badges: end -->
 
+## About
+
 Have you ever wanted to compare multiple panels of line plots that do
 not share coordinate schemes? These kinds of plots are ubiquitous in the
 Earth sciences, but there is not an easy way to create them with ggplot
