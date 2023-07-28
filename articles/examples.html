@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ggstackplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,8 +78,87 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggstackplot</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggstackplot</span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="example-1-high-altitude-balloon-flight">Example 1: high altitude balloon flight<a class="anchor" aria-label="anchor" href="#example-1-high-altitude-balloon-flight"></a>
+</h2>
+<div class="section level3">
+<h3 id="load-example-data">Load example data<a class="anchor" aria-label="anchor" href="#load-example-data"></a>
+</h3>
+<p>The data in this example are from measurements acquired on a
+scientific high altitude balloon flight. Caro, T.A., Wendeln, M.,
+Freeland, M. et al. Ultraviolet light measurements (280–400 nm) acquired
+from stratospheric balloon flight to assess influence on bioaerosols.
+Aerobiologia 35, 771–776 (2019). <a href="https://doi.org/10.1007/s10453-019-09597-9" class="external-link uri">https://doi.org/10.1007/s10453-019-09597-9</a></p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hab_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"HAB_example_data.RDS"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hab_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
+<span><span class="co">#&gt;   `Temperature (C)` `Pressure (hPa)` `alt (m)` speed `Total UV Flux (mW/cm)`</span></span>
+<span><span class="co">#&gt;               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>              23.7             961.      480.  8.94                    2.13</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>              25.5             932.      744. 10.9                     2.47</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>              27.0             903.     <span style="text-decoration: underline;">1</span>006   9.77                    2.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>              28.2             869.     <span style="text-decoration: underline;">1</span>327.  8.90                    2.88</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>              29.1             841.     <span style="text-decoration: underline;">1</span>612.  8.74                    2.92</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>              29.7             815.     <span style="text-decoration: underline;">1</span>889. 12.2                     2.78</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="visualize-example-data">Visualize example data<a class="anchor" aria-label="anchor" href="#visualize-example-data"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hab_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">`alt (m)`</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">`Temperature (C)`</span>, <span class="va">`Pressure (hPa)`</span>, `Speed (m/s)` <span class="op">=</span> <span class="va">`speed`</span>, <span class="va">`Total UV Flux (mW/cm)`</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"darkgreen"</span>, <span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
+<span>    alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    shared_axis_size <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>    overlap <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>    template <span class="op">=</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span></span>
+<span>        name <span class="op">=</span> <span class="st">"Altitude (m)"</span>,</span>
+<span>        n.breaks <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>        sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">sec_axis</a></span><span class="op">(</span></span>
+<span>          name <span class="op">=</span> <span class="st">"Altitude (km)"</span>,</span>
+<span>          trans <span class="op">=</span> <span class="op">~</span> <span class="va">.</span> <span class="op">/</span> <span class="fl">1000</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html" class="external-link">expand_limits</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>                xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">7500</span>,</span>
+<span>                fill <span class="op">=</span> <span class="st">"lightgray"</span>, color <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>                alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>                xmin <span class="op">=</span> <span class="fl">7500</span>, xmax <span class="op">=</span> <span class="fl">35000</span>,</span>
+<span>                fill <span class="op">=</span> <span class="st">"lightblue1"</span>, color <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>                alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      `Temperature (C)` <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      `Pressure (hPa)` <span class="op">=</span> </span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      `Speed (m/s)` <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      `Total UV Flux (mW/cm)` <span class="op">=</span> </span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Scale for <span style="color: #00BB00;">y</span> is already present.</span></span>
+<span><span class="co">#&gt; Adding another scale for <span style="color: #00BB00;">y</span>, which will replace the existing scale.</span></span></code></pre></div>
+<p><img src="examples_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
