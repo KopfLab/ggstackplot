@@ -26,7 +26,9 @@ library(ggstackplot)
 
 ## `x` and `y` arguments
 
-### vertical stack
+### Vertical stack
+
+Select variables to make a stack. The selection order translates to the order with which the plots are stacked. Any valid tidyselect selection and/or renaming are supported.
 
 ```{r}
 # select any number of variables to make the stack
@@ -55,7 +57,9 @@ mtcars |>
   )
 ```
 
-### horizontal stack
+### Horizontal stack
+
+Select multiple x variables to stack:
 
 ```{r}
 # all examples shown in this document work the same way for a horizontal
@@ -66,8 +70,9 @@ mtcars |>
   )
 ```
 
-
 ## `color` argument
+
+Set colors manually by supplying a character vector of colors:
 
 ```{r}
 # select any specific colors for each plot
@@ -87,8 +92,9 @@ mtcars |>
   )
 ```
 
-
 ## `remove_na` argument
+
+This removes NA values so that lines are not interrupted. When `remove_na` is set to `FALSE`, breaks in lines may appear due to NA values.
 
 ```{r,  message=FALSE}
 library(dplyr)
@@ -113,7 +119,10 @@ mtcars |>
 
 ## `both_axes` argument
 
+When `both_axes = TRUE` , the stacked variable axes are duplicated on both sides of each stacked plot.
+
 ```{r}
+# Vertical stackplot
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
@@ -121,6 +130,7 @@ mtcars |>
     both_axes = TRUE
   )
 
+# Horizontal stackplot
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
@@ -131,7 +141,10 @@ mtcars |>
 
 ## `alternate_axes` argument
 
+When `alternate_axes = FALSE` , the axes for the multiple variables are kept on the same side of the facets. The default behavior alternates these axes left/right or top/bottom.
+
 ```{r}
+# axes do not alternate:
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
@@ -139,6 +152,7 @@ mtcars |>
     alternate_axes = FALSE
   )
 
+# Horizontal version
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
@@ -149,7 +163,10 @@ mtcars |>
 
 ## `switch_axes` argument
 
+Determines whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if `alternate_axes = TRUE`). Setting `switch_axes = TRUE`}, leads to the opposite, i.e. the first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms). If `alternate_axes = TRUE` this essentially switches the order with which the axes alternate (e.g., right/left/right vs. left/right/left).
+
 ```{r}
+# stacked axis starts on the right
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
@@ -157,6 +174,8 @@ mtcars |>
     switch_axes = TRUE
   )
 
+# or for the horizontal version, stacked axis
+# starts on the top
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
@@ -165,6 +184,7 @@ mtcars |>
   )
 
 # and in combination with alternate_axes = FALSE
+# all axes on the right
 mtcars |> 
   ggstackplot(
     x = mpg, y = c(wt, qsec),
@@ -173,6 +193,7 @@ mtcars |>
     switch_axes = TRUE
   )
 
+# or all axes on the top
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
@@ -183,6 +204,8 @@ mtcars |>
 ```
 
 ## `overlap` argument
+
+Overlap determines the grid overlap between the multiple stacked plots. `1` corresponds to fully overlapping (similar to having a ggplot `sec_axis` enabled) while `0` does not overlap at all.
 
 ```{r}
 # define any overlap between 0 and 1
@@ -202,7 +225,9 @@ mtcars |>
   )
 ```
 
-### different overlaps
+### Different overlaps
+
+Multiple overlap arguments can be supplied with a numeric vector of numbers between 0 and 1, where each element in the vector corresponds to the overlap between the *n* and *n+1*th overlap value. For example, for a plot with four stacked panels: `qsec`, `drat`, `wt`, `hp`, a vector of `overlap = c(1, 0, 1)` indicates that between the first 2 elements (`qsec` and `drat`) there is full overlap. Between `drat` and `wt` there is no overlap (`0`). Between `wt` and `hp` there is full overlap.
 
 ```{r}
 # different overlap between stack panels
@@ -226,7 +251,7 @@ mtcars |>
 
 ## `shared_axis_size` argument
 
-The size of the shared axis often needs to be adjusted depending on which aspect ratio is intended. It is defined as fraction of a full panel.
+The size of the shared axis determines the size of any shared axes relative to the grid size of the original ggplot. The size of the shared axis often needs to be adjusted depending on which aspect ratio is intended. It is defined as fraction of a full panel, between 0 and 1.
 
 ```{r}
 mtcars |> 
@@ -235,13 +260,13 @@ mtcars |>
     color = c("#E41A1C", "#377EB8"),
     overlap = 1,
     # can be only 10% of a plot size as we're overlapping plots
-    shared_axis_size = 0.1
+    shared_axis_size = 1
   )
 ```
 
 ## `simplify_shared_axis` argument
 
-Sometimes it's better to keep the shared axis on each panel.
+Sometimes it's better just to keep the shared axis on each panel. This produces something akin to a `facet_wrap()` or `cowplot::plot_grid()`.
 
 ```{r}
 mtcars |> 
@@ -256,18 +281,20 @@ mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
-    simplify_shared_axis = FALSE,
+    #simplify_shared_axis = FALSE,
     alternate_axes = FALSE
   )
 ```
 
 # The `template` argument
 
-This is the most powerful argument. It defines which ggplot to use as the template for all plots in the stack. This can be an actual plot (just the data will be replaced) or a ggplot that doesn't have data associated yet. The possibilities are pretty much endless. Just make sure to always add the `theme_stacked_plot()` base theme (you can modify it more from there on). A few examples below:
+This is the most important argument. It defines which ggplot to use as the template for all plots in the stack. This can be an actual plot (just the data will be replaced) or a ggplot that doesn't have data associated yet. The possibilities are pretty much endless. Just make sure to always add the `theme_stacked_plot()` base theme (you can modify it more from there on). A few examples below:
 
-## theme modifications
+## Theme modifications
 
 Add any modification to the overlying theme as you see fit.
+
+Here, `template` allows the user to define that a `ggplot()` will serve as the base, with `geom_line` as the primary geom. Then, `theme_stackplot()` is applied and custom `theme()` options are set.
 
 ```{r}
 library(ggplot2)
@@ -303,7 +330,70 @@ mtcars |>
   )
 ```
 
-## custom geom data
+## Grid modifications
+
+Modifying the `panel.grid` argument can create gridlines for both the stacked variable axes and the shared axis. This can get a bit cluttered in a plot where `overlap = 1`.\
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 1,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme(
+        panel.grid.major = element_line(
+          color = "lightgray", 
+          linewidth = 0.8)
+      )
+  )
+```
+
+But, this can look reasonable if there is no overlap of the stacked plats, and/or if the lines are made inconspicuous:
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme(
+        panel.grid.major = element_line(
+          color = "lightgray", 
+          linetype = "dotted", 
+          size = 0.2)
+      )
+  )
+```
+
+## Other themes
+
+You aren't bound to our theme's aesthetic choices :), you can always add another theme or theme modifications on top of `theme_stackplot()`! Here we add the classic `theme_bw()` to get those nice clean gridlines back, as well as a panel border.
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    overlap = 0,
+    template = ggplot() +
+      geom_line(data = function(df) filter(df, .yvar == "qsec")) +
+      geom_point(data = function(df) filter(df, .yvar == "drat")) +
+      theme_stackplot() +
+      theme_bw() # give us that good theme!
+  )
+```
+
+## Custom geom data
+
+It is possible to use different geoms for different stacked panels. Here, we use both lines and points. These geoms are defined in the `template` argument.
 
 ```{r}
 # use different geoms for different panels
@@ -318,12 +408,14 @@ mtcars |>
       geom_point(data = function(df) filter(df, .yvar == "drat")) +
       theme_stackplot()
   )
+  
 ```
 
-## additional plot elements
+## Additional plot elements
+
+One can also add additional plot elements just as with a normal ggplot. Here we add a vertical line that is shared across all stacked plots:
 
 ```{r}
-# add some vertical bars
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
@@ -337,10 +429,14 @@ mtcars |>
   )
 ```
 
-## axis modifications
+
+
+## Axis modifications
+
+Sometimes secondary axes will still be desired, especially if that axis is a transformation of an existing one. For example, here, we create a square root mpg axis that is plotted against the mpg axis. Again, all of this is defined in the `template` argument by adding a `scale_x_continuous` argument, just as you would in a normal ggplot.
 
 ```{r}
-# add secondary x axis
+# add a secondary x axis
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
@@ -352,7 +448,7 @@ mtcars |>
       geom_line() +
       scale_x_continuous(
         # change axis name
-        name = "this is my elaborate mpg axis",
+        name = "this is my mpg axis",
         # this can be the same with dup_axis() or as here have a transformed axis
         sec.axis = sec_axis(
           trans = sqrt, 
@@ -364,7 +460,9 @@ mtcars |>
   )
 ```
 
-## additional aesthetics
+## Additional aesthetics
+
+Aesthetics are also defined in the `template` argument. Remember, the only parameters that are defined in the stackplot are (i) the shared axis (in this case, `mpg` ), (ii) the axes to be stacked, in this case `y = c(wt, qsec, drat)`, (iii) any ggstackplot-specific arguments. All ggplot arguments and aesthetics are assigned in the `template` argument.
 
 ```{r}
 # add aesthetics to the plot
@@ -381,21 +479,25 @@ mtcars |>
   )
 ```
 
-
 # The `add` argument
 
-For even more specific plot refinements, the `add` argument provides an easy way to add ggplot components to specific panels in the stack plot. A few examples below:
+For even more specific plot refinements, the `add` argument provides an easy way to add ggplot components to **specific panels** in the stack plot. A few examples below:
 
-## custom geoms
+## Custom geoms
+
+Similar to the example `custom geom data` the `add` argument can also be used to add specific geoms *only to specific panels.*
+
+This takes the form of a `list()` where each item in the list is of the form: `panel_name = panel_addition` where panel_name is the panel-specific variable and `panel_addition` is the item to `add` (`+`) to that panel. `add` also allows the user to make additions by index (e.g., first panel, second panel, third panel, etc.).
+
+Here, we add a `geom_line` to the `qsec` panel and a `geom_rect` rectangle to the `drat` panel by defining these panels in the `list()`.
 
 ```{r}
-# similar to the example `custom geom data`, the `add` argument can also
-# be used to add specific geoms only to specific panels
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
     template = ggplot() + theme_stackplot(),
+    # add:
     add = list(
       # panel by name
       qsec = geom_line(), 
@@ -406,23 +508,38 @@ mtcars |>
   )
 ```
 
-## custom themes
+## Custom themes
+
+Similarly, custom theme options can be added to specific panels. Here, we `add` by panel index:
 
 ```{r}
-# likewise custom themes can be added to individual panels with `add`
 mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
-    template = ggplot() + geom_line() + theme_stackplot(),
+    # define ggplot template options
+    template = 
+      ggplot() + 
+      geom_line() + 
+      theme_stackplot(),
+    # define panel-specific additions
     add = list(
       # panel by index
-      geom_point() + theme(axis.title.y = element_text(size = 30))
+      # first panel:
+      geom_point() + theme(
+        axis.title.y = element_text(size = 30)),
+      # second panel:
+      theme(
+        panel.grid.major.y = element_line(
+          color = "lightgray", 
+          size = 0.2))
     )
   )
 ```
 
-## custom scales
+## Custom scales
+
+The `add` argument also allows the definition of custom scales. This is particularly useful if applying functions from the `scales` package. Here we again defines panel by their index and set specific scales, specifying no changes to the first panel by supplying `NULL`.
 
 ```{r, message=FALSE}
 # particularly useful is also the possibility to modify individual scales
@@ -433,18 +550,25 @@ mtcars |>
     template = ggplot() + geom_line() + theme_stackplot(),
     add = list(
       # panel by index
+      # first panel:
       NULL,
-      scale_y_continuous("$$ drat", labels = scales::label_dollar()) + 
-        theme(axis.title.y = element_text(size = 30)) 
+      # second panel:
+      scale_y_continuous(
+        "$$ drat", 
+        labels = scales::label_dollar()
+        ) + 
+        theme(
+          axis.title.y = element_text(size = 30)
+          ) 
     )
   )
 ```
 
-## legend positioning
+## Legend positioning
+
+Another example of theme modification is the use of the \`add\` argument to specify legend positioning.
 
 ```{r}
-# another example of theme modification is the use of the `add` argument
-# to specify legend positioning
 mtcars |>
   ggstackplot(
     x = mpg,  y = c(wt, qsec, drat),
@@ -461,15 +585,19 @@ mtcars |>
     x = mpg,  y = c(wt, qsec, drat),
     color = c("#E41A1C", "#377EB8", "#4DAF4A"),
     template = 
-      ggplot() + aes(linetype = factor(vs)) +
-      geom_line() + theme_stackplot() +
-      theme(legend.position = "none"),
-    # re-include the middle panel legend on the plot
+      ggplot() + 
+      aes(linetype = factor(vs)) +
+      geom_line() + 
+      theme_stackplot() +
+      theme(legend.position = "none"), # remove the legends, then...
+    # ... re-include the middle panel legend on the plot
     # with some additional styling
     add = list(
       qsec = 
         theme(
-          legend.position = c(0.2, 0.9),
+          # define legend relative position in x,y:
+          legend.position = c(0.2, 0.9), 
+          # other legend stylistic changes:
           legend.title = element_text(size = 20),
           legend.text = element_text(size = 16),
           legend.background = element_rect(
@@ -478,6 +606,55 @@ mtcars |>
           legend.direction = "horizontal"
         ) +
         labs(linetype = "VS")
+    )
+  )
+```
+
+# Putting it all together
+
+```{r, warning = FALSE}
+iris |> 
+  ggstackplot(
+    # define our shared y axis
+    x = Sepal.Length,
+    # define the stacked x axes
+    y = c(Sepal.Width, Petal.Length, Petal.Width),
+    # we want to alternate the axes:
+    alternate_axes = TRUE,
+    overlap = 0,
+    # set the base ggplot options
+    template = 
+      # it's a ggplot:
+      ggplot() +
+      # set color aesthetic to vary with species
+      aes(color = Species, fill = Species) +
+      # we want the default stackplot theme
+      theme_stackplot() +
+      # add custom theme modifications
+      theme(
+        # we want each panel to have vertical gridlines
+        panel.grid.major.x = element_line(color = "lightgray", linewidth = 0.2),
+        # and no repeated legends
+        legend.position = "None"
+      ) +
+      # set some labels for the base plot
+      labs(
+        # set the shared axis label:
+        x = "Sepal Length"
+      ),
+    # make panel-specific additions
+    add = list(
+      # for Petal.Length panel:
+      Petal.Length = 
+        geom_col() +
+        labs(y = "Length of the Petal"),
+      Sepal.Width = 
+        geom_point() +
+        labs(y = "Width of the Sepal"),
+      Petal.Width =
+        geom_line() +
+        coord_cartesian(ylim = c(-3, 5)) +
+        labs(y = "Width of the Petal")
     )
   )
 ```
