@@ -24,6 +24,27 @@ test_that("test calculate_axis_switch()", {
   expect_equal(calculate_axis_switch(1:5, TRUE, TRUE, TRUE), c(TRUE, FALSE, TRUE, FALSE, TRUE))
 })
 
+test_that("test combine_plot_theme_add()", {
+  # check that misleading axis modifications don't work
+  expect_error(
+    mtcars |>
+    ggstackplot(
+      x = mpg, y = c(wt, qsec, drat),
+      add = list(wt = scale_x_continuous(limits = c(10, 15)))
+    ),
+    "invalid add-on.*shared x-axis"
+  )
+  # check that misleading axis modifications don't work
+  expect_error(
+    mtcars |>
+      ggstackplot(
+        y = mpg, x = c(wt, qsec, drat),
+        add = list(wt = scale_y_continuous(limits = c(10, 15)))
+      ),
+    "invalid add-on.*shared y-axis"
+  )
+})
+
 test_that("test process_add_ons()", {
 
   expect_error(process_add_ons(dplyr::tibble(), add = mean()), "`add` must be a list")
