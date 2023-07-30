@@ -24,7 +24,23 @@
 #' @param debug debug flag to print the stackplot tibble and gtable intermediates
 #' @examples
 #'
+#' # 1 step stackplot (most common use)
+#' mtcars |>
+#'   ggstackplot(
+#'     x = mpg,
+#'     y = c(`weight [g]` = wt, qsec, drat, disp),
+#'     palette = "Set1",
+#'     overlap = c(1, 0, 0.3)
+#'   )
 #'
+#' # 2 step stackplot
+#' mtcars |>
+#'   prepare_stackplot(
+#'     x = mpg,
+#'     y = c(`weight [g]` = wt, qsec, drat, disp),
+#'     palette = "Set1"
+#'   ) |>
+#'   assemble_stackplot(overlap = c(1, 0, 0.3))
 #'
 #' @export
 ggstackplot <- function(
