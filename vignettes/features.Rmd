@@ -70,9 +70,31 @@ mtcars |>
   )
 ```
 
+## `palette` argument
+
+Set individual plot colors by providing an RColorBrewer palette. Color definition applies to the color and fill aesthetics as well as the actual axis colors.
+
+```{r}
+# use the Set1 RColorBrewer palette
+mtcars |> 
+  ggstackplot(
+    x = mpg, y = c(wt, qsec),
+    palette = "Set1"
+  )
+```
+
+```{r}
+# likewise for the horizontal stack version
+mtcars |> 
+  ggstackplot(
+    y = mpg, x = c(wt, qsec),
+    palette = "Set1"
+  )
+```
+
 ## `color` argument
 
-Set colors manually by supplying a character vector of colors:
+Alternatively, set colors manually by supplying a character vector of colors:
 
 ```{r}
 # select any specific colors for each plot
@@ -83,20 +105,11 @@ mtcars |>
   )
 ```
 
-```{r}
-# likewise for the horizontal stack version
-mtcars |> 
-  ggstackplot(
-    y = mpg, x = c(wt, qsec),
-    color = c("#E41A1C", "#377EB8")
-  )
-```
-
 ## `remove_na` argument
 
 This removes NA values so that lines are not interrupted. When `remove_na` is set to `FALSE`, breaks in lines may appear due to NA values.
 
-```{r,  message=FALSE}
+```{r,  message=FALSE, warning=FALSE}
 library(dplyr)
 
 # default (NAs are removed so lines are not interrupted)
@@ -368,7 +381,7 @@ mtcars |>
         panel.grid.major = element_line(
           color = "lightgray", 
           linetype = "dotted", 
-          size = 0.2)
+          linewidth = 0.5)
       )
   )
 ```
@@ -537,9 +550,9 @@ mtcars |>
   )
 ```
 
-## Custom scales
+## Custom axes
 
-The `add` argument also allows the definition of custom scales. This is particularly useful if applying functions from the `scales` package. Here we again defines panel by their index and set specific scales, specifying no changes to the first panel by supplying `NULL`.
+The `add` argument also allows the definition of custom axes. This is particularly useful if applying functions from the `scales` package.
 
 ```{r, message=FALSE}
 # particularly useful is also the possibility to modify individual scales
@@ -549,17 +562,11 @@ mtcars |>
     color = c("#E41A1C", "#377EB8"),
     template = ggplot() + geom_line() + theme_stackplot(),
     add = list(
-      # panel by index
-      # first panel:
-      NULL,
-      # second panel:
-      scale_y_continuous(
-        "$$ drat", 
-        labels = scales::label_dollar()
-        ) + 
-        theme(
-          axis.title.y = element_text(size = 30)
-          ) 
+      # modify the axis for the second plot
+      drat = 
+        scale_y_continuous("$$ drat",  labels = scales::label_dollar()) + 
+        expand_limits(y = 0) +
+        theme(axis.title.y = element_text(size = 30))
     )
   )
 ```
@@ -589,7 +596,8 @@ mtcars |>
       aes(linetype = factor(vs)) +
       geom_line() + 
       theme_stackplot() +
-      theme(legend.position = "none"), # remove the legends, then...
+      # remove the legends, then...
+      theme(legend.position = "none"), 
     # ... re-include the middle panel legend on the plot
     # with some additional styling
     add = list(
@@ -612,49 +620,100 @@ mtcars |>
 
 # Putting it all together
 
-```{r, warning = FALSE}
-iris |> 
+```{r, message = FALSE, fig.height=8}
+# example with economics data bundled with ggplot2
+ggplot2::economics |>
   ggstackplot(
-    # define our shared y axis
-    x = Sepal.Length,
-    # define the stacked x axes
-    y = c(Sepal.Width, Petal.Length, Petal.Width),
-    # we want to alternate the axes:
-    alternate_axes = TRUE,
-    overlap = 0,
-    # set the base ggplot options
+    # define shared x axis
+    x = date, 
+    # define the stacked y axes
+    y = c(pce, pop, psavert, unemploy),
+    # pick the RColorBrewer Dark2 palette (good color contrast)
+    palette = "Dark2",
+    # overlay the pce & pop plots (1), then make a full break (0) to the once again overlaye psavert & unemploy plots (1)
+    overlap = c(1, 0, 1),
+    # switch axes so unemploy and psavert are on the side where they are 
+    # highest, respectively - not doing this here by changing the order of y
+    # because we want pop and unemploy on the same side
+    switch_axes = TRUE,
+    # make shared axis space a bit smaller
+    shared_axis_size = 0.15,
+    # provide a base plot with shared graphics eelements among all plots
     template = 
-      # it's a ggplot:
+      # it's a ggplot
       ggplot() +
-      # set color aesthetic to vary with species
-      aes(color = Species, fill = Species) +
+      # use a line plot for all
+      geom_line() +
       # we want the default stackplot theme
       theme_stackplot() +
-      # add custom theme modifications
-      theme(
-        # we want each panel to have vertical gridlines
-        panel.grid.major.x = element_line(color = "lightgray", linewidth = 0.2),
-        # and no repeated legends
-        legend.position = "None"
-      ) +
-      # set some labels for the base plot
-      labs(
-        # set the shared axis label:
-        x = "Sepal Length"
-      ),
-    # make panel-specific additions
-    add = list(
-      # for Petal.Length panel:
-      Petal.Length = 
-        geom_col() +
-        labs(y = "Length of the Petal"),
-      Sepal.Width = 
-        geom_point() +
-        labs(y = "Width of the Sepal"),
-      Petal.Width =
-        geom_line() +
-        coord_cartesian(ylim = c(-3, 5)) +
-        labs(y = "Width of the Petal")
-    )
+      # add custom theme modifications, such as text size
+      theme(text = element_text(size = 14)) +
+      # make the shared axis a date axis
+      scale_x_date() +
+      # include y=0 for all plots to contextualize data better
+      expand_limits(y = 0),
+    # add plot specific elements
+    add = 
+      list(
+        pce = 
+          # show pce in trillions of dollars
+          scale_y_continuous(
+            "personal consumption expenditures",
+            labels = function(x) sprintf("$%.1f T", x/1000),
+            # always keep the secondary axis duplicated so ggstackplot can
+            # manage axis placement for you
+            sec.axis = dup_axis()
+          ),
+        pop = 
+          # show population in millions
+          scale_y_continuous(
+            "population",
+            labels = function(x) sprintf("%.0f M", x/1000),
+            sec.axis = dup_axis()
+          ),
+        psavert = 
+          # savings is in %
+          scale_y_continuous(
+            "personal savings rate",
+            labels = function(x) paste0(x, "%"),
+            sec.axis = dup_axis()
+          ) +
+          # show data points in addition to line
+          geom_point(),
+        unemploy = 
+          # unemploy in millions
+          scale_y_continuous(
+            "unemployed persons",
+            labels = function(x) sprintf("%.0f M", x/1000),
+            sec.axis = dup_axis()
+          ) +
+          # show data points in addition to line
+          geom_point()
+      )
   )
 ```
+
+# Advanced
+
+Instead of calling `ggstackplot()` to make a plot, you can also use `prepare_stackplot()` and `assemble_stackplot()` to separate the two main steps of making a ggstackplot. `prepare_stackplot()` provides a tibble with all the plot components that can be modified directly in the tibble if so desired before assembling the plot with `assemble_stackplot()`. Usuallyt this is not necessary because the combination of the `template` and `add` parameters in `ggstackplot()` provides the same kind of flexibility as modifying plot elements in the plot tibble.
+
+```{r}
+# prep plot
+plot_prep <- 
+  mtcars |> 
+  prepare_stackplot(
+    x = mpg, y = c(wt, qsec),
+    palette = "Set1"
+  )
+
+# show plot tibble
+plot_prep
+
+# modify plot tibble
+plot_prep$plot[[2]] <- ggplot(mtcars) + aes(mpg, drat) + geom_point()
+plot_prep$theme[[2]] <- theme_bw()
+
+# assemble stackplot
+plot_prep |> assemble_stackplot()
+```
+
