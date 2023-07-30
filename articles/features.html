@@ -148,16 +148,18 @@ selection and/or renaming are supported.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="color-argument">
-<code>color</code> argument<a class="anchor" aria-label="anchor" href="#color-argument"></a>
+<h3 id="palette-argument">
+<code>palette</code> argument<a class="anchor" aria-label="anchor" href="#palette-argument"></a>
 </h3>
-<p>Set colors manually by supplying a character vector of colors:</p>
+<p>Set individual plot colors by providing an RColorBrewer palette.
+Color definition applies to the color and fill aesthetics as well as the
+actual axis colors.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># select any specific colors for each plot</span></span>
+<code class="sourceCode R"><span><span class="co"># use the Set1 RColorBrewer palette</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
-<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span></span>
+<span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="features_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -165,9 +167,24 @@ selection and/or renaming are supported.</p>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    y <span class="op">=</span> <span class="va">mpg</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
-<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span></span>
+<span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="features_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="color-argument">
+<code>color</code> argument<a class="anchor" aria-label="anchor" href="#color-argument"></a>
+</h3>
+<p>Alternatively, set colors manually by supplying a character vector of
+colors:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># select any specific colors for each plot</span></span>
+<span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="features_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="remove_na-argument">
@@ -176,7 +193,7 @@ selection and/or renaming are supported.</p>
 <p>This removes NA values so that lines are not interrupted. When
 <code>remove_na</code> is set to <code>FALSE</code>, breaks in lines may
 appear due to NA values.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># default (NAs are removed so lines are not interrupted)</span></span>
@@ -186,8 +203,8 @@ appear due to NA values.</p>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># explicit `remove_na` = FALSE</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -196,12 +213,8 @@ appear due to NA values.</p>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    remove_na <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There was 1 warning in `dplyr::mutate()`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Removed 1 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-6-2.png" width="672"></p>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="features_files/figure-html/unnamed-chunk-7-2.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="both_axes-argument">
@@ -209,7 +222,7 @@ appear due to NA values.</p>
 </h3>
 <p>When <code>both_axes = TRUE</code> , the stacked variable axes are
 duplicated on both sides of each stacked plot.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Vertical stackplot</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -217,8 +230,8 @@ duplicated on both sides of each stacked plot.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    both_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Horizontal stackplot</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -227,7 +240,7 @@ duplicated on both sides of each stacked plot.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    both_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-7-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-8-2.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="alternate_axes-argument">
@@ -236,7 +249,7 @@ duplicated on both sides of each stacked plot.</p>
 <p>When <code>alternate_axes = FALSE</code> , the axes for the multiple
 variables are kept on the same side of the facets. The default behavior
 alternates these axes left/right or top/bottom.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># axes do not alternate:</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -244,8 +257,8 @@ alternates these axes left/right or top/bottom.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    alternate_axes <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Horizontal version</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -254,7 +267,7 @@ alternates these axes left/right or top/bottom.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    alternate_axes <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-8-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-9-2.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="switch_axes-argument">
@@ -269,7 +282,7 @@ plot in the lower corner has the variable axis on the other side
 (secondary in ggplot terms). If <code>alternate_axes = TRUE</code> this
 essentially switches the order with which the axes alternate (e.g.,
 right/left/right vs. left/right/left).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># stacked axis starts on the right</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -277,8 +290,8 @@ right/left/right vs. left/right/left).</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># or for the horizontal version, stacked axis</span></span>
 <span><span class="co"># starts on the top</span></span>
@@ -288,8 +301,8 @@ right/left/right vs. left/right/left).</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-9-2.png" width="672"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-10-2.png" width="672"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># and in combination with alternate_axes = FALSE</span></span>
 <span><span class="co"># all axes on the right</span></span>
@@ -300,8 +313,8 @@ right/left/right vs. left/right/left).</p>
 <span>    alternate_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-9-3.png" width="672"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-10-3.png" width="672"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># or all axes on the top</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -311,7 +324,7 @@ right/left/right vs. left/right/left).</p>
 <span>    alternate_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-9-4.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-10-4.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="overlap-argument">
@@ -321,7 +334,7 @@ right/left/right vs. left/right/left).</p>
 plots. <code>1</code> corresponds to fully overlapping (similar to
 having a ggplot <code>sec_axis</code> enabled) while <code>0</code> does
 not overlap at all.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define any overlap between 0 and 1</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -329,8 +342,8 @@ not overlap at all.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    overlap <span class="op">=</span> <span class="fl">0.3</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># full overlap</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -339,7 +352,7 @@ not overlap at all.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    overlap <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-10-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-11-2.png" width="672"></p>
 <div class="section level4">
 <h4 id="different-overlaps">Different overlaps<a class="anchor" aria-label="anchor" href="#different-overlaps"></a>
 </h4>
@@ -353,7 +366,7 @@ elements (<code>qsec</code> and <code>drat</code>) there is full
 overlap. Between <code>drat</code> and <code>wt</code> there is no
 overlap (<code>0</code>). Between <code>wt</code> and <code>hp</code>
 there is full overlap.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># different overlap between stack panels</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -362,8 +375,8 @@ there is full overlap.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span>, <span class="st">"#4DAF4A"</span>, <span class="st">"#984EA3"</span><span class="op">)</span>,</span>
 <span>    overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># and the horizontal version</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -373,7 +386,7 @@ there is full overlap.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span>, <span class="st">"#4DAF4A"</span>, <span class="st">"#984EA3"</span><span class="op">)</span>,</span>
 <span>    overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-11-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-12-2.png" width="672"></p>
 </div>
 </div>
 <div class="section level3">
@@ -385,7 +398,7 @@ relative to the grid size of the original ggplot. The size of the shared
 axis often needs to be adjusted depending on which aspect ratio is
 intended. It is defined as fraction of a full panel, between 0 and
 1.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -394,7 +407,7 @@ intended. It is defined as fraction of a full panel, between 0 and
 <span>    <span class="co"># can be only 10% of a plot size as we're overlapping plots</span></span>
 <span>    shared_axis_size <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="simplify_shared_axis-argument">
@@ -403,15 +416,15 @@ intended. It is defined as fraction of a full panel, between 0 and
 <p>Sometimes it’s better just to keep the shared axis on each panel.
 This produces something akin to a <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap()</a></code> or
 <code><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">cowplot::plot_grid()</a></code>.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    simplify_shared_axis <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># also goes well with changing `both_axes`, `switch_axes` and/or `alternate_axes`</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -421,7 +434,7 @@ This produces something akin to a <code><a href="https://ggplot2.tidyverse.org/r
 <span>    <span class="co">#simplify_shared_axis = FALSE,</span></span>
 <span>    alternate_axes <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-13-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -442,7 +455,7 @@ can modify it more from there on). A few examples below:</p>
 <code>geom_line</code> as the primary geom. Then,
 <code><a href="../reference/theme_stackplot.html">theme_stackplot()</a></code> is applied and custom
 <code><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme()</a></code> options are set.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># increase y axis text size</span></span>
@@ -459,8 +472,8 @@ can modify it more from there on). A few examples below:</p>
 <span>        axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># increase the panel margins</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
@@ -476,7 +489,7 @@ can modify it more from there on). A few examples below:</p>
 <span>        plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>l <span class="op">=</span> <span class="fl">0.2</span>, t <span class="op">=</span> <span class="fl">0.1</span>, b <span class="op">=</span> <span class="fl">0.1</span>, unit <span class="op">=</span> <span class="st">"npc"</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-15-2.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="grid-modifications">Grid modifications<a class="anchor" aria-label="anchor" href="#grid-modifications"></a>
@@ -484,7 +497,7 @@ can modify it more from there on). A few examples below:</p>
 <p>Modifying the <code>panel.grid</code> argument can create gridlines
 for both the stacked variable axes and the shared axis. This can get a
 bit cluttered in a plot where <code>overlap = 1</code>.<br></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -500,10 +513,10 @@ bit cluttered in a plot where <code>overlap = 1</code>.<br></p>
 <span>          linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
 <p>But, this can look reasonable if there is no overlap of the stacked
 plats, and/or if the lines are made inconspicuous:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -517,15 +530,10 @@ plats, and/or if the lines are made inconspicuous:</p>
 <span>        panel.grid.major <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span></span>
 <span>          color <span class="op">=</span> <span class="st">"lightgray"</span>, </span>
 <span>          linetype <span class="op">=</span> <span class="st">"dotted"</span>, </span>
-<span>          size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span>          linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There was 1 warning in `dplyr::mutate()`.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `plot = map2(.data$config, .data$data, make_plot, template)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="features_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="other-themes">Other themes<a class="anchor" aria-label="anchor" href="#other-themes"></a>
@@ -535,7 +543,7 @@ add another theme or theme modifications on top of
 <code><a href="../reference/theme_stackplot.html">theme_stackplot()</a></code>! Here we add the classic
 <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw()</a></code> to get those nice clean gridlines back, as well
 as a panel border.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -547,7 +555,7 @@ as a panel border.</p>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># give us that good theme!</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="custom-geom-data">Custom geom data<a class="anchor" aria-label="anchor" href="#custom-geom-data"></a>
@@ -555,7 +563,7 @@ as a panel border.</p>
 <p>It is possible to use different geoms for different stacked panels.
 Here, we use both lines and points. These geoms are defined in the
 <code>template</code> argument.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># use different geoms for different panels</span></span>
 <span><span class="co"># you can refer to y-stack panel variables with `.yvar` and x-stack panel variables with `.xvar`</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
@@ -568,7 +576,7 @@ Here, we use both lines and points. These geoms are defined in the
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">.yvar</span> <span class="op">==</span> <span class="st">"drat"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="additional-plot-elements">Additional plot elements<a class="anchor" aria-label="anchor" href="#additional-plot-elements"></a>
@@ -576,7 +584,7 @@ Here, we use both lines and points. These geoms are defined in the
 <p>One can also add additional plot elements just as with a normal
 ggplot. Here we add a vertical line that is shared across all stacked
 plots:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -588,7 +596,7 @@ plots:</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="axis-modifications">Axis modifications<a class="anchor" aria-label="anchor" href="#axis-modifications"></a>
@@ -599,7 +607,7 @@ create a square root mpg axis that is plotted against the mpg axis.
 Again, all of this is defined in the <code>template</code> argument by
 adding a <code>scale_x_continuous</code> argument, just as you would in
 a normal ggplot.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add a secondary x axis</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -622,7 +630,7 @@ a normal ggplot.</p>
 <span>      <span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="additional-aesthetics">Additional aesthetics<a class="anchor" aria-label="anchor" href="#additional-aesthetics"></a>
@@ -633,7 +641,7 @@ the shared axis (in this case, <code>mpg</code> ), (ii) the axes to be
 stacked, in this case <code>y = c(wt, qsec, drat)</code>, (iii) any
 ggstackplot-specific arguments. All ggplot arguments and aesthetics are
 assigned in the <code>template</code> argument.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add aesthetics to the plot</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -646,7 +654,7 @@ assigned in the <code>template</code> argument.</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -672,7 +680,7 @@ etc.).</p>
 <p>Here, we add a <code>geom_line</code> to the <code>qsec</code> panel
 and a <code>geom_rect</code> rectangle to the <code>drat</code> panel by
 defining these panels in the <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -687,14 +695,14 @@ defining these panels in the <code><a href="https://rdrr.io/r/base/list.html" cl
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="custom-themes">Custom themes<a class="anchor" aria-label="anchor" href="#custom-themes"></a>
 </h3>
 <p>Similarly, custom theme options can be added to specific panels.
 Here, we <code>add</code> by panel index:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -717,17 +725,15 @@ Here, we <code>add</code> by panel index:</p>
 <span>          size <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 </div>
 <div class="section level3">
-<h3 id="custom-scales">Custom scales<a class="anchor" aria-label="anchor" href="#custom-scales"></a>
+<h3 id="custom-axes">Custom axes<a class="anchor" aria-label="anchor" href="#custom-axes"></a>
 </h3>
 <p>The <code>add</code> argument also allows the definition of custom
-scales. This is particularly useful if applying functions from the
-<code>scales</code> package. Here we again defines panel by their index
-and set specific scales, specifying no changes to the first panel by
-supplying <code>NULL</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+axes. This is particularly useful if applying functions from the
+<code>scales</code> package.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># particularly useful is also the possibility to modify individual scales</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -735,27 +741,21 @@ supplying <code>NULL</code>.</p>
 <span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
 <span>    template <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="co"># panel by index</span></span>
-<span>      <span class="co"># first panel:</span></span>
-<span>      <span class="cn">NULL</span>,</span>
-<span>      <span class="co"># second panel:</span></span>
-<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
-<span>        <span class="st">"$$ drat"</span>, </span>
-<span>        labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_dollar.html" class="external-link">label_dollar</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>        <span class="op">)</span> <span class="op">+</span> </span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>          axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
-<span>          <span class="op">)</span> </span>
+<span>      <span class="co"># modify the axis for the second plot</span></span>
+<span>      drat <span class="op">=</span> </span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span><span class="st">"$$ drat"</span>,  labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_dollar.html" class="external-link">label_dollar</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html" class="external-link">expand_limits</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="legend-positioning">Legend positioning<a class="anchor" aria-label="anchor" href="#legend-positioning"></a>
 </h3>
 <p>Another example of theme modification is the use of the `add`
 argument to specify legend positioning.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">mpg</span>,  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span>,</span>
@@ -766,8 +766,8 @@ argument to specify legend positioning.</p>
 <span>    <span class="co"># switch legend position for middle plot</span></span>
 <span>    add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>qsec <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<p><img src="features_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -778,7 +778,8 @@ argument to specify legend positioning.</p>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>linetype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">vs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>, <span class="co"># remove the legends, then...</span></span>
+<span>      <span class="co"># remove the legends, then...</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>, </span>
 <span>    <span class="co"># ... re-include the middle panel legend on the plot</span></span>
 <span>    <span class="co"># with some additional styling</span></span>
 <span>    add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -797,58 +798,123 @@ argument to specify legend positioning.</p>
 <span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>linetype <span class="op">=</span> <span class="st">"VS"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-25-2.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-26-2.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="putting-it-all-together">Putting it all together<a class="anchor" aria-label="anchor" href="#putting-it-all-together"></a>
 </h2>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># example with economics data bundled with ggplot2</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="va"><a href="https://ggplot2.tidyverse.org/reference/economics.html" class="external-link">economics</a></span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
-<span>    <span class="co"># define our shared y axis</span></span>
-<span>    x <span class="op">=</span> <span class="va">Sepal.Length</span>,</span>
-<span>    <span class="co"># define the stacked x axes</span></span>
-<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="va">Petal.Length</span>, <span class="va">Petal.Width</span><span class="op">)</span>,</span>
-<span>    <span class="co"># we want to alternate the axes:</span></span>
-<span>    alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    overlap <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>    <span class="co"># set the base ggplot options</span></span>
+<span>    <span class="co"># define shared x axis</span></span>
+<span>    x <span class="op">=</span> <span class="va">date</span>, </span>
+<span>    <span class="co"># define the stacked y axes</span></span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pce</span>, <span class="va">pop</span>, <span class="va">psavert</span>, <span class="va">unemploy</span><span class="op">)</span>,</span>
+<span>    <span class="co"># pick the RColorBrewer Dark2 palette (good color contrast)</span></span>
+<span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
+<span>    <span class="co"># overlay the pce &amp; pop plots (1), then make a full break (0) to the once again overlaye psavert &amp; unemploy plots (1)</span></span>
+<span>    overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="co"># switch axes so unemploy and psavert are on the side where they are </span></span>
+<span>    <span class="co"># highest, respectively - not doing this here by changing the order of y</span></span>
+<span>    <span class="co"># because we want pop and unemploy on the same side</span></span>
+<span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="co"># make shared axis space a bit smaller</span></span>
+<span>    shared_axis_size <span class="op">=</span> <span class="fl">0.15</span>,</span>
+<span>    <span class="co"># provide a base plot with shared graphics eelements among all plots</span></span>
 <span>    template <span class="op">=</span> </span>
-<span>      <span class="co"># it's a ggplot:</span></span>
+<span>      <span class="co"># it's a ggplot</span></span>
 <span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="co"># set color aesthetic to vary with species</span></span>
-<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Species</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># use a line plot for all</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="co"># we want the default stackplot theme</span></span>
 <span>      <span class="fu"><a href="../reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="co"># add custom theme modifications</span></span>
-<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>        <span class="co"># we want each panel to have vertical gridlines</span></span>
-<span>        panel.grid.major.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"lightgray"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span>
-<span>        <span class="co"># and no repeated legends</span></span>
-<span>        legend.position <span class="op">=</span> <span class="st">"None"</span></span>
-<span>      <span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="co"># set some labels for the base plot</span></span>
-<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>        <span class="co"># set the shared axis label:</span></span>
-<span>        x <span class="op">=</span> <span class="st">"Sepal Length"</span></span>
-<span>      <span class="op">)</span>,</span>
-<span>    <span class="co"># make panel-specific additions</span></span>
-<span>    add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="co"># for Petal.Length panel:</span></span>
-<span>      Petal.Length <span class="op">=</span> </span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Length of the Petal"</span><span class="op">)</span>,</span>
-<span>      Sepal.Width <span class="op">=</span> </span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Width of the Sepal"</span><span class="op">)</span>,</span>
-<span>      Petal.Width <span class="op">=</span></span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Width of the Petal"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<span>      <span class="co"># add custom theme modifications, such as text size</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># make the shared axis a date axis</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># include y=0 for all plots to contextualize data better</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html" class="external-link">expand_limits</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    <span class="co"># add plot specific elements</span></span>
+<span>    add <span class="op">=</span> </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        pce <span class="op">=</span> </span>
+<span>          <span class="co"># show pce in trillions of dollars</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"personal consumption expenditures"</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"$%.1f T"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
+<span>            <span class="co"># always keep the secondary axis duplicated so ggstackplot can</span></span>
+<span>            <span class="co"># manage axis placement for you</span></span>
+<span>            sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>        pop <span class="op">=</span> </span>
+<span>          <span class="co"># show population in millions</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"population"</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f M"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
+<span>            sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>        psavert <span class="op">=</span> </span>
+<span>          <span class="co"># savings is in %</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"personal savings rate"</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"%"</span><span class="op">)</span>,</span>
+<span>            sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>          <span class="op">)</span> <span class="op">+</span></span>
+<span>          <span class="co"># show data points in addition to line</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        unemploy <span class="op">=</span> </span>
+<span>          <span class="co"># unemploy in millions</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"unemployed persons"</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f M"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
+<span>            sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>          <span class="op">)</span> <span class="op">+</span></span>
+<span>          <span class="co"># show data points in addition to line</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="features_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
+<p><img src="features_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="advanced">Advanced<a class="anchor" aria-label="anchor" href="#advanced"></a>
+</h2>
+<p>Instead of calling <code><a href="../reference/ggstackplot.html">ggstackplot()</a></code> to make a plot, you can
+also use <code><a href="../reference/ggstackplot.html">prepare_stackplot()</a></code> and
+<code><a href="../reference/ggstackplot.html">assemble_stackplot()</a></code> to separate the two main steps of
+making a ggstackplot. <code><a href="../reference/ggstackplot.html">prepare_stackplot()</a></code> provides a tibble
+with all the plot components that can be modified directly in the tibble
+if so desired before assembling the plot with
+<code><a href="../reference/ggstackplot.html">assemble_stackplot()</a></code>. Usuallyt this is not necessary
+because the combination of the <code>template</code> and
+<code>add</code> parameters in <code><a href="../reference/ggstackplot.html">ggstackplot()</a></code> provides the
+same kind of flexibility as modifying plot elements in the plot
+tibble.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># prep plot</span></span>
+<span><span class="va">plot_prep</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/ggstackplot.html">prepare_stackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">mpg</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">qsec</span><span class="op">)</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># show plot tibble</span></span>
+<span><span class="va">plot_prep</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
+<span><span class="co">#&gt;   .var  config           data               plot   theme   add   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> wt    <span style="color: #949494;">&lt;tibble [1 × 9]&gt;</span> <span style="color: #949494;">&lt;tibble [32 × 11]&gt;</span> <span style="color: #949494;">&lt;gg&gt;</span>   <span style="color: #949494;">&lt;theme&gt;</span> <span style="color: #949494;">&lt;NULL&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> qsec  <span style="color: #949494;">&lt;tibble [1 × 9]&gt;</span> <span style="color: #949494;">&lt;tibble [32 × 11]&gt;</span> <span style="color: #949494;">&lt;gg&gt;</span>   <span style="color: #949494;">&lt;theme&gt;</span> <span style="color: #949494;">&lt;NULL&gt;</span></span></span>
+<span></span>
+<span><span class="co"># modify plot tibble</span></span>
+<span><span class="va">plot_prep</span><span class="op">$</span><span class="va">plot</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">drat</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">plot_prep</span><span class="op">$</span><span class="va">theme</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># assemble stackplot</span></span>
+<span><span class="va">plot_prep</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/ggstackplot.html">assemble_stackplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="features_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 </div>
   </div>
 

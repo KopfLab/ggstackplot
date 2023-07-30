@@ -68,13 +68,14 @@
 <span>  <span class="va">y</span>,</span>
 <span>  remove_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  color <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  palette <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  both_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  switch_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overlap <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  simplify_shared_axis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  shared_axis_size <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>  template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  template <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -85,10 +86,11 @@
 <span>  <span class="va">y</span>,</span>
 <span>  remove_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  color <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  palette <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  both_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  alternate_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  switch_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  template <span class="op">=</span> <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  template <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -122,6 +124,10 @@
 
 <dt>color</dt>
 <dd><p>which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the <code>template</code> to overwrite this aesthetic), either one value for or one color per variable. Pick <code>NA</code> to not set colors (in case you want to use them yourself in the aesthetics).</p></dd>
+
+
+<dt>palette</dt>
+<dd><p>which color to make the plots defined with an RColorBrewer palette (<code><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">RColorBrewer::display.brewer.all()</a></code>). You can only use <code>color</code> or <code>palette</code> parameter, not both.</p></dd>
 
 
 <dt>both_axes</dt>
@@ -164,6 +170,18 @@
 <dd><p>a nested data frame, the output from <code>prepare_stackplot()</code></p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p><code>ggstackplot()</code> returns a ggplot with overlayed plot layers</p>
+
+
+<p><code>prepare_stackplot()</code> returns a tibble with all plot components</p>
+
+
+<p><code>assemble_stackplot()</code> returns a ggplot with overlayed plot layers</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p><code>ggstackplot()</code> stacks a ggplot template with the provided data and parameters. It returns a plot object generated by <code><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">cowplot::plot_grid()</a></code>).</p>
@@ -171,6 +189,31 @@
 <p><code>assemble_stackplot()</code> is usually not called directly but can be used to manually combine a stackplot tibble (typically created by <code>prepare_stockplot()</code>). Returns a plot object generated by <code><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">cowplot::plot_grid()</a></code>).</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 1 step stackplot (most common use)</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">ggstackplot</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">mpg</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`weight [g]` <span class="op">=</span> <span class="va">wt</span>, <span class="va">qsec</span>, <span class="va">drat</span>, <span class="va">disp</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    palette <span class="op">=</span> <span class="st">"Set1"</span>,</span></span>
+<span class="r-in"><span>    overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-plt img"><img src="ggstackplot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 2 step stackplot</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">prepare_stackplot</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">mpg</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`weight [g]` <span class="op">=</span> <span class="va">wt</span>, <span class="va">qsec</span>, <span class="va">drat</span>, <span class="va">disp</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    palette <span class="op">=</span> <span class="st">"Set1"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">assemble_stackplot</span><span class="op">(</span>overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="ggstackplot-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
