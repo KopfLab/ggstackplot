@@ -43,6 +43,7 @@
 #'   assemble_stackplot(overlap = c(1, 0, 0.3))
 #'
 #' @export
+#' @returns `ggstackplot()` returns a ggplot with overlayed plot layers
 ggstackplot <- function(
     data, x, y, remove_na = TRUE, color = NA, palette = NA,
     both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
@@ -76,6 +77,7 @@ ggstackplot <- function(
 #' `prepare_stackplot()` is usually not called directly but can be used to assemble the parts of a stackplot first and then look at them or edit them individually before combining them with `assemble_stackplot()]`. Returns a nested data frame with all stacked variables (.var), their plot configuration, data, plot object, and theme object.
 #' @rdname ggstackplot
 #' @export
+#' @returns `prepare_stackplot()` returns a tibble with all plot components
 prepare_stackplot <- function(
     data, x, y, remove_na = TRUE, color = NA, palette = NA,
     both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
@@ -263,6 +265,7 @@ create_stackplot_tibble <- function(
 #' @param prepared_stackplot a nested data frame, the output from [prepare_stackplot()]
 #' @rdname ggstackplot
 #' @export
+#' @returns `assemble_stackplot()` returns a ggplot with overlayed plot layers
 assemble_stackplot <- function(prepared_stackplot, overlap = 0, simplify_shared_axis = TRUE, shared_axis_size = 0.15, debug = FALSE) {
 
   # assemble the stackplot
