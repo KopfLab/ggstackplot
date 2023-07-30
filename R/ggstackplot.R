@@ -12,6 +12,7 @@
 #' @param y the y variable(s) to plot, accepts [dplyr::select()] syntax. The order of variables in plotted from top to bottom (if multiple `y`).
 #' @param remove_na whether to remove `NA` values in the x/y plot, setting this to `FALSE` can lead to unintended side-effects for interrupted lines so check your plot carefully if you change this
 #' @param color which color to make the plots (also sets the plotwide color and fill aesthetics, overwrite in individual geoms in the `template` to overwrite this aesthetic), either one value for or one color per variable. Pick `NA` to not set colors (in case you want to use them yourself in the aesthetics).
+#' @param palette which color to make the plots defined with an RColorBrewer palette ([RColorBrewer::display.brewer.all()]). You can only use `color` or `palette` parameter, not both.
 #' @param both_axes whether to have the stacked axes on both sides (overrides alternate_axes and switch_axes)
 #' @param alternate_axes whether to alternate the sides on which the stacked axes are plotted
 #' @param switch_axes whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if `alternate_axes = TRUE`). Setting `switch_axes = TRUE`, leads to the opposite, i.e. first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms).
@@ -23,11 +24,28 @@
 #' @param debug debug flag to print the stackplot tibble and gtable intermediates
 #' @examples
 #'
+#' # 1 step stackplot (most common use)
+#' mtcars |>
+#'   ggstackplot(
+#'     x = mpg,
+#'     y = c(`weight [g]` = wt, qsec, drat, disp),
+#'     palette = "Set1",
+#'     overlap = c(1, 0, 0.3)
+#'   )
 #'
+#' # 2 step stackplot
+#' mtcars |>
+#'   prepare_stackplot(
+#'     x = mpg,
+#'     y = c(`weight [g]` = wt, qsec, drat, disp),
+#'     palette = "Set1"
+#'   ) |>
+#'   assemble_stackplot(overlap = c(1, 0, 0.3))
 #'
 #' @export
+#' @returns `ggstackplot()` returns a ggplot with overlayed plot layers
 ggstackplot <- function(
-    data, x, y, remove_na = TRUE, color = NA,
+    data, x, y, remove_na = TRUE, color = NA, palette = NA,
     both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
     overlap = 0, simplify_shared_axis = TRUE, shared_axis_size = 0.2,
     template = ggplot() +
@@ -41,7 +59,7 @@ ggstackplot <- function(
   data |>
     prepare_stackplot(
       x = {{ x }}, y = {{ y }},
-      remove_na = remove_na, color = color,
+      remove_na = remove_na, color = color, palette = palette,
       both_axes = both_axes, alternate_axes = alternate_axes,
       switch_axes = switch_axes, template = template, add = {{ add }},
       debug = debug) |>
@@ -59,8 +77,9 @@ ggstackplot <- function(
 #' `prepare_stackplot()` is usually not called directly but can be used to assemble the parts of a stackplot first and then look at them or edit them individually before combining them with `assemble_stackplot()]`. Returns a nested data frame with all stacked variables (.var), their plot configuration, data, plot object, and theme object.
 #' @rdname ggstackplot
 #' @export
+#' @returns `prepare_stackplot()` returns a tibble with all plot components
 prepare_stackplot <- function(
-    data, x, y, remove_na = TRUE, color = NA,
+    data, x, y, remove_na = TRUE, color = NA, palette = NA,
     both_axes = FALSE, alternate_axes = TRUE, switch_axes = FALSE,
     template = ggplot() +
       geom_line() +
@@ -75,6 +94,7 @@ prepare_stackplot <- function(
     create_stackplot_tibble(
       x = {{ x }}, y = {{ y }},
       remove_na = remove_na, color = color,
+      palette = palette,
       both_axes = both_axes,
       alternate_axes = alternate_axes,
       switch_axes = switch_axes
@@ -102,7 +122,7 @@ prepare_stackplot <- function(
 
 # internal function to prepare the data for a ggstackplot
 create_stackplot_tibble <- function(
-    data, x, y, remove_na = TRUE, color = NA, both_axes = FALSE, alternate_axes = FALSE, switch_axes = FALSE) {
+    data, x, y, remove_na = TRUE, color = NA, palette = NA, both_axes = FALSE, alternate_axes = FALSE, switch_axes = FALSE) {
 
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
@@ -181,10 +201,20 @@ create_stackplot_tibble <- function(
   ) |>
     dplyr::arrange(dplyr::desc(.data$.xvar), .data$.yvar)
 
-  # do we have a valid length for color?
+  # do we have a valid length for color or palette?
+  stopifnot("can only set either `color` or `palette`, not both" = is.na(color) | is.na(palette))
   if (!(is.character(color) || all(is.na(color))) || !length(color) %in% c(1L, nrow(config))) {
     abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)))
   }
+  if (!all(is.na(palette))) {
+    # palette argument provided
+    if (is_scalar_character(palette) && palette %in% rownames(RColorBrewer::brewer.pal.info) && RColorBrewer::brewer.pal.info[palette, 1] >= nrow(config)) {
+      color = RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[palette, 1], palette)[1:nrow(config)]
+    } else
+      sprintf("`palette` must be a string identifying a valid RColorBrewer palette with at least %d colors. Use `RColorBrewer::display.brewer.all()` to see all available palettes.", nrow(config)) |>
+      abort()
+  }
+
 
   # finish config
   config <- config |>
@@ -235,6 +265,7 @@ create_stackplot_tibble <- function(
 #' @param prepared_stackplot a nested data frame, the output from [prepare_stackplot()]
 #' @rdname ggstackplot
 #' @export
+#' @returns `assemble_stackplot()` returns a ggplot with overlayed plot layers
 assemble_stackplot <- function(prepared_stackplot, overlap = 0, simplify_shared_axis = TRUE, shared_axis_size = 0.15, debug = FALSE) {
 
   # assemble the stackplot

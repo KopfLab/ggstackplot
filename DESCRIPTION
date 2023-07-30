@@ -1,11 +1,11 @@
 Package: ggstackplot
-Title: Create overlapping stacked ggplots
+Title: Create Overlapping Stacked Plots
 Version: 0.3.0
 Authors@R: 
   c(person(
       given = "Sebastian", family = "Kopf", 
       email = "sebastian.kopf@colorado.edu", 
-      role = c("aut", "cre"), 
+      role = c("aut", "cre", "cph"), 
       comment = c(ORCID = "0000-0002-2044-0201")),
   person(
       given = "Tristan", family = "Caro", 
@@ -23,7 +23,9 @@ Authors@R:
       role = c("aut"), 
       comment = c(ORCID = "0000-0003-2959-3631"))
   )
-Description: This package makes it easy to create overlapping ggplots. This plotting style is particularly common in paleoclimatology and oceanography research communities.
+Description: 
+  Easily create overlapping grammar of graphics plots for scientific data visualization. 
+  This style of plotting is particularly common in climatology and oceanography research communities.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -35,7 +37,8 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    cowplot
+    cowplot,
+    RColorBrewer
 Suggests: 
     covr,
     knitr,
