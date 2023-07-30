@@ -30,19 +30,63 @@ devtools::install_github("KopfLab/ggstackplot")
 
 ``` r
 library(ggstackplot)
-ggstackplot(
-  mtcars,
-  x = mpg,
-  y = c(`weight [g]` = wt, qsec, drat, disp),
-  color = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"),
-  overlap = c(1, 0, 0.3)
-)
+
+# using the built-in economics dataset in ggplot2
+ggplot2::economics |>
+  ggstackplot(
+    # define shared x axis
+    x = date, 
+    # define stacked y axes
+    y = c(pce, pop, psavert, unemploy),
+    # add a color palette
+    palette = "Set1"
+  )
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
+## Show me more
+
+``` r
+library(ggplot2)
+
+# creating a horizontal stack instead of vertical and using some of the many
+# customization features available in ggstackplot
+ggplot2::economics |>
+  ggstackplot(
+    # define shared y axis
+    y = date, 
+    # define the stacked x axes with custom axis labels
+    x = c(
+      "personal consumption expenditures" = pce, 
+      "population" = pop, 
+      "personal savings rate" = psavert, 
+      "unemployed persons" = unemploy),
+    # add a different color palette
+    palette = "Dark2",
+    # overlay the pce & pop plots and psavert & unemploy plots
+    overlap = c(1, 0, 1),
+    # provide a custom plot template
+    template = 
+      ggplot() +
+      geom_path() +
+      theme_stackplot() +
+      scale_y_date(),
+    # add plot specific elements
+    add = 
+      list(
+        # add points just for 2 plots
+        `unemployed persons` = geom_point(),
+        `personal savings rate` = geom_point()
+      )
+  )
+```
+
+<img src="man/figures/README-example2-1.png" width="100%" />
+
 ## Next steps
 
-- check out the `Features` vignette for details on all available
-  functionality
-- check out the `Examples` vignette for scientific data examples
+- check out the **[Features](articles/features.html)** vignette for
+  details on all available functionality
+- check out the **[Examples](articles/examples.html)** vignette for
+  scientific data examples
