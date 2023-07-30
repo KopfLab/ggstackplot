@@ -90,5 +90,5 @@ ggplot2::economics |>
 
 ## Next steps
 
-- check out the **[Features](articles/features.html)** vignette for details on all available functionality
-- check out the **[Examples](articles/examples.html)** vignette for scientific data examples
+- check out the **[Features](https://ggstackplot.kopflab.org/articles/features.html)** vignette for details on all available functionality
+- check out the **[Examples](https://ggstackplot.kopflab.org/articles/examples.html)** vignette for scientific data examples

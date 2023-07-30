@@ -80,6 +80,13 @@ assemble_stackplot(
 
 \item{prepared_stackplot}{a nested data frame, the output from \code{\link[=prepare_stackplot]{prepare_stackplot()}}}
 }
+\value{
+\code{ggstackplot()} returns a ggplot with overlayed plot layers
+
+\code{prepare_stackplot()} returns a tibble with all plot components
+
+\code{assemble_stackplot()} returns a ggplot with overlayed plot layers
+}
 \description{
 Use \code{ggstackplot()} to generate a stackplot. If you need more fine control, use \code{prepare_stackplot()} and \code{assemble_stackplot()} individually.
 }

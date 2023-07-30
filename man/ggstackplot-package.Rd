@@ -4,12 +4,12 @@
 \name{ggstackplot-package}
 \alias{ggstackplot-package}
 \alias{_PACKAGE}
-\title{ggstackplot: Create overlapping stacked ggplots}
+\title{ggstackplot: Create Overlapping Stacked Plots}
 \description{
-This package makes it easy to create overlapping ggplots. This plotting style is particularly common in paleoclimatology and oceanography research communities.
+Easily create overlapping grammar of graphics plots for scientific data visualization. This style of plotting is particularly common in climatology and oceanography research communities.
 }
 \author{
-\strong{Maintainer}: Sebastian Kopf \email{sebastian.kopf@colorado.edu} (\href{https://orcid.org/0000-0002-2044-0201}{ORCID})
+\strong{Maintainer}: Sebastian Kopf \email{sebastian.kopf@colorado.edu} (\href{https://orcid.org/0000-0002-2044-0201}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
