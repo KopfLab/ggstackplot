@@ -52,7 +52,11 @@ test_that("test create_stackplot_tibble() parameters", {
     "`switch_axes` must be TRUE or FALSE"
   )
 
-  # color
+  # color / palette
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, color = 42, palette = 42),
+    "can only set either"
+  )
   expect_error(
     create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, color = 42),
     "`color` must be either a single color or one for each variable"
@@ -60,6 +64,22 @@ test_that("test create_stackplot_tibble() parameters", {
   expect_error(
     create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, color = c("a", "b", "c")),
     "`color` must be either a single color or one for each variable"
+  )
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, palette = 42),
+    "must be a string"
+  )
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, palette = c("a", "b")),
+    "must be a string"
+  )
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, wt), y = disp, palette = "DNE"),
+    "must be.*identifying a valid RColorBrewer palette"
+  )
+  expect_error(
+    create_stackplot_tibble(mtcars, x = c(mpg, cyl, hp, drat, wt, qsec, vs, am, gear), y = disp, palette = "Accent"),
+    "must be.*identifying a valid RColorBrewer palette"
   )
 
 })

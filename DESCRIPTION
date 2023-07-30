@@ -35,7 +35,8 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    cowplot
+    cowplot,
+    RColorBrewer
 Suggests: 
     covr,
     knitr,
