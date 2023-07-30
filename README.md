@@ -84,11 +84,11 @@ ggplot2::economics |>
 
 <img src="man/figures/README-example2-1.png" width="100%" />
 
-## Next steps
+## What else can I do with ggstackplot?
 
 - check out the
   **[Features](https://ggstackplot.kopflab.org/articles/features.html)**
-  vignette for details on all available functionality
+  vignette for full details on all available functionality
 - check out the
   **[Examples](https://ggstackplot.kopflab.org/articles/examples.html)**
   vignette for scientific data examples
