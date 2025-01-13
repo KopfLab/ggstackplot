@@ -6,6 +6,7 @@
 ## usethis namespace: end
 NULL
 
+#' @aliases NULL ggstackplot-package
 #' @details
 #' `r lifecycle::badge("stable")`
 #'

@@ -2,7 +2,6 @@
 % Please edit documentation in R/ggstackplot-package.R
 \docType{package}
 \name{ggstackplot-package}
-\alias{ggstackplot}
 \alias{ggstackplot-package}
 \title{ggstackplot: Create Overlapping Stacked Plots}
 \description{
