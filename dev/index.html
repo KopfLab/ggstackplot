@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create overlapping stacked ggplots • ggstackplot</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<title>Create Overlapping Stacked Plots • ggstackplot</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/simplex/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Create overlapping stacked ggplots">
-<meta property="og:description" content="This package makes it easy to create overlapping ggplots. This plotting style is particularly common in paleoclimatology and oceanography research communities.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Create Overlapping Stacked Plots">
+<meta property="og:description" content="Easily create overlapping grammar of graphics plots for scientific data visualization. This style of plotting is particularly common in climatology and oceanography research communities.">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -26,7 +26,7 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggstackplot</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.0</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.9999</span>
       </span>
     </div>
 
@@ -50,9 +50,6 @@
   <a href="articles/features.html">Features</a>
 </li>
 <li>
-  <a href="articles/examples.html">Examples</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
@@ -60,7 +57,7 @@
 <li>
   <a href="https://github.com/kopflab/ggstackplot" class="external-link">
     <span class="fa fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -71,7 +68,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -82,36 +79,199 @@
 <div class="section level2">
 <h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
 </h2>
-<p>Have you ever wanted to compare multiple panels of line plots that do not share coordinate schemes? These kinds of plots are ubiquitous in the Earth sciences, but there is not an easy way to create them with ggplot facets.</p>
+<p>Have you ever wanted to create (partly) overlapping line plots with matched color-coding of the data and axes? These kinds of plots are common, for example, in climatology and oceanography research but there is not an easy way to create them with ggplot facets. The ggstackplot package builds on <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> to provide a straightforward approach to building these kinds of plots while retaining the powerful grammar of graphics functionality of ggplots.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install ggstackplot from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"KopfLab/ggstackplot"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version of ggstackplot from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages("pak")</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"KopfLab/ggstackplot"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="show-me-some-code">Show me some code<a class="anchor" aria-label="anchor" href="#show-me-some-code"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggstackplot</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
-<span>  <span class="va">mtcars</span>,</span>
-<span>  x <span class="op">=</span> <span class="va">mpg</span>,</span>
-<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`weight [g]` <span class="op">=</span> <span class="va">wt</span>, <span class="va">qsec</span>, <span class="va">drat</span>, <span class="va">disp</span><span class="op">)</span>,</span>
-<span>  color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span>, <span class="st">"#4DAF4A"</span>, <span class="st">"#984EA3"</span><span class="op">)</span>,</span>
-<span>  overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="100%"></p>
+<span></span>
+<span><span class="co"># using R's built-in mtcars dataset</span></span>
+<span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    <span class="co"># define shared x axis</span></span>
+<span>    x <span class="op">=</span> <span class="va">mpg</span>, </span>
+<span>    <span class="co"># define multiple y axes</span></span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"weight"</span> <span class="op">=</span> <span class="va">wt</span>, <span class="st">"horsepower"</span> <span class="op">=</span> <span class="va">hp</span><span class="op">)</span>,</span>
+<span>    <span class="co"># set colors</span></span>
+<span>    color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E41A1C"</span>, <span class="st">"#377EB8"</span><span class="op">)</span>,</span>
+<span>    <span class="co"># set to complete overlap</span></span>
+<span>    overlap <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-mtcars-1.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
+<h2 id="show-me-some-climate-data">Show me some climate data<a class="anchor" aria-label="anchor" href="#show-me-some-climate-data"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># download a recent dataset from the public climate data repository PANGAEA</span></span>
+<span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu">pangaear</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/pangaear/reference/pg_data.html" class="external-link">pg_data</a></span><span class="op">(</span>doi <span class="op">=</span> <span class="st">"10.1594/PANGAEA.967047"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># show what some of these data look like</span></span>
+<span><span class="va">dataset</span><span class="op">$</span><span class="va">data</span><span class="op">[</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Depth ice/snow [m] (Top Depth)"</span>, </span>
+<span>    <span class="st">"Age [ka BP]"</span>, </span>
+<span>    <span class="st">"[SO4]2- [ng/g] (Ion chromatography)"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="37%">
+<col width="16%">
+<col width="45%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Depth ice/snow [m] (Top Depth)</th>
+<th align="right">Age [ka BP]</th>
+<th align="right">[SO4]2- [ng/g] (Ion chromatography)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">160.215</td>
+<td align="right">1.20662</td>
+<td align="right">52.00</td>
+</tr>
+<tr class="even">
+<td align="right">160.183</td>
+<td align="right">1.20300</td>
+<td align="right">165.00</td>
+</tr>
+<tr class="odd">
+<td align="right">160.151</td>
+<td align="right">1.20276</td>
+<td align="right">93.50</td>
+</tr>
+<tr class="even">
+<td align="right">160.022</td>
+<td align="right">1.20191</td>
+<td align="right">42.25</td>
+</tr>
+<tr class="odd">
+<td align="right">159.990</td>
+<td align="right">1.20155</td>
+<td align="right">74.50</td>
+</tr>
+<tr class="even">
+<td align="right">159.958</td>
+<td align="right">1.20130</td>
+<td align="right">104.50</td>
+</tr>
+</tbody>
+</table>
+<p><strong>These data were kindly made available on <a href="https://doi.org/10.1594/PANGAEA.967047" class="external-link">PANGEA</a> by Sigl et al. (2024).</strong></p>
+<p>Full citation:</p>
+<blockquote>
+<p>Sigl, Michael; Gabriel, Imogen; Hutchison, William; Burke, Andrea (2024): Sulfate concentration and sulfur isotope data from Greenland TUNU2013 ice-core samples between 740-765 CE [dataset]. PANGAEA, <a href="https://doi.org/10.1594/PANGAEA.967047" class="external-link uri">https://doi.org/10.1594/PANGAEA.967047</a></p>
+</blockquote>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># visualize the data with ggstackplot</span></span>
+<span><span class="va">dataset</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Age [ka BP]"</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="co"># vertical stack of the measurements through time</span></span>
+<span>      <span class="st">"sulfate [ng/g]"</span> <span class="op">=</span> <span class="st">"[SO4]2- [ng/g] (Ion chromatography)"</span>,</span>
+<span>      <span class="st">"δ34S [‰]"</span> <span class="op">=</span> <span class="st">"δ34S [SO4]2- [‰ CDT] (Multi-collector ICP-MS (MC-IC...)"</span>,</span>
+<span>      <span class="st">"Δ33S [‰]"</span> <span class="op">=</span> <span class="st">"Δ33S [SO4]2- [‰ CDT] (Multi-collector ICP-MS (MC-IC...)"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># color palette</span></span>
+<span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
+<span>    <span class="co"># partial overlap of the panels</span></span>
+<span>    overlap <span class="op">=</span> <span class="fl">0.4</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-geodata-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="show-me-more">Show me more<a class="anchor" aria-label="anchor" href="#show-me-more"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># using the built-in economics dataset in ggplot2 to create a horizontal stack</span></span>
+<span><span class="co"># instead of vertical and using many of the customization features available</span></span>
+<span><span class="co"># with ggstackplot and ggplot2</span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="va"><a href="https://ggplot2.tidyverse.org/reference/economics.html" class="external-link">economics</a></span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    <span class="co"># define shared x axis</span></span>
+<span>    x <span class="op">=</span> <span class="va">date</span>, </span>
+<span>    <span class="co"># define the stacked y axes</span></span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pce</span>, <span class="va">pop</span>, <span class="va">psavert</span>, <span class="va">unemploy</span><span class="op">)</span>,</span>
+<span>    <span class="co"># pick the RColorBrewer Dark2 palette (good color contrast)</span></span>
+<span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
+<span>    <span class="co"># overlay the pce &amp; pop plots (1), then make a full break (0) to the once</span></span>
+<span>    <span class="co"># again overlaye psavert &amp; unemploy plots (1)</span></span>
+<span>    overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="co"># switch axes so unemploy and psavert are on the side where they are </span></span>
+<span>    <span class="co"># highest, respectively - not doing this here by changing the order of y</span></span>
+<span>    <span class="co"># because we want pop and unemploy on the same side</span></span>
+<span>    switch_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="co"># make shared axis space a bit smaller</span></span>
+<span>    shared_axis_size <span class="op">=</span> <span class="fl">0.15</span>,</span>
+<span>    <span class="co"># provide a base plot with shared graphics eelements among all plots</span></span>
+<span>    template <span class="op">=</span> </span>
+<span>      <span class="co"># it's a ggplot</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># use a line plot for all</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># we want the default stackplot theme</span></span>
+<span>      <span class="fu"><a href="reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># add custom theme modifications, such as text size</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># make the shared axis a date axis</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html" class="external-link">scale_x_date</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="co"># include y=0 for all plots to contextualize data better</span></span>
+<span>      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html" class="external-link">expand_limits</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    <span class="co"># add plot specific elements</span></span>
+<span>    add <span class="op">=</span> </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        pce <span class="op">=</span> </span>
+<span>          <span class="co"># show pce in trillions of dollars</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"personal consumption expenditures"</span>, </span>
+<span>            <span class="co"># always keep the secondary axis duplicated so ggstackplot can</span></span>
+<span>            <span class="co"># manage axis placement for you</span></span>
+<span>            sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            <span class="co"># labeling function for the dollar units</span></span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"$%.1f T"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span>,</span>
+<span>          <span class="op">)</span>,</span>
+<span>        pop <span class="op">=</span> </span>
+<span>          <span class="co"># show population in millions</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"population"</span>, sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f M"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>        psavert <span class="op">=</span> </span>
+<span>          <span class="co"># savings is in %</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"personal savings rate"</span>, sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"%"</span><span class="op">)</span>,</span>
+<span>          <span class="op">)</span> <span class="op">+</span></span>
+<span>          <span class="co"># show data points in addition to line</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        unemploy <span class="op">=</span> </span>
+<span>          <span class="co"># unemploy in millions</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>            <span class="st">"unemployed persons"</span>, sec.axis <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/sec_axis.html" class="external-link">dup_axis</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.0f M"</span>, <span class="va">x</span><span class="op">/</span><span class="fl">1000</span><span class="op">)</span></span>
+<span>          <span class="op">)</span> <span class="op">+</span></span>
+<span>          <span class="co"># show data points in addition to line</span></span>
+<span>          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-economics-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="what-else-can-i-do-with-ggstackplot">What else can I do with ggstackplot?<a class="anchor" aria-label="anchor" href="#what-else-can-i-do-with-ggstackplot"></a>
 </h2>
 <ul>
-<li>check out the <code>Features</code> vignette for details on all available functionality</li>
-<li>check out the <code>Examples</code> vignette for scientific data examples</li>
+<li>check out the <strong><a href="https://ggstackplot.kopflab.org/articles/features.html">Features</a></strong> vignette for full details on all available functionality</li>
 </ul>
 </div>
 </div>
@@ -145,7 +305,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Sebastian Kopf <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2044-0201" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Sebastian Kopf <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-2044-0201" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Tristan Caro <br><small class="roles"> Author </small>  </li>
 <li>Jamie McFarlin <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8185-8185" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jon Raberg <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-2959-3631" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
@@ -156,8 +316,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://ggstackplot.kopflab.org/"><img src="https://img.shields.io/badge/docs-online-green.svg" alt="Documentation"></a></li>
 <li><a href="https://app.codecov.io/gh/kopflab/ggstackplot" class="external-link"><img src="https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6" alt="codecov"></a></li>
+<li><a href="https://ggstackplot.kopflab.org/"><img src="https://img.shields.io/badge/docs-online-green.svg" alt="Documentation"></a></li>
 </ul>
 </div>
 
@@ -172,16 +332,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
