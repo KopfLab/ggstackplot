@@ -1,4 +1,4 @@
-test_that("test create_stackplot_tibble() parameters", {
+test_that("test create_stackplot_tibble() safety checks", {
   # data
   expect_error(
     create_stackplot_tibble(),
@@ -78,7 +78,16 @@ test_that("test create_stackplot_tibble() parameters", {
     create_stackplot_tibble(mtcars, x = c(mpg, cyl, hp, drat, wt, qsec, vs, am, gear), y = disp, palette = "Accent"),
     "must be.*identifying a valid RColorBrewer palette"
   )
+})
 
+test_that("test create_stackplot_tibble() parameters", {
+  # `x` and `y` arguments
+  vdiffr::expect_doppelganger(
+    "vertically stacked qseq & drat vs mpg plot",
+    ggstackplot(mtcars, x = mpg, y = c(wt, qsec, drat)))
+  vdiffr::expect_doppelganger(
+    "vertical order of qseq & drat vs mpg plot changed",
+    ggstackplot(mtcars, x = mpg, y = c(wt, drat, qsec)))
 })
 
 
@@ -91,27 +100,27 @@ test_that("test create_stackplot_gtables() parameters", {
   )
   expect_error(
     create_stackplot_gtables(data.frame(x = 5)),
-    "with columns '.var'"
+    "with columns.*.var"
   )
 
   # prepared stackplot for testing
-  expect_is(prep_sp <- prepare_stackplot(mtcars, "mpg", "wt"), "data.frame")
+  expect_s3_class(prep_sp <- prepare_stackplot(mtcars, "mpg", "wt"), "data.frame")
 
   # overlap
   expect_error(
     create_stackplot_gtables(prep_sp, overlap = "42"),
-    "`overlap` must be either a single numeric value.*between 0 and 1.*or one for each"
+    "`overlap` must be either a single numeric value.*between 0 and 1.*one for.*each"
   )
   expect_error(
     create_stackplot_gtables(prep_sp, overlap = -0.01),
-    "`overlap` must be either a single numeric value.*between 0 and 1.*or one for each"
+    "`overlap` must be either a single numeric value.*between 0 and 1.*one for.*each"
   )
   expect_error(
     create_stackplot_gtables(prep_sp, overlap = 1.01),
-    "`overlap` must be either a single numeric value.*between 0 and 1.*or one for each"
+    "`overlap` must be either a single numeric value.*between 0 and 1.*one for.*each"
   )
   expect_error(
     create_stackplot_gtables(prep_sp, overlap = c(0.5, 0.5)),
-    "`overlap` must be either a single numeric value.*between 0 and 1.*or one for each"
+    "`overlap` must be either a single numeric value.*between 0 and 1.*one for.*each"
   )
 })
