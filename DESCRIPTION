@@ -36,20 +36,19 @@ Imports:
     rlang,
     cli,
     methods,
+    lifecycle,
     tidyselect,
     dplyr,
     tidyr,
     ggplot2,
     cowplot,
-    RColorBrewer,
-    lifecycle
+    RColorBrewer
 Suggests: 
     covr,
     knitr,
     rmarkdown,
-    roxygen2,
-    testthat (>= 3.0.0)
-    lifecycle,
+    testthat (>= 3.0.0),
+    vdiffr,
     scales
 Config/testthat/edition: 3
 VignetteBuilder: knitr
