@@ -1,6 +1,3 @@
-context("ggstackplot")
-
-
 test_that("test create_stackplot_tibble() parameters", {
   # data
   expect_error(
