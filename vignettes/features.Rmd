@@ -294,7 +294,7 @@ mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
-    #simplify_shared_axis = FALSE,
+    simplify_shared_axis = FALSE,
     alternate_axes = FALSE
   )
 ```

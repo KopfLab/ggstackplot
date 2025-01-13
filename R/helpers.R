@@ -2,9 +2,9 @@
 
 #' Recommended base theme for stacked gg plots
 #'
+#' Returns a basic ggplot2 theme that extends [ggplot2::theme_bw()] with a transparent plot background to make sure overlapping plots do not cover each other up.
 #'
-#'
-#' @return `ggplot2::theme()` object
+#' @return [ggplot2::theme()] object
 #' @examples
 #' library(ggplot2)
 #' template <- ggplot() + geom_line() + theme_stackplot()
