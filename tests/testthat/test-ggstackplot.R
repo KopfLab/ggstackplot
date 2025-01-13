@@ -112,6 +112,10 @@ test_that("test create_stackplot_gtables() safety checks", {
     create_stackplot_gtables(prep_sp, overlap = c(0.5, 0.5)),
     "`overlap` must be either a single numeric value.*between 0 and 1.*one for.*each"
   )
+  expect_warning(
+    ggstackplot(mtcars, x = mpg, y = c(qsec, drat), add = list(qsec = DNE)),
+    "failed to parse added code"
+  )
 })
 
 test_that("test ggstackplot() functionality", {
@@ -155,7 +159,50 @@ test_that("test ggstackplot() functionality", {
   )
   vdiffr::expect_doppelganger(
     "plot with custom template",
-    ggstackplot(mtcars, x = mpg, y = c(qsec, drat), template = ggplot() + geom_line())
+    ggstackplot(mtcars, x = mpg, y = c(qsec, drat),
+                template = ggplot() + geom_line() + labs(x = "x", y = "y"))
+  )
+  vdiffr::expect_doppelganger(
+    "vertical stack plot with axis definitions in template",
+    ggstackplot(
+      mtcars, x = mpg, y = c(qsec, drat),
+      template =
+        ggplot() + geom_line() +
+        scale_x_continuous(limits = c(0, 100)) +
+        scale_y_continuous(limits = c(0, 100))
+    )
+  )
+  vdiffr::expect_doppelganger(
+    "vertical stack plot with axis definitions and labels in template",
+    ggstackplot(
+      mtcars, x = mpg, y = c(qsec, drat),
+      template =
+        ggplot() + geom_line() +
+        scale_x_continuous(limits = c(0, 100)) +
+        scale_y_continuous(limits = c(0, 100)) +
+        labs(x = "x", y = "y")
+    )
+  )
+  vdiffr::expect_doppelganger(
+    "horizontal stack plot with axis definitions in template",
+    ggstackplot(
+      mtcars, y = mpg, x = c(qsec, drat),
+      template =
+        ggplot() + geom_line() +
+        scale_x_continuous(limits = c(0, 100)) +
+        scale_y_continuous(limits = c(0, 100))
+    )
+  )
+  vdiffr::expect_doppelganger(
+    "horizontal stack plot with axis definitions and labels in template",
+    ggstackplot(
+      mtcars, y = mpg, x = c(qsec, drat),
+      template =
+        ggplot() + geom_line() +
+        scale_x_continuous(limits = c(0, 100)) +
+        scale_y_continuous(limits = c(0, 100)) +
+        labs(x = "x", y = "y")
+    )
   )
   vdiffr::expect_doppelganger(
     "plot with added elements",
