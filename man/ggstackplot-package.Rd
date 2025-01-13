@@ -2,11 +2,16 @@
 % Please edit documentation in R/ggstackplot-package.R
 \docType{package}
 \name{ggstackplot-package}
+\alias{ggstackplot}
 \alias{ggstackplot-package}
-\alias{_PACKAGE}
 \title{ggstackplot: Create Overlapping Stacked Plots}
 \description{
 Easily create overlapping grammar of graphics plots for scientific data visualization. This style of plotting is particularly common in climatology and oceanography research communities.
+}
+\details{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Have you ever wanted to compare multiple panels of line plots that do not share coordinate schemes? These kinds of plots are ubiquitous in the Earth sciences, but there is not an easy way to create them with ggplot facets. Check out the functionality provided by ggstackplots with useful examples and plot styling ideas at \url{https://ggstackplot.kopflab.org}
 }
 \author{
 \strong{Maintainer}: Sebastian Kopf \email{sebastian.kopf@colorado.edu} (\href{https://orcid.org/0000-0002-2044-0201}{ORCID}) [copyright holder]
@@ -19,4 +24,3 @@ Authors:
 }
 
 }
-\keyword{internal}

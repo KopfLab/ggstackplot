@@ -36,7 +36,8 @@ prepare_stackplot(
   switch_axes = FALSE,
   template = ggplot() + geom_line() + geom_point() + theme_stackplot(),
   add = list(),
-  debug = FALSE
+  debug = FALSE,
+  call = caller_env()
 )
 
 assemble_stackplot(
@@ -76,7 +77,7 @@ assemble_stackplot(
 
 \item{add}{a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)}
 
-\item{debug}{debug flag to print the stackplot tibble and gtable intermediates}
+\item{debug}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} debug flag to print the stackplot tibble and gtable intermediates}
 
 \item{prepared_stackplot}{a nested data frame, the output from \code{\link[=prepare_stackplot]{prepare_stackplot()}}}
 }
