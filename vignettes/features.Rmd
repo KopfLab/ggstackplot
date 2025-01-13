@@ -63,7 +63,7 @@ Select multiple x variables to stack:
 
 ```{r}
 # all examples shown in this document work the same way for a horizontal
-# stack simplfy by switching out the x and y assignments
+# stack, simply switch out the x and y assignments
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec, drat)
@@ -421,7 +421,38 @@ mtcars |>
       geom_point(data = function(df) filter(df, .yvar == "drat")) +
       theme_stackplot()
   )
-  
+```
+
+## Different plot elements
+
+One can also change the geoms in the default theme. Here we use `geom_path()` instead of `geom_line()` in a horizontal stack. This is a very common use case because `geom_line()` connects the data points by increasing x-axis which is not always what we want (for example in oceanographic depth plots where we want to connect the data points by increasing y-axis value). 
+
+```{r}
+# horizontal stack with default (geom_line())
+mtcars |>
+  ggstackplot(
+    y = mpg, x = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = 
+      ggplot() + 
+      geom_point() +
+      geom_line() + # default in template
+      theme_stackplot() 
+  )
+# the following is the exact same data but using a
+# horizontal stack with "depth-profile" like geom_path()
+mtcars |>
+  # arrange data by the y-axis
+  arrange(mpg) |>
+  ggstackplot(
+    y = mpg, x = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    template = 
+      ggplot() + 
+      geom_point() +
+      geom_path() + # plots data in order
+      theme_stackplot() 
+  )
 ```
 
 ## Additional plot elements
@@ -441,8 +472,6 @@ mtcars |>
       theme_stackplot() 
   )
 ```
-
-
 
 ## Axis modifications
 
@@ -464,7 +493,7 @@ mtcars |>
         name = "this is my mpg axis",
         # this can be the same with dup_axis() or as here have a transformed axis
         sec.axis = sec_axis(
-          trans = sqrt, 
+          transform = sqrt, 
           name = expression(sqrt(mpg)), 
           breaks = scales::pretty_breaks(5)
         )
@@ -621,7 +650,7 @@ mtcars |>
 # Putting it all together
 
 ```{r, message = FALSE, fig.height=8}
-# example with economics data bundled with ggplot2
+# example from the README with economics data bundled with ggplot2
 ggplot2::economics |>
   ggstackplot(
     # define shared x axis
@@ -630,7 +659,8 @@ ggplot2::economics |>
     y = c(pce, pop, psavert, unemploy),
     # pick the RColorBrewer Dark2 palette (good color contrast)
     palette = "Dark2",
-    # overlay the pce & pop plots (1), then make a full break (0) to the once again overlaye psavert & unemploy plots (1)
+    # overlay the pce & pop plots (1), then make a full break (0) to the once
+    # again overlaye psavert & unemploy plots (1)
     overlap = c(1, 0, 1),
     # switch axes so unemploy and psavert are on the side where they are 
     # highest, respectively - not doing this here by changing the order of y
@@ -649,7 +679,7 @@ ggplot2::economics |>
       # add custom theme modifications, such as text size
       theme(text = element_text(size = 14)) +
       # make the shared axis a date axis
-      scale_x_date() +
+      scale_x_date("year") +
       # include y=0 for all plots to contextualize data better
       expand_limits(y = 0),
     # add plot specific elements
@@ -658,34 +688,32 @@ ggplot2::economics |>
         pce = 
           # show pce in trillions of dollars
           scale_y_continuous(
-            "personal consumption expenditures",
-            labels = function(x) sprintf("$%.1f T", x/1000),
+            "personal consumption expenditures", 
             # always keep the secondary axis duplicated so ggstackplot can
             # manage axis placement for you
-            sec.axis = dup_axis()
+            sec.axis = dup_axis(),
+            # labeling function for the dollar units
+            labels = function(x) sprintf("$%.1f T", x/1000),
           ),
         pop = 
           # show population in millions
           scale_y_continuous(
-            "population",
-            labels = function(x) sprintf("%.0f M", x/1000),
-            sec.axis = dup_axis()
+            "population", sec.axis = dup_axis(),
+            labels = function(x) sprintf("%.0f M", x/1000)
           ),
         psavert = 
           # savings is in %
           scale_y_continuous(
-            "personal savings rate",
+            "personal savings rate", sec.axis = dup_axis(),
             labels = function(x) paste0(x, "%"),
-            sec.axis = dup_axis()
           ) +
           # show data points in addition to line
           geom_point(),
         unemploy = 
           # unemploy in millions
           scale_y_continuous(
-            "unemployed persons",
-            labels = function(x) sprintf("%.0f M", x/1000),
-            sec.axis = dup_axis()
+            "unemployed persons", sec.axis = dup_axis(),
+            labels = function(x) sprintf("%.0f M", x/1000)
           ) +
           # show data points in addition to line
           geom_point()
