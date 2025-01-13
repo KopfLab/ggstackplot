@@ -163,7 +163,7 @@ test_that("test ggstackplot() functionality", {
                 template = ggplot() + geom_line() + labs(x = "x", y = "y"))
   )
   vdiffr::expect_doppelganger(
-    "vertical stack plot with axis definitions in template",
+    "vstack w axis defs in template",
     ggstackplot(
       mtcars, x = mpg, y = c(qsec, drat),
       template =
@@ -173,7 +173,7 @@ test_that("test ggstackplot() functionality", {
     )
   )
   vdiffr::expect_doppelganger(
-    "vertical stack plot with axis definitions and labels in template",
+    "vstack w axis defs and labs in template",
     ggstackplot(
       mtcars, x = mpg, y = c(qsec, drat),
       template =
@@ -184,7 +184,7 @@ test_that("test ggstackplot() functionality", {
     )
   )
   vdiffr::expect_doppelganger(
-    "horizontal stack plot with axis definitions in template",
+    "hstack w axis defs in template",
     ggstackplot(
       mtcars, y = mpg, x = c(qsec, drat),
       template =
@@ -194,7 +194,7 @@ test_that("test ggstackplot() functionality", {
     )
   )
   vdiffr::expect_doppelganger(
-    "horizontal stack plot with axis definitions and labels in template",
+    "hstack w axis defs and labs in template",
     ggstackplot(
       mtcars, y = mpg, x = c(qsec, drat),
       template =
