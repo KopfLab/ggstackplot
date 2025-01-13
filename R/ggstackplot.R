@@ -86,7 +86,7 @@ prepare_stackplot <- function(
       geom_point() +
       theme_stackplot(),
     add = list(),
-    debug = FALSE, call = caller_env()) {
+    debug = FALSE) {
 
   # prep the stackplot
   prepared_stackplot <- data |>
@@ -97,8 +97,7 @@ prepare_stackplot <- function(
       palette = palette,
       both_axes = both_axes,
       alternate_axes = alternate_axes,
-      switch_axes = switch_axes,
-      call = call
+      switch_axes = switch_axes
     ) |>
     # prepare plots
     dplyr::mutate(plot = map2(.data$config, .data$data, make_plot, template)) |>

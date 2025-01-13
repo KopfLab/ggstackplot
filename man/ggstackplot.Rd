@@ -36,8 +36,7 @@ prepare_stackplot(
   switch_axes = FALSE,
   template = ggplot() + geom_line() + geom_point() + theme_stackplot(),
   add = list(),
-  debug = FALSE,
-  call = caller_env()
+  debug = FALSE
 )
 
 assemble_stackplot(
