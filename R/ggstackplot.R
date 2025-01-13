@@ -21,7 +21,7 @@
 #' @param shared_axis_size if simplify_shared_axes is true, this determines the size of the shared axis relative to the size of a single plot
 #' @param template a template plot (ggplot object) to use for the stacked plots
 #' @param add a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)
-#' @param debug debug flag to print the stackplot tibble and gtable intermediates
+#' @param debug `r lifecycle::badge("experimental")` debug flag to print the stackplot tibble and gtable intermediates
 #' @examples
 #'
 #' # 1 step stackplot (most common use)
@@ -122,48 +122,48 @@ prepare_stackplot <- function(
 
 # internal function to prepare the data for a ggstackplot
 create_stackplot_tibble <- function(
-    data, x, y, remove_na = TRUE, color = NA, palette = NA, both_axes = FALSE, alternate_axes = FALSE, switch_axes = FALSE) {
+    data, x, y, remove_na = TRUE, color = NA, palette = NA, both_axes = FALSE, alternate_axes = FALSE, switch_axes = FALSE, call = caller_env()) {
 
   # do we have a data frame?
   if (missing(data) || !is.data.frame(data)) {
-    abort("`data` must be a data frame or tibble.")
+    cli_abort("`data` must be a data frame or tibble.", call = call)
   }
 
   # do x and y evaluate correctly?
   x <- try_fetch(
     tidyselect::eval_select(rlang::enexpr(x), data),
     error = function(cnd) {
-      abort(
+      cli_abort(
         "`x` must be a valid tidyselect expression.",
-        parent = cnd
+        parent = cnd, call = call
       )
     }
   )
   y <- try_fetch(
     tidyselect::eval_select(rlang::enexpr(y), data),
     error = function(cnd) {
-      abort(
+      cli_abort(
         "`y` must be a valid tidyselect expression.",
-        parent = cnd
+        parent = cnd, call = call
       )
     }
   )
 
   # do we have at least 1 x and 1 y?
   if (length(x) < 1 || length(y) < 1) {
-    abort(c(
+    cli_abort(c(
       "insufficient number of columns",
       "x" = if (length(x) < 1) "no `x` column selected",
       "x" = if (length(y) < 1) "no `y` column selected"
-    ))
+    ), call = call)
   }
   # do we have both multiple x AND y?
   if (length(x) > 1 && length(y) > 1) {
-    abort(c(
+    cli_abort(c(
       "too many columns, only x OR y can select multiple columns",
       "x" = if (length(x) < 1) "no `x` column selected",
       "x" = if (length(y) < 1) "no `y` column selected"
-    ))
+    ), call = call)
   }
 
   # do we have valid remove_na, both_axes, alternate_axes, and switch_axes (the booleans)
@@ -204,7 +204,7 @@ create_stackplot_tibble <- function(
   # do we have a valid length for color or palette?
   stopifnot("can only set either `color` or `palette`, not both" = is.na(color) | is.na(palette))
   if (!(is.character(color) || all(is.na(color))) || !length(color) %in% c(1L, nrow(config))) {
-    abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)))
+    cli_abort(sprintf("`color` must be either a single color or one for each variable (%d)", nrow(config)), call = call)
   }
   if (!all(is.na(palette))) {
     # palette argument provided
@@ -212,7 +212,7 @@ create_stackplot_tibble <- function(
       color = RColorBrewer::brewer.pal(RColorBrewer::brewer.pal.info[palette, 1], palette)[1:nrow(config)]
     } else
       sprintf("`palette` must be a string identifying a valid RColorBrewer palette with at least %d colors. Use `RColorBrewer::display.brewer.all()` to see all available palettes.", nrow(config)) |>
-      abort()
+      cli_abort(call = call)
   }
 
 
@@ -290,28 +290,33 @@ assemble_stackplot <- function(prepared_stackplot, overlap = 0, simplify_shared_
 }
 
 # internal function to great a list of gtables for the combined plot
-create_stackplot_gtables <- function(prepared_stackplot, overlap, simplify_shared_axis, shared_axis_size) {
+create_stackplot_gtables <- function(prepared_stackplot, overlap, simplify_shared_axis, shared_axis_size, call = caller_env()) {
 
   # do we have a data frame?
   req_cols <- c(".var", "config", "data", "plot", "theme")
   if (missing(prepared_stackplot) || !is.data.frame(prepared_stackplot) ||
       !all(req_cols %in% names(prepared_stackplot))) {
-    abort(
-      sprintf("`prepared_stackplot` must be a data frame or tibble with columns '%s'", paste(req_cols, collapse = "', '"))
+    cli_abort(
+      "{.var prepared_stackplot} must be a data frame or tibble with columns
+      {.emph {req_cols}}", call = call
     )
   }
 
   # do we have a valid overlap value?
   if (missing(overlap) || !is.numeric(overlap) || !all(overlap >= 0) || !all(overlap <= 1) ||
       !length(overlap) %in% c(1L, nrow(prepared_stackplot) - 1L)) {
-    abort(sprintf("`overlap` must be either a single numeric value (between 0 and 1) or one for each sequential plot overlap (%d)",
-                  nrow(prepared_stackplot) - 1L))
+    cli_abort(
+      c("{.var overlap} must be either a single numeric value (between 0 and 1)
+      or a vector with {nrow(prepared_stackplot) - 1L} numbers, one for the
+      overlap of each sequential plot",
+      "x" = "{.var overlap} is a {.obj_type_friendly {overlap}}"),
+      call = call)
   }
 
   # combine plots and themes and assembel the gtables
   gtables <- prepared_stackplot |>
     combine_plot_theme_add(simplify_shared_axis = simplify_shared_axis, include_adds = TRUE) |>
-    tidyr::unnest(.data$config) |>
+    tidyr::unnest("config") |>
     dplyr::select(".var", ".direction", "plot_w_theme") |>
     # could think about relative sizing here with size_adjust but that doesn't seem like a feature we need
     dplyr::mutate(

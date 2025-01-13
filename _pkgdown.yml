@@ -17,8 +17,6 @@ navbar:
   left:
   - text: Features
     href: articles/features.html
-  - text: Examples
-    href: articles/examples.html
   - text: Reference
     href: reference/index.html
   right:

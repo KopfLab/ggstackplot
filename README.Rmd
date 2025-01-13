@@ -18,73 +18,154 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml)
-[![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
 [![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
+[![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
 <!-- badges: end -->
 
 ## About
 
-Have you ever wanted to compare multiple panels of line plots that do not share coordinate schemes? These kinds of plots are ubiquitous in the Earth sciences, but there is not an easy way to create them with ggplot facets.
+Have you ever wanted to create (partly) overlapping line plots with matched color-coding of the data and axes? These kinds of plots are common, for example, in climatology and oceanography research but there is not an easy way to create them with ggplot facets. The ggstackplot package builds on [ggplot2](https://ggplot2.tidyverse.org/) to provide a straightforward approach to building these kinds of plots while retaining the powerful grammar of graphics functionality of ggplots.
 
 ## Installation
 
-You can install ggstackplot from [GitHub](https://github.com/) with:
+You can install the development version of ggstackplot from [GitHub](https://github.com/) with:
 
-```{r, eval = FALSE}
-if(!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("KopfLab/ggstackplot")
+```
+# install.packages("pak")
+pak::pak("KopfLab/ggstackplot")
 ```
 
 ## Show me some code
 
-```{r example, fig.width=7, fig.height=7}
+```{r mtcars}
 library(ggstackplot)
 
-# using the built-in economics dataset in ggplot2
-ggplot2::economics |>
+# using R's built-in mtcars dataset
+mtcars |> 
   ggstackplot(
     # define shared x axis
-    x = date, 
-    # define stacked y axes
-    y = c(pce, pop, psavert, unemploy),
-    # add a color palette
-    palette = "Set1"
+    x = mpg, 
+    # define multiple y axes
+    y = c("weight" = wt, "horsepower" = hp),
+    # set colors
+    color = c("#E41A1C", "#377EB8"),
+    # set to complete overlap
+    overlap = 1
+  )
+```
+
+## Show me some climate data
+
+```{r, message = FALSE}
+# download a recent dataset from the public climate data repository PANGAEA
+dataset <- pangaear::pg_data(doi = "10.1594/PANGAEA.967047")[[1]]
+
+# show what some of these data look like
+dataset$data[
+  c("Depth ice/snow [m] (Top Depth)", 
+    "Age [ka BP]", 
+    "[SO4]2- [ng/g] (Ion chromatography)")] |>
+  head() |> knitr::kable()
+```
+
+**These data were kindly made available on [PANGEA](`r dataset$url`) by Sigl et al. (2024).**
+
+Full citation:
+
+> `r dataset$citation`
+
+```{r geodata}
+# visualize the data with ggstackplot
+dataset$data |> 
+  ggstackplot(
+    x = "Age [ka BP]",
+    y = c(
+      # vertical stack of the measurements through time
+      "sulfate [ng/g]" = "[SO4]2- [ng/g] (Ion chromatography)",
+      "δ34S [‰]" = "δ34S [SO4]2- [‰ CDT] (Multi-collector ICP-MS (MC-IC...)",
+      "Δ33S [‰]" = "Δ33S [SO4]2- [‰ CDT] (Multi-collector ICP-MS (MC-IC...)"
+    ),
+    # color palette
+    palette = "Dark2",
+    # partial overlap of the panels
+    overlap = 0.4
   )
 ```
 
 ## Show me more
 
-```{r example2, fig.width=7, fig.height=4}
+```{r economics, fig.height=6, message = FALSE}
 library(ggplot2)
 
-# creating a horizontal stack instead of vertical and using some of the many
-# customization features available in ggstackplot
+# using the built-in economics dataset in ggplot2 to create a horizontal stack
+# instead of vertical and using many of the customization features available
+# with ggstackplot and ggplot2
 ggplot2::economics |>
   ggstackplot(
-    # define shared y axis
-    y = date, 
-    # define the stacked x axes with custom axis labels
-    x = c(
-      "personal consumption expenditures" = pce, 
-      "population" = pop, 
-      "personal savings rate" = psavert, 
-      "unemployed persons" = unemploy),
-    # add a different color palette
+    # define shared x axis
+    x = date, 
+    # define the stacked y axes
+    y = c(pce, pop, psavert, unemploy),
+    # pick the RColorBrewer Dark2 palette (good color contrast)
     palette = "Dark2",
-    # overlay the pce & pop plots and psavert & unemploy plots
+    # overlay the pce & pop plots (1), then make a full break (0) to the once
+    # again overlaye psavert & unemploy plots (1)
     overlap = c(1, 0, 1),
-    # provide a custom plot template
+    # switch axes so unemploy and psavert are on the side where they are 
+    # highest, respectively - not doing this here by changing the order of y
+    # because we want pop and unemploy on the same side
+    switch_axes = TRUE,
+    # make shared axis space a bit smaller
+    shared_axis_size = 0.15,
+    # provide a base plot with shared graphics eelements among all plots
     template = 
+      # it's a ggplot
       ggplot() +
-      geom_path() +
+      # use a line plot for all
+      geom_line() +
+      # we want the default stackplot theme
       theme_stackplot() +
-      scale_y_date(),
+      # add custom theme modifications, such as text size
+      theme(text = element_text(size = 14)) +
+      # make the shared axis a date axis
+      scale_x_date("year") +
+      # include y=0 for all plots to contextualize data better
+      expand_limits(y = 0),
     # add plot specific elements
     add = 
       list(
-        # add points just for 2 plots
-        `unemployed persons` = geom_point(),
-        `personal savings rate` = geom_point()
+        pce = 
+          # show pce in trillions of dollars
+          scale_y_continuous(
+            "personal consumption expenditures", 
+            # always keep the secondary axis duplicated so ggstackplot can
+            # manage axis placement for you
+            sec.axis = dup_axis(),
+            # labeling function for the dollar units
+            labels = function(x) sprintf("$%.1f T", x/1000),
+          ),
+        pop = 
+          # show population in millions
+          scale_y_continuous(
+            "population", sec.axis = dup_axis(),
+            labels = function(x) sprintf("%.0f M", x/1000)
+          ),
+        psavert = 
+          # savings is in %
+          scale_y_continuous(
+            "personal savings rate", sec.axis = dup_axis(),
+            labels = function(x) paste0(x, "%"),
+          ) +
+          # show data points in addition to line
+          geom_point(),
+        unemploy = 
+          # unemploy in millions
+          scale_y_continuous(
+            "unemployed persons", sec.axis = dup_axis(),
+            labels = function(x) sprintf("%.0f M", x/1000)
+          ) +
+          # show data points in addition to line
+          geom_point()
       )
   )
 ```
@@ -92,4 +173,3 @@ ggplot2::economics |>
 ## What else can I do with ggstackplot?
 
 - check out the **[Features](https://ggstackplot.kopflab.org/articles/features.html)** vignette for full details on all available functionality
-- check out the **[Examples](https://ggstackplot.kopflab.org/articles/examples.html)** vignette for scientific data examples

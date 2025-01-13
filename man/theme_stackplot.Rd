@@ -7,10 +7,10 @@
 theme_stackplot()
 }
 \value{
-\code{ggplot2::theme()} object
+\code{\link[ggplot2:theme]{ggplot2::theme()}} object
 }
 \description{
-Recommended base theme for stacked gg plots
+Returns a basic ggplot2 theme that extends \code{\link[ggplot2:ggtheme]{ggplot2::theme_bw()}} with a transparent plot background to make sure overlapping plots do not cover each other up.
 }
 \examples{
 library(ggplot2)

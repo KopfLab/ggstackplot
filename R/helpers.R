@@ -2,9 +2,9 @@
 
 #' Recommended base theme for stacked gg plots
 #'
+#' Returns a basic ggplot2 theme that extends [ggplot2::theme_bw()] with a transparent plot background to make sure overlapping plots do not cover each other up.
 #'
-#'
-#' @return `ggplot2::theme()` object
+#' @return [ggplot2::theme()] object
 #' @examples
 #' library(ggplot2)
 #' template <- ggplot() + geom_line() + theme_stackplot()
@@ -208,21 +208,21 @@ process_add_ons <- function(prepared_stackplot, add) {
       sprintf("no match for `add` component(s) '%s' in variables ('%s')",
               paste(add_names[is.na(add_indices)], collapse = "', '"),
               paste(prepared_stackplot$.var, collapse = "', '")) |>
-        abort()
+        cli_abort()
     }
 
     # check for indices outside what's possible
     if (any(out_of_range <- !add_indices %in% seq_along(prepared_stackplot$.var))) {
       sprintf("`add` component(s) index out of range: %s",
               paste(add_indices[out_of_range], collapse = ", ")) |>
-        abort()
+        cli_abort()
     }
 
     # check for duplicates
     if (any(dups <- duplicated(add_indices))) {
       sprintf("multiple `add` component definitions for variable(s) '%s'",
               paste(prepared_stackplot$.var[unique(add_indices[dups])], collapse = "', '" )) |>
-        abort()
+        cli_abort()
     }
 
     # store adds
@@ -295,7 +295,7 @@ combine_plot_theme_add <- function(prepared_stackplot, simplify_shared_axis, inc
             if(!is.null(simplify_axis)) {
               if (any(grepl(sprintf("scale_%s_", simplify_axis), as.character(add)))) {
                 sprintf("invalid add-on for '%s' plot: `%s`. Modifications of the shared %s-axis are not allowed because it can lead to deceptive visualizations. You can modify the shared axis in the template or switch to `simplify_shared_axis = FALSE`.", var, as_label(add), simplify_axis) |>
-                abort()
+                cli_abort()
               }
             }
 
