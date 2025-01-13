@@ -166,7 +166,9 @@ test_that("test ggstackplot() functionality", {
     "plot with template sec axis labs",
     ggstackplot(mtcars, x = mpg, y = c(qsec, drat),
                 alternate_axes = FALSE, both_axes = TRUE,
-                template = ggplot() + geom_line() + labs(x = "x", y = "y"))
+                template = ggplot() + geom_line() +
+                  scale_x_continuous(sec.axis = dup_axis())+
+                  labs(x = "x", y = "y"))
   )
   vdiffr::expect_doppelganger(
     "vstack w axis defs in template",
