@@ -160,6 +160,12 @@ test_that("test ggstackplot() functionality", {
   vdiffr::expect_doppelganger(
     "plot with custom template",
     ggstackplot(mtcars, x = mpg, y = c(qsec, drat),
+                template = ggplot() + geom_line())
+  )
+  vdiffr::expect_doppelganger(
+    "plot with template sec axis labs",
+    ggstackplot(mtcars, x = mpg, y = c(qsec, drat),
+                alternate_axes = FALSE, both_axes = TRUE,
                 template = ggplot() + geom_line() + labs(x = "x", y = "y"))
   )
   vdiffr::expect_doppelganger(
@@ -168,8 +174,8 @@ test_that("test ggstackplot() functionality", {
       mtcars, x = mpg, y = c(qsec, drat),
       template =
         ggplot() + geom_line() +
-        scale_x_continuous(limits = c(0, 100)) +
-        scale_y_continuous(limits = c(0, 100))
+        scale_x_continuous() +
+        scale_y_continuous()
     )
   )
   vdiffr::expect_doppelganger(
@@ -178,8 +184,8 @@ test_that("test ggstackplot() functionality", {
       mtcars, x = mpg, y = c(qsec, drat),
       template =
         ggplot() + geom_line() +
-        scale_x_continuous(limits = c(0, 100)) +
-        scale_y_continuous(limits = c(0, 100)) +
+        scale_x_continuous() +
+        scale_y_continuous() +
         labs(x = "x", y = "y")
     )
   )
@@ -189,8 +195,8 @@ test_that("test ggstackplot() functionality", {
       mtcars, y = mpg, x = c(qsec, drat),
       template =
         ggplot() + geom_line() +
-        scale_x_continuous(limits = c(0, 100)) +
-        scale_y_continuous(limits = c(0, 100))
+        scale_x_continuous() +
+        scale_y_continuous()
     )
   )
   vdiffr::expect_doppelganger(
@@ -199,8 +205,8 @@ test_that("test ggstackplot() functionality", {
       mtcars, y = mpg, x = c(qsec, drat),
       template =
         ggplot() + geom_line() +
-        scale_x_continuous(limits = c(0, 100)) +
-        scale_y_continuous(limits = c(0, 100)) +
+        scale_x_continuous() +
+        scale_y_continuous() +
         labs(x = "x", y = "y")
     )
   )
