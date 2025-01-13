@@ -48,6 +48,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr,
-    scales
+    scales,
+    pangaear
 Config/testthat/edition: 3
 VignetteBuilder: knitr
