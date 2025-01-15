@@ -2,8 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  explore: explore.html
-last_built: 2025-01-15T12:55Z
+  ggstackplot: ggstackplot.html
+last_built: 2025-01-15T14:33Z
 urls:
   reference: https://ggstackplot.kopflab.org/reference
   article: https://ggstackplot.kopflab.org/articles
