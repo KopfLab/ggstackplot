@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggstackplot)](https://cran.r-project.org/package=ggstackplot)
+[![Life
+cycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KopfLab/ggstackplot/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/kopflab/ggstackplot/branch/main/graph/badge.svg?token=SN0YDIJ6Y6)](https://app.codecov.io/gh/kopflab/ggstackplot)
 [![Documentation](https://img.shields.io/badge/docs-online-green.svg)](https://ggstackplot.kopflab.org/)
@@ -22,8 +25,13 @@ retaining the powerful grammar of graphics functionality of ggplots.
 
 ## Installation
 
-You can install the development version of ggstackplot from
-[GitHub](https://github.com/) with:
+To install the current release from
+[CRAN](https://cran.r-project.org/package=ggstackplot):
+
+    install.packages("ggstackplot")
+
+You can also install the development version of ggstackplot from
+[GitHub](https://github.com/KopfLab/ggstackplot) with:
 
     # install.packages("pak")
     pak::pak("KopfLab/ggstackplot")
