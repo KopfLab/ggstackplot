@@ -23,7 +23,6 @@
 #' @param add a list of ggplot component calls to add to specific panel plots, either by panel variable name (named list) or index (unnamed list)
 #' @param debug `r lifecycle::badge("experimental")` debug flag to print the stackplot tibble and gtable intermediates
 #' @examples
-#'
 #' # 1 step stackplot (most common use)
 #' mtcars |>
 #'   ggstackplot(
@@ -42,8 +41,9 @@
 #'   ) |>
 #'   assemble_stackplot(overlap = c(1, 0, 0.3))
 #'
-#' # many more examples in the vignette
-#' if (interactive()) vignette("explore", "ggstackplot")
+#' @examplesIf interactive()
+#' # many more examples available in the vignette
+#' vignette("explore", "ggstackplot")
 #'
 #' @export
 #' @returns `ggstackplot()` returns a ggplot with overlayed plot layers
