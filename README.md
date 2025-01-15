@@ -165,7 +165,7 @@ dataset2$data |>
   ggstackplot(
     x = c(
       "δ13C carb [‰ PDB]",
-      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+      "δ13C n-C19 [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
     ),
     y = "Depth sed [m]",
     palette = "Dark2",
@@ -185,7 +185,7 @@ dataset2$data |>
   ggstackplot(
     x = c(
       "δ13C carb [‰ PDB]",
-      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+      "δ13C n-C19 [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
     ),
     y = "Depth sed [m]",
     palette = "Dark2",
