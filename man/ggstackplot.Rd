@@ -64,7 +64,7 @@ assemble_stackplot(
 
 \item{alternate_axes}{whether to alternate the sides on which the stacked axes are plotted}
 
-\item{switch_axes}{whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if \code{alternate_axes = TRUE}). Setting \code{switch_axes = TRUE}, leads to the opposite, i.e. first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms).}
+\item{switch_axes}{whether to switch the stacked axes. Not switching means that for vertical stacks the plot at the bottom has the y-axis always on the left side; and for horizontal stacks that the plot on the left has the x-axis on top. Setting \code{switch_axes = TRUE}, leads to the opposite.}
 
 \item{overlap}{fractional overlap between adjacent plots. The max of 1 means plots are perfectly overlaid. The min of 0 means there is no overlap. If providing multiple values, must be 1 less than the number of stacked plots (since it's describing the overlap/gap between adjacent plots). By default there is no overlap between plots}
 

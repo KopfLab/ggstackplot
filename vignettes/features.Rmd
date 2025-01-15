@@ -176,7 +176,7 @@ mtcars |>
 
 ## `switch_axes` argument
 
-Determines whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if `alternate_axes = TRUE`). Setting `switch_axes = TRUE`}, leads to the opposite, i.e. the first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms). If `alternate_axes = TRUE` this essentially switches the order with which the axes alternate (e.g., right/left/right vs. left/right/left).
+Determines whether to switch the stacked axes. Not switching means that for vertical stacks the plot at the bottom has the y-axis always on the left side; and for horizontal stacks that the plot on the left has the x-axis on top. Setting `switch_axes = TRUE`}, leads to the opposite. If `alternate_axes = TRUE` this essentially switches the order with which the axes alternate (e.g., right/left/right vs. left/right/left). Note that if `both_axes = TRUE`, neither the `switch_axes` nor `alternate_axes` parameter has any effect.
 
 ```{r}
 # stacked axis starts on the right
@@ -188,7 +188,7 @@ mtcars |>
   )
 
 # or for the horizontal version, stacked axis
-# starts on the top
+# starts on the bottom
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
