@@ -143,7 +143,8 @@ make_plot <- function(config, data, template) {
     }
     if (config$.direction == "vertical" && is.null(plot$scales$scales[[x_scale_idx]]$limits)) {
       # add limits
-      plot$scales$scales[[x_scale_idx]]$limits <- limits
+      plot$scales$scales[[x_scale_idx]]$limits <-
+        sort(plot$scales$scales[[x_scale_idx]]$transform(limits))
     }
   }
 
@@ -175,7 +176,8 @@ make_plot <- function(config, data, template) {
     }
     if (config$.direction == "horizontal" && is.null(plot$scales$scales[[y_scale_idx]]$limits)) {
       # add limits
-      plot$scales$scales[[y_scale_idx]]$limits <- c(config$.shared_axis_min, config$.shared_axis_max)
+      plot$scales$scales[[y_scale_idx]]$limits <-
+        sort(plot$scales$scales[[y_scale_idx]]$transform(limits))
     }
   }
 
