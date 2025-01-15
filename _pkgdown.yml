@@ -2,14 +2,11 @@ title: ggstackplot
 url: https://ggstackplot.kopflab.org
 template:
   bootstrap: 5
-  light-switch: true
   bslib:
+    bootswitch: simplex
     primary: "#306cc9"
   params:
     ganalytics: G-J5NKSWDWXF
-
-home:
-  strip_header: true
 
 development:
   mode: auto
@@ -17,7 +14,7 @@ development:
 navbar:
   structure:
     left:  [intro, reference, news]
-    right: [search, github, lightswitch]
+    right: [search, github]
   components:
     intro:
       text: Explore
