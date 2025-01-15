@@ -35,8 +35,12 @@ make_color_axis_theme <- function(config) {
   theme_modify_axes(
     axis = if (config$.direction == "horizontal") "x" else "y",
     change_color = if (!is.na(config$.color)) config$.color else NULL,
-    remove_primary = !is.na(config$.axis_switch) && config$.axis_switch,
-    remove_secondary = !is.na(config$.axis_switch) && !config$.axis_switch
+    remove_primary = !is.na(config$.axis_switch) &&
+      ((config$.direction == "horizontal" && !config$.axis_switch) ||
+      (config$.direction == "vertical" && config$.axis_switch)),
+    remove_secondary = !is.na(config$.axis_switch) &&
+      ((config$.direction == "horizontal" && config$.axis_switch) ||
+         (config$.direction == "vertical" && !config$.axis_switch))
   ) +
     # make the shared axis uniform
     theme_modify_axes(
@@ -139,7 +143,8 @@ make_plot <- function(config, data, template) {
     }
     if (config$.direction == "vertical" && is.null(plot$scales$scales[[x_scale_idx]]$limits)) {
       # add limits
-      plot$scales$scales[[x_scale_idx]]$limits <- limits
+      plot$scales$scales[[x_scale_idx]]$limits <-
+        sort(plot$scales$scales[[x_scale_idx]]$transform(limits))
     }
   }
 
@@ -171,7 +176,8 @@ make_plot <- function(config, data, template) {
     }
     if (config$.direction == "horizontal" && is.null(plot$scales$scales[[y_scale_idx]]$limits)) {
       # add limits
-      plot$scales$scales[[y_scale_idx]]$limits <- c(config$.shared_axis_min, config$.shared_axis_max)
+      plot$scales$scales[[y_scale_idx]]$limits <-
+        sort(plot$scales$scales[[y_scale_idx]]$transform(limits))
     }
   }
 
@@ -411,12 +417,12 @@ calculate_axis_switch <- function(var, alternate, switch, reverse) {
   if (!alternate) {
     # no alternating axis
     return(rep(switch, length(var)))
-  } else if (!switch) {
-    # alternating axis not switched
-    return(var %% 2L == 0L)
-  } else {
+  } else if (switch) {
     # switched alternating axis
     return(var %% 2L == 1L)
+  } else {
+    # alternating axis not switched
+    return(var %% 2L == 0L)
   }
 }
 

@@ -15,8 +15,8 @@ navbar:
   title: ggstackplot
   type: default
   left:
-  - text: Features
-    href: articles/features.html
+  - text: Explore
+    href: articles/explore.html
   - text: Reference
     href: reference/index.html
   right:

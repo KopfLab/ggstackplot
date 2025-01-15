@@ -1,8 +1,8 @@
 ---
-title: "ggstackplot features"
+title: "Explore"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ggstackplot features}
+  %\VignetteIndexEntry{explore}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -19,8 +19,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+# load the package
 library(ggstackplot)
 ```
+
+This vignette explores the various features of the ggstackplot package.
 
 # Main Arguments
 
@@ -176,7 +179,7 @@ mtcars |>
 
 ## `switch_axes` argument
 
-Determines whether to switch the stacked axes. Not switching means the first plot in the lower left corner is always arranged like a regular ggplot with the y axis on the left and the x axis on the bottom (even if `alternate_axes = TRUE`). Setting `switch_axes = TRUE`}, leads to the opposite, i.e. the first plot in the lower corner has the variable axis on the other side (secondary in ggplot terms). If `alternate_axes = TRUE` this essentially switches the order with which the axes alternate (e.g., right/left/right vs. left/right/left).
+Determines whether to switch the stacked axes. Not switching means that for vertical stacks the plot at the bottom has the y-axis always on the left side; and for horizontal stacks that the plot on the left has the x-axis on top. Setting `switch_axes = TRUE`}, leads to the opposite. If `alternate_axes = TRUE` this essentially switches the order with which the axes alternate (e.g., right/left/right vs. left/right/left). Note that if `both_axes = TRUE`, neither the `switch_axes` nor `alternate_axes` parameter has any effect.
 
 ```{r}
 # stacked axis starts on the right
@@ -188,7 +191,7 @@ mtcars |>
   )
 
 # or for the horizontal version, stacked axis
-# starts on the top
+# starts on the bottom
 mtcars |> 
   ggstackplot(
     y = mpg, x = c(wt, qsec),
@@ -475,7 +478,7 @@ mtcars |>
 
 ## Axis modifications
 
-Sometimes secondary axes will still be desired, especially if that axis is a transformation of an existing one. For example, here, we create a square root mpg axis that is plotted against the mpg axis. Again, all of this is defined in the `template` argument by adding a `scale_x_continuous` argument, just as you would in a normal ggplot.
+Sometimes secondary axes will still be desired, especially if that axis is a transformation of an existing one. For example, here, we create a square root mpg axis that is plotted against the mpg axis. All this can also be defined in the `template` argument by adding a `scale_x_continuous` argument, just as you would in a normal ggplot.
 
 ```{r}
 # add a secondary x axis
@@ -483,8 +486,7 @@ mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
-    both_axes = TRUE,
-    overlap = 0.1, 
+    both_axes = TRUE, overlap = 0.1, 
     template = 
       ggplot() + 
       geom_line() +
@@ -498,6 +500,22 @@ mtcars |>
           breaks = scales::pretty_breaks(5)
         )
       ) +
+      theme_stackplot() 
+  )
+```
+
+Similarly, transformation axes can be introduced such as e.g. a log axis.
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    both_axes = TRUE, overlap = 0.1,
+    template = 
+      ggplot() + 
+      geom_line() +
+      scale_x_log10("this is my log10 mpg axis") +
       theme_stackplot() 
   )
 ```

@@ -21,6 +21,9 @@
 ehthumbs.db
 Thumbs.db
 
+# test files
+tests/**/*.pdf
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf

@@ -176,7 +176,7 @@ test_that("test ggstackplot() functionality", {
       mtcars, x = mpg, y = c(qsec, drat),
       template =
         ggplot() + geom_line() +
-        scale_x_continuous() +
+        scale_x_log10() +
         scale_y_continuous()
     )
   )

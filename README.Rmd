@@ -100,14 +100,79 @@ dataset$data |>
   )
 ```
 
+## What about horizontal stacks?
+
+```{r, message = FALSE}
+# download some more data from PANGAEA
+dataset2 <- pangaear::pg_data(doi = "10.1594/PANGAEA.933277")[[1]]
+
+# show what some of these data look like
+dataset2$data[
+  c("Depth sed [m]", "Comp", "δ13C [‰ PDB] (mean, vs. VPDB)")] |>
+  head() |> knitr::kable()
+```
+
+Full citation:
+
+> `r dataset2$citation`
+
+```{r "geodata-horizontal", message = FALSE}
+library(dplyr)
+library(ggplot2)
+# provide a different base plot with shared graphics elements among all plots
+my_template <-
+  # it's a ggplot
+  ggplot() +
+  # use a path plot for all (to connect the data points by depth!)
+  geom_point() + geom_path() +
+  # we still want the default stackplot theme
+  theme_stackplot() +
+  # depth is commonly plotted in reverse
+  scale_y_reverse()
+
+# now make the horizontal stack through depth for 2 of the variables
+dataset2$data |> 
+  filter(Comp == "C19") |>
+  arrange(`Depth sed [m]`) |>
+  ggstackplot(
+    x = c(
+      "δ13C carb [‰ PDB]",
+      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+    ),
+    y = "Depth sed [m]",
+    palette = "Dark2",
+    overlap = 1,
+    template = my_template
+  )
+```
+
+```{r "geodata-horizontal-2", message = FALSE}
+# or show them side by side (note that this could also be achieved with
+# ggplot facets except for the fine-control and coloring of the different x-axes)
+dataset2$data |> 
+  filter(Comp == "C19") |>
+  arrange(`Depth sed [m]`) |>
+  ggstackplot(
+    x = c(
+      "δ13C carb [‰ PDB]",
+      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+    ),
+    y = "Depth sed [m]",
+    palette = "Dark2",
+    # no more overlap
+    overlap = 0, 
+    # fine-tune the axes to be on top and bottom
+    both_axes = TRUE,
+    template = my_template
+  )
+```
+
 ## Show me more
 
 ```{r economics, fig.height=6, message = FALSE}
-library(ggplot2)
-
-# using the built-in economics dataset in ggplot2 to create a horizontal stack
-# instead of vertical and using many of the customization features available
-# with ggstackplot and ggplot2
+# using the built-in economics dataset in ggplot2 to create a vertical stacke of
+# double axis plots using many of the customization features available with 
+# ggstackplot and ggplot2
 ggplot2::economics |>
   ggstackplot(
     # define shared x axis
@@ -180,4 +245,4 @@ ggplot2::economics |>
 
 ## What else can I do with ggstackplot?
 
-- check out the **[Features](https://ggstackplot.kopflab.org/articles/features.html)** vignette for full details on all available functionality
+- check out our **[Vignette](https://ggstackplot.kopflab.org/articles/explore.html)** to explore the package further with detailed examples for all the different features

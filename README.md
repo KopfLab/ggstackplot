@@ -111,14 +111,125 @@ dataset$data |>
 
 <img src="man/figures/README-geodata-1.png" width="100%" />
 
+## What about horizontal stacks?
+
+``` r
+# download some more data from PANGAEA
+dataset2 <- pangaear::pg_data(doi = "10.1594/PANGAEA.933277")[[1]]
+
+# show what some of these data look like
+dataset2$data[
+  c("Depth sed [m]", "Comp", "δ13C [‰ PDB] (mean, vs. VPDB)")] |>
+  head() |> knitr::kable()
+```
+
+| Depth sed \[m\] | Comp      | δ13C \[‰ PDB\] (mean, vs. VPDB) |
+|----------------:|:----------|--------------------------------:|
+|         120.205 | C17       |                         -28.185 |
+|         120.205 | phytane   |                         -27.032 |
+|         120.205 | C19       |                         -28.268 |
+|         120.205 | C21       |                         -27.901 |
+|         120.205 | C27aaa20R |                         -29.707 |
+|         120.205 | C28aaa20R |                         -28.194 |
+
+Full citation:
+
+> Boudinot, F Garrett; Kopf, Sebastian; Dildar, Nadia; Sepúlveda, Julio
+> (2021): Compound-specific carbon isotope results from the SH#1 core
+> analyzed and processed at University of Colorado Boulder \[dataset\].
+> PANGAEA, <https://doi.org/10.1594/PANGAEA.933277>
+
+``` r
+library(dplyr)
+library(ggplot2)
+# provide a different base plot with shared graphics elements among all plots
+my_template <-
+  # it's a ggplot
+  ggplot() +
+  # use a path plot for all (to connect the data points by depth!)
+  geom_point() + geom_path() +
+  # we still want the default stackplot theme
+  theme_stackplot() +
+  # depth is commonly plotted in reverse
+  scale_y_reverse()
+
+# now make the horizontal stack through depth for 2 of the variables
+dataset2$data |> 
+  filter(Comp == "C19") |>
+  arrange(`Depth sed [m]`) |>
+  ggstackplot(
+    x = c(
+      "δ13C carb [‰ PDB]",
+      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+    ),
+    y = "Depth sed [m]",
+    palette = "Dark2",
+    overlap = 1,
+    template = my_template
+  )
+#> Warning: There were 4 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
+#> Caused by warning:
+#> ! Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+```
+
+<img src="man/figures/README-geodata-horizontal-1.png" width="100%" />
+
+``` r
+# or show them side by side (note that this could also be achieved with
+# ggplot facets except for the fine-control and coloring of the different x-axes)
+dataset2$data |> 
+  filter(Comp == "C19") |>
+  arrange(`Depth sed [m]`) |>
+  ggstackplot(
+    x = c(
+      "δ13C carb [‰ PDB]",
+      "n-C19 δ13C_org [‰]" = "δ13C [‰ PDB] (mean, vs. VPDB)"
+    ),
+    y = "Depth sed [m]",
+    palette = "Dark2",
+    # no more overlap
+    overlap = 0, 
+    # fine-tune the axes to be on top and bottom
+    both_axes = TRUE,
+    template = my_template
+  )
+#> Warning: There were 4 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
+#> Caused by warning:
+#> ! Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+```
+
+<img src="man/figures/README-geodata-horizontal-2-1.png" width="100%" />
+
 ## Show me more
 
 ``` r
-library(ggplot2)
-
-# using the built-in economics dataset in ggplot2 to create a horizontal stack
-# instead of vertical and using many of the customization features available
-# with ggstackplot and ggplot2
+# using the built-in economics dataset in ggplot2 to create a vertical stacke of
+# double axis plots using many of the customization features available with 
+# ggstackplot and ggplot2
 ggplot2::economics |>
   ggstackplot(
     # define shared x axis
@@ -193,6 +304,7 @@ ggplot2::economics |>
 
 ## What else can I do with ggstackplot?
 
-- check out the
-  **[Features](https://ggstackplot.kopflab.org/articles/features.html)**
-  vignette for full details on all available functionality
+- check out our
+  **[Vignette](https://ggstackplot.kopflab.org/articles/explore.html)**
+  to explore the package further with detailed examples for all the
+  different features
