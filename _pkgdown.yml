@@ -1,25 +1,27 @@
 title: ggstackplot
 url: https://ggstackplot.kopflab.org
 template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    primary: "#306cc9"
   params:
-    bootswatch: simplex
     ganalytics: G-J5NKSWDWXF
-    toc_float: true
-
-development:
-  mode: auto
 
 home:
   strip_header: true
 
+development:
+  mode: auto
+
 navbar:
-  title: ggstackplot
-  type: default
-  left:
-  - text: Explore
-    href: articles/explore.html
-  - text: Reference
-    href: reference/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/kopflab/ggstackplot
+  structure:
+    left:  [intro, reference, news]
+    right: [search, github, lightswitch]
+  components:
+    intro:
+      text: Explore
+      href: articles/ggstackplot.html
+    news:
+      text: News
+      href: news/index.html

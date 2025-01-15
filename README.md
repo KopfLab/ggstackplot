@@ -25,13 +25,9 @@ retaining the powerful grammar of graphics functionality of ggplots.
 
 ## Installation
 
-To install the current release from
-[CRAN](https://cran.r-project.org/package=ggstackplot):
-
-    install.packages("ggstackplot")
-
-You can also install the development version of ggstackplot from
-[GitHub](https://github.com/KopfLab/ggstackplot) with:
+Install the latest stable version of ggstackplot from
+[GitHub](https://github.com/KopfLab/ggstackplot) (the CRAN version may
+lag behind) with:
 
     # install.packages("pak")
     pak::pak("KopfLab/ggstackplot")
@@ -177,8 +173,8 @@ dataset2$data |>
 <img src="man/figures/README-geodata-horizontal-1.png" width="100%" />
 
 ``` r
-# or show them side by side (note that this could also be achieved with
-# ggplot facets except for the fine-control and coloring of the different x-axes)
+# or show them side by side (note that this could also be achieved with ggplot
+# facets except for the fine-control and coloring of the different x-axes)
 dataset2$data |> 
   filter(Comp == "C19") |>
   arrange(`Depth sed [m]`) |>
@@ -280,6 +276,6 @@ ggplot2::economics |>
 ## What else can I do with ggstackplot?
 
 - check out our
-  **[Vignette](https://ggstackplot.kopflab.org/articles/explore.html)**
+  **[Vignette](https://ggstackplot.kopflab.org/articles/ggstackplot.html)**
   to explore the package further with detailed examples for all the
   different features
