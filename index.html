@@ -171,6 +171,7 @@
 <blockquote>
 <p>Sigl, Michael; Gabriel, Imogen; Hutchison, William; Burke, Andrea (2024): Sulfate concentration and sulfur isotope data from Greenland TUNU2013 ice-core samples between 740-765 CE [dataset]. PANGAEA, <a href="https://doi.org/10.1594/PANGAEA.967047" class="external-link uri">https://doi.org/10.1594/PANGAEA.967047</a></p>
 </blockquote>
+<p>Vertical stack plot:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># visualize the data with ggstackplot</span></span>
 <span><span class="va">dataset</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> </span>
@@ -243,10 +244,12 @@
 <blockquote>
 <p>Boudinot, F Garrett; Kopf, Sebastian; Dildar, Nadia; Sepúlveda, Julio (2021): Compound-specific carbon isotope results from the SH#1 core analyzed and processed at University of Colorado Boulder [dataset]. PANGAEA, <a href="https://doi.org/10.1594/PANGAEA.933277" class="external-link uri">https://doi.org/10.1594/PANGAEA.933277</a></p>
 </blockquote>
+<p>Horizontal stack plot:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="co"># provide a different base plot with shared graphics elements among all plots</span></span>
+<span></span>
+<span><span class="co"># use a custom template for this plot</span></span>
 <span><span class="va">my_template</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># it's a ggplot</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -270,22 +273,7 @@
 <span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
 <span>    overlap <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    template <span class="op">=</span> <span class="va">my_template</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There were 4 warnings in `dplyr::mutate()`.</span></span>
-<span><span class="co">#&gt; The first warning was:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; ! Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_path()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_path()`).</span></span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-geodata-horizontal-1.png" width="100%"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># or show them side by side (note that this could also be achieved with</span></span>
@@ -305,22 +293,7 @@
 <span>    <span class="co"># fine-tune the axes to be on top and bottom</span></span>
 <span>    both_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    template <span class="op">=</span> <span class="va">my_template</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There were 4 warnings in `dplyr::mutate()`.</span></span>
-<span><span class="co">#&gt; The first warning was:</span></span>
-<span><span class="co">#&gt; ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; ! Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_path()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_path()`).</span></span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-geodata-horizontal-2-1.png" width="100%"></p>
 </div>
 <div class="section level2">
