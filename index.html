@@ -39,14 +39,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggstackplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="articles/features.html">Features</a>
+  <a href="articles/explore.html">Explore</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -93,7 +93,7 @@
 <h2 id="show-me-some-code">Show me some code<a class="anchor" aria-label="anchor" href="#show-me-some-code"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggstackplot</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggstackplot.kopflab.org/">ggstackplot</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># using R's built-in mtcars dataset</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span> </span>
@@ -190,14 +190,146 @@
 <p><img src="reference/figures/README-geodata-1.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="show-me-more">Show me more<a class="anchor" aria-label="anchor" href="#show-me-more"></a>
+<h2 id="what-about-horizontal-stacks">What about horizontal stacks?<a class="anchor" aria-label="anchor" href="#what-about-horizontal-stacks"></a>
 </h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># download some more data from PANGAEA</span></span>
+<span><span class="va">dataset2</span> <span class="op">&lt;-</span> <span class="fu">pangaear</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/pangaear/reference/pg_data.html" class="external-link">pg_data</a></span><span class="op">(</span>doi <span class="op">=</span> <span class="st">"10.1594/PANGAEA.933277"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># using the built-in economics dataset in ggplot2 to create a horizontal stack</span></span>
-<span><span class="co"># instead of vertical and using many of the customization features available</span></span>
-<span><span class="co"># with ggstackplot and ggplot2</span></span>
+<span><span class="co"># show what some of these data look like</span></span>
+<span><span class="va">dataset2</span><span class="op">$</span><span class="va">data</span><span class="op">[</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Depth sed [m]"</span>, <span class="st">"Comp"</span>, <span class="st">"δ13C [‰ PDB] (mean, vs. VPDB)"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">Depth sed [m]</th>
+<th align="left">Comp</th>
+<th align="right">δ13C [‰ PDB] (mean, vs. VPDB)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">120.205</td>
+<td align="left">C17</td>
+<td align="right">-28.185</td>
+</tr>
+<tr class="even">
+<td align="right">120.205</td>
+<td align="left">phytane</td>
+<td align="right">-27.032</td>
+</tr>
+<tr class="odd">
+<td align="right">120.205</td>
+<td align="left">C19</td>
+<td align="right">-28.268</td>
+</tr>
+<tr class="even">
+<td align="right">120.205</td>
+<td align="left">C21</td>
+<td align="right">-27.901</td>
+</tr>
+<tr class="odd">
+<td align="right">120.205</td>
+<td align="left">C27aaa20R</td>
+<td align="right">-29.707</td>
+</tr>
+<tr class="even">
+<td align="right">120.205</td>
+<td align="left">C28aaa20R</td>
+<td align="right">-28.194</td>
+</tr>
+</tbody>
+</table>
+<p>Full citation:</p>
+<blockquote>
+<p>Boudinot, F Garrett; Kopf, Sebastian; Dildar, Nadia; Sepúlveda, Julio (2021): Compound-specific carbon isotope results from the SH#1 core analyzed and processed at University of Colorado Boulder [dataset]. PANGAEA, <a href="https://doi.org/10.1594/PANGAEA.933277" class="external-link uri">https://doi.org/10.1594/PANGAEA.933277</a></p>
+</blockquote>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co"># provide a different base plot with shared graphics elements among all plots</span></span>
+<span><span class="va">my_template</span> <span class="op">&lt;-</span></span>
+<span>  <span class="co"># it's a ggplot</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># use a path plot for all (to connect the data points by depth!)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># we still want the default stackplot theme</span></span>
+<span>  <span class="fu"><a href="reference/theme_stackplot.html">theme_stackplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># depth is commonly plotted in reverse</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_reverse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># now make the horizontal stack through depth for 2 of the variables</span></span>
+<span><span class="va">dataset2</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Comp</span> <span class="op">==</span> <span class="st">"C19"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">`Depth sed [m]`</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"δ13C carb [‰ PDB]"</span>,</span>
+<span>      <span class="st">"n-C19 δ13C_org [‰]"</span> <span class="op">=</span> <span class="st">"δ13C [‰ PDB] (mean, vs. VPDB)"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Depth sed [m]"</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
+<span>    overlap <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    template <span class="op">=</span> <span class="va">my_template</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: There were 4 warnings in `dplyr::mutate()`.</span></span>
+<span><span class="co">#&gt; The first warning was:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.</span></span>
+<span><span class="co">#&gt; Caused by warning:</span></span>
+<span><span class="co">#&gt; ! Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_path()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_path()`).</span></span></code></pre></div>
+<p><img src="reference/figures/README-geodata-horizontal-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># or show them side by side (note that this could also be achieved with</span></span>
+<span><span class="co"># ggplot facets except for the fine-control and coloring of the different x-axes)</span></span>
+<span><span class="va">dataset2</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Comp</span> <span class="op">==</span> <span class="st">"C19"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">`Depth sed [m]`</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"δ13C carb [‰ PDB]"</span>,</span>
+<span>      <span class="st">"n-C19 δ13C_org [‰]"</span> <span class="op">=</span> <span class="st">"δ13C [‰ PDB] (mean, vs. VPDB)"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Depth sed [m]"</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"Dark2"</span>,</span>
+<span>    <span class="co"># no more overlap</span></span>
+<span>    overlap <span class="op">=</span> <span class="fl">0</span>, </span>
+<span>    <span class="co"># fine-tune the axes to be on top and bottom</span></span>
+<span>    both_axes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    template <span class="op">=</span> <span class="va">my_template</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: There were 4 warnings in `dplyr::mutate()`.</span></span>
+<span><span class="co">#&gt; The first warning was:</span></span>
+<span><span class="co">#&gt; ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.</span></span>
+<span><span class="co">#&gt; Caused by warning:</span></span>
+<span><span class="co">#&gt; ! Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_path()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 63 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_path()`).</span></span></code></pre></div>
+<p><img src="reference/figures/README-geodata-horizontal-2-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="show-me-more">Show me more<a class="anchor" aria-label="anchor" href="#show-me-more"></a>
+</h2>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># using the built-in economics dataset in ggplot2 to create a vertical stacke of</span></span>
+<span><span class="co"># double axis plots using many of the customization features available with </span></span>
+<span><span class="co"># ggstackplot and ggplot2</span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="va"><a href="https://ggplot2.tidyverse.org/reference/economics.html" class="external-link">economics</a></span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
 <span>    <span class="co"># define shared x axis</span></span>
@@ -272,7 +404,7 @@
 <h2 id="what-else-can-i-do-with-ggstackplot">What else can I do with ggstackplot?<a class="anchor" aria-label="anchor" href="#what-else-can-i-do-with-ggstackplot"></a>
 </h2>
 <ul>
-<li>check out the <strong><a href="https://ggstackplot.kopflab.org/articles/features.html">Features</a></strong> vignette for full details on all available functionality</li>
+<li>check out our <strong><a href="https://ggstackplot.kopflab.org/articles/explore.html">Vignette</a></strong> to explore the package further with detailed examples for all the different features</li>
 </ul>
 </div>
 </div>
@@ -283,6 +415,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=ggstackplot" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/kopflab/ggstackplot/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/kopflab/ggstackplot/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -314,7 +448,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Sebastian Kopf <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-2044-0201" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Tristan Caro <br><small class="roles"> Author </small>  </li>
+<li>Tristan Caro <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-6177-7444" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jamie McFarlin <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8185-8185" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Jon Raberg <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-2959-3631" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
