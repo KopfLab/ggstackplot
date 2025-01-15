@@ -11,7 +11,7 @@ Authors@R:
       given = "Tristan", family = "Caro", 
       email = "tristan.caro@colorado.edu", 
       role = c("aut"), 
-      comment = c(ORCID = "")),
+      comment = c(ORCID = "0000-0001-6177-7444")),
   person(
       given = "Jamie", family = "McFarlin", 
       email = "jamie.mcfarlin@uwyo.edu", 
@@ -27,6 +27,9 @@ Description:
   Easily create overlapping grammar of graphics plots for scientific data visualization. 
   This style of plotting is particularly common in climatology and oceanography research communities.
 License: MIT + file LICENSE
+URL: https://ggstackplot.kopflab.org/,
+    https://github.com/kopflab/ggstackplot
+BugReports: https://github.com/kopflab/ggstackplot/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
