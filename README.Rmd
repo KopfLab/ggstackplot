@@ -126,7 +126,9 @@ my_template <-
   # use a path plot for all (to connect the data points by depth!)
   geom_point() + geom_path() +
   # we still want the default stackplot theme
-  theme_stackplot()
+  theme_stackplot() +
+  # depth is commonly plotted in reverse
+  scale_y_reverse()
 
 # now make the horizontal stack through depth for 2 of the variables
 dataset2$data |> 

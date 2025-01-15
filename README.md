@@ -149,7 +149,9 @@ my_template <-
   # use a path plot for all (to connect the data points by depth!)
   geom_point() + geom_path() +
   # we still want the default stackplot theme
-  theme_stackplot()
+  theme_stackplot() +
+  # depth is commonly plotted in reverse
+  scale_y_reverse()
 
 # now make the horizontal stack through depth for 2 of the variables
 dataset2$data |> 
@@ -165,6 +167,21 @@ dataset2$data |>
     overlap = 1,
     template = my_template
   )
+#> Warning: There were 4 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
+#> Caused by warning:
+#> ! Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
 ```
 
 <img src="man/figures/README-geodata-horizontal-1.png" width="100%" />
@@ -188,6 +205,21 @@ dataset2$data |>
     both_axes = TRUE,
     template = my_template
   )
+#> Warning: There were 4 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
+#> Caused by warning:
+#> ! Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 63 rows containing missing values or values outside the scale range
+#> (`geom_path()`).
 ```
 
 <img src="man/figures/README-geodata-horizontal-2-1.png" width="100%" />

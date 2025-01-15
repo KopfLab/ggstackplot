@@ -478,7 +478,7 @@ mtcars |>
 
 ## Axis modifications
 
-Sometimes secondary axes will still be desired, especially if that axis is a transformation of an existing one. For example, here, we create a square root mpg axis that is plotted against the mpg axis. Again, all of this is defined in the `template` argument by adding a `scale_x_continuous` argument, just as you would in a normal ggplot.
+Sometimes secondary axes will still be desired, especially if that axis is a transformation of an existing one. For example, here, we create a square root mpg axis that is plotted against the mpg axis. All this can also be defined in the `template` argument by adding a `scale_x_continuous` argument, just as you would in a normal ggplot.
 
 ```{r}
 # add a secondary x axis
@@ -486,8 +486,7 @@ mtcars |>
   ggstackplot(
     x = mpg, y = c(qsec, drat),
     color = c("#E41A1C", "#377EB8"),
-    both_axes = TRUE,
-    overlap = 0.1, 
+    both_axes = TRUE, overlap = 0.1, 
     template = 
       ggplot() + 
       geom_line() +
@@ -501,6 +500,22 @@ mtcars |>
           breaks = scales::pretty_breaks(5)
         )
       ) +
+      theme_stackplot() 
+  )
+```
+
+Similarly, transformation axes can be introduced such as e.g. a log axis.
+
+```{r}
+mtcars |>
+  ggstackplot(
+    x = mpg, y = c(qsec, drat),
+    color = c("#E41A1C", "#377EB8"),
+    both_axes = TRUE, overlap = 0.1,
+    template = 
+      ggplot() + 
+      geom_line() +
+      scale_x_log10("this is my log10 mpg axis") +
       theme_stackplot() 
   )
 ```
