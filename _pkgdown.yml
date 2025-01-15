@@ -3,7 +3,11 @@ url: https://ggstackplot.kopflab.org
 template:
   params:
     bootswatch: simplex
-    ganalytics: UA-106138361-3
+    ganalytics: G-J5NKSWDWXF
+    toc_float: true
+
+home:
+  strip_header: true
 
 development:
   mode: auto
