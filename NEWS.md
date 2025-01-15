@@ -1,3 +1,6 @@
+# ggstackplot 0.4.1
+
+
 # ggstackplot 0.4.0
 
 This is the first public release adding all core ggstackplot functionality.
