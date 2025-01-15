@@ -6,9 +6,6 @@ template:
     ganalytics: G-J5NKSWDWXF
     toc_float: true
 
-home:
-  strip_header: true
-
 development:
   mode: auto
 
