@@ -272,6 +272,7 @@ ggplot2::economics |>
 
 ## What else can I do with ggstackplot?
 
-- check out the
-  **[Features](https://ggstackplot.kopflab.org/articles/features.html)**
-  vignette for full details on all available functionality
+- check out our
+  **[Vignette](https://ggstackplot.kopflab.org/articles/explore.html)**
+  to explore the package further with detailed examples for all the
+  different features

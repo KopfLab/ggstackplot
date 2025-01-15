@@ -1,8 +1,8 @@
 ---
-title: "ggstackplot features"
+title: "Explore"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ggstackplot features}
+  %\VignetteIndexEntry{explore}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -19,8 +19,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+# load the package
 library(ggstackplot)
 ```
+
+This vignette explores the various features of the ggstackplot package.
 
 # Main Arguments
 
