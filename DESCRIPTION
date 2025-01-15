@@ -1,6 +1,6 @@
 Package: ggstackplot
 Title: Create Overlapping Stacked Plots
-Version: 0.4.0.9000
+Version: 0.4.1
 Authors@R: 
   c(person(
       given = "Sebastian", family = "Kopf", 

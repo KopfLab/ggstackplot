@@ -1,6 +1,4 @@
-This is a new package.
-
-The reference included in the README acknowledges the example dataset used for demonstrating package functionality but since does not relate to the actual functionality of this package, it is not included in the DESCRIPTION file.
+Update of an existing CRAN package to add a new feature (support of reverse axes) and clarify some of the parameters with additional examples in the package documentation. Details listed in the NEWS.
 
 ## Test environments
 
@@ -12,6 +10,8 @@ The reference included in the README acknowledges the example dataset used for d
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* This is a new release.
+## Downstream dependencies
+
+There are currently no downstream dependencies for this package.
