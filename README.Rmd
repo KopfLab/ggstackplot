@@ -82,6 +82,8 @@ Full citation:
 
 > `r dataset$citation`
 
+Vertical stack plot:
+
 ```{r geodata}
 # visualize the data with ggstackplot
 dataset$data |> 
@@ -116,10 +118,13 @@ Full citation:
 
 > `r dataset2$citation`
 
+Horizontal stack plot:
+
 ```{r "geodata-horizontal", message = FALSE}
 library(dplyr)
 library(ggplot2)
-# provide a different base plot with shared graphics elements among all plots
+
+# use a custom template for this plot
 my_template <-
   # it's a ggplot
   ggplot() +

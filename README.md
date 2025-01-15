@@ -91,6 +91,8 @@ Full citation:
 > TUNU2013 ice-core samples between 740-765 CE \[dataset\]. PANGAEA,
 > <https://doi.org/10.1594/PANGAEA.967047>
 
+Vertical stack plot:
+
 ``` r
 # visualize the data with ggstackplot
 dataset$data |> 
@@ -139,10 +141,13 @@ Full citation:
 > analyzed and processed at University of Colorado Boulder \[dataset\].
 > PANGAEA, <https://doi.org/10.1594/PANGAEA.933277>
 
+Horizontal stack plot:
+
 ``` r
 library(dplyr)
 library(ggplot2)
-# provide a different base plot with shared graphics elements among all plots
+
+# use a custom template for this plot
 my_template <-
   # it's a ggplot
   ggplot() +
@@ -167,21 +172,6 @@ dataset2$data |>
     overlap = 1,
     template = my_template
   )
-#> Warning: There were 4 warnings in `dplyr::mutate()`.
-#> The first warning was:
-#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
-#> Caused by warning:
-#> ! Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_path()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_path()`).
 ```
 
 <img src="man/figures/README-geodata-horizontal-1.png" width="100%" />
@@ -205,21 +195,6 @@ dataset2$data |>
     both_axes = TRUE,
     template = my_template
   )
-#> Warning: There were 4 warnings in `dplyr::mutate()`.
-#> The first warning was:
-#> ℹ In argument: `gtable = map(.data$plot_w_theme, ggplot2::ggplotGrob)`.
-#> Caused by warning:
-#> ! Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_path()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
-#> Warning: Removed 63 rows containing missing values or values outside the scale range
-#> (`geom_path()`).
 ```
 
 <img src="man/figures/README-geodata-horizontal-2-1.png" width="100%" />
