@@ -118,6 +118,6 @@ mtcars |>
 
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # many more examples available in the vignette
-vignette("Explore", "ggstackplot")
+vignette("ggstackplot")
 \dontshow{\}) # examplesIf}
 }

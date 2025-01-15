@@ -1,5 +1,5 @@
 ---
-title: "Explore"
+title: "ggstackplot"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -13,12 +13,13 @@ output:
 editor_options:
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Explore}
+  %\VignetteIndexEntry{ggstackplot}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r, include = FALSE}
+# once in quarto this can go into the front matter
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
