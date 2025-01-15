@@ -83,14 +83,16 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of ggstackplot from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages("pak")</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"KopfLab/ggstackplot"</span>)</span></code></pre></div>
+<p>To install the current release from <a href="https://cran.r-project.org/package=ggstackplot" class="external-link">CRAN</a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggstackplot"</span>)</span></code></pre></div>
+<p>You can also install the development version of ggstackplot from <a href="https://github.com/KopfLab/ggstackplot" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># install.packages("pak")</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"KopfLab/ggstackplot"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="show-me-some-code">Show me some code<a class="anchor" aria-label="anchor" href="#show-me-some-code"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ggstackplot</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># using R's built-in mtcars dataset</span></span>
@@ -110,7 +112,7 @@
 <div class="section level2">
 <h2 id="show-me-some-climate-data">Show me some climate data<a class="anchor" aria-label="anchor" href="#show-me-some-climate-data"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># download a recent dataset from the public climate data repository PANGAEA</span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu">pangaear</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/pangaear/reference/pg_data.html" class="external-link">pg_data</a></span><span class="op">(</span>doi <span class="op">=</span> <span class="st">"10.1594/PANGAEA.967047"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -169,7 +171,7 @@
 <blockquote>
 <p>Sigl, Michael; Gabriel, Imogen; Hutchison, William; Burke, Andrea (2024): Sulfate concentration and sulfur isotope data from Greenland TUNU2013 ice-core samples between 740-765 CE [dataset]. PANGAEA, <a href="https://doi.org/10.1594/PANGAEA.967047" class="external-link uri">https://doi.org/10.1594/PANGAEA.967047</a></p>
 </blockquote>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># visualize the data with ggstackplot</span></span>
 <span><span class="va">dataset</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/ggstackplot.html">ggstackplot</a></span><span class="op">(</span></span>
@@ -190,7 +192,7 @@
 <div class="section level2">
 <h2 id="show-me-more">Show me more<a class="anchor" aria-label="anchor" href="#show-me-more"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># using the built-in economics dataset in ggplot2 to create a horizontal stack</span></span>
@@ -277,7 +279,14 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=ggstackplot" class="external-link">View on CRAN</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
