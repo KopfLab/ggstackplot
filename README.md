@@ -198,9 +198,9 @@ dataset2$data |>
 ## Show me more
 
 ``` r
-# using the built-in economics dataset in ggplot2 to create a vertical stacke of
-# double axis plots using many of the customization features available with 
-# ggstackplot and ggplot2
+# using the built-in economics dataset in ggplot2 to create a vertical stack
+# of double axis plots using many of the customization features available 
+# with ggstackplot and ggplot2
 ggplot2::economics |>
   ggstackplot(
     # define shared x axis
