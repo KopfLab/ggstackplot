@@ -43,7 +43,7 @@
 #'
 #' @examplesIf interactive()
 #' # many more examples available in the vignette
-#' vignette("explore", "ggstackplot")
+#' vignette("Explore", "ggstackplot")
 #'
 #' @export
 #' @returns `ggstackplot()` returns a ggplot with overlayed plot layers
