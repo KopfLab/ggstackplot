@@ -38,10 +38,10 @@ lag behind) with:
 library(ggstackplot)
 
 # using R's built-in mtcars dataset
-mtcars |> 
+mtcars |>
   ggstackplot(
     # define shared x axis
-    x = mpg, 
+    x = mpg,
     # define multiple y axes
     y = c("weight" = wt, "horsepower" = hp),
     # set colors
@@ -61,8 +61,8 @@ dataset <- pangaear::pg_data(doi = "10.1594/PANGAEA.967047")[[1]]
 
 # show what some of these data look like
 dataset$data[
-  c("Depth ice/snow [m] (Top Depth)", 
-    "Age [ka BP]", 
+  c("Depth ice/snow [m] (Top Depth)",
+    "Age [ka BP]",
     "[SO4]2- [ng/g] (Ion chromatography)")] |>
   head() |> knitr::kable()
 ```
@@ -77,7 +77,7 @@ dataset$data[
 |                          159.958 |       1.20130 |                                  104.50 |
 
 **These data were kindly made available on
-[PANGEA](https://doi.org/10.1594/PANGAEA.967047) by Sigl et
+[PANGAEA](https://doi.org/10.1594/PANGAEA.967047) by Sigl et
 al. (2024).**
 
 Full citation:
@@ -91,7 +91,7 @@ Vertical stack plot:
 
 ``` r
 # visualize the data with ggstackplot
-dataset$data |> 
+dataset$data |>
   ggstackplot(
     x = "Age [ka BP]",
     y = c(
@@ -155,7 +155,7 @@ my_template <-
   scale_y_reverse()
 
 # now make the horizontal stack through depth for 2 of the variables
-dataset2$data |> 
+dataset2$data |>
   filter(Comp == "C19") |>
   arrange(`Depth sed [m]`) |>
   ggstackplot(
@@ -175,7 +175,7 @@ dataset2$data |>
 ``` r
 # or show them side by side (note that this could also be achieved with ggplot
 # facets except for the fine-control and coloring of the different x-axes)
-dataset2$data |> 
+dataset2$data |>
   filter(Comp == "C19") |>
   arrange(`Depth sed [m]`) |>
   ggstackplot(
@@ -186,7 +186,7 @@ dataset2$data |>
     y = "Depth sed [m]",
     palette = "Dark2",
     # no more overlap
-    overlap = 0, 
+    overlap = 0,
     # fine-tune the axes to be on top and bottom
     both_axes = TRUE,
     template = my_template
@@ -199,12 +199,12 @@ dataset2$data |>
 
 ``` r
 # using the built-in economics dataset in ggplot2 to create a vertical stack
-# of double axis plots using many of the customization features available 
+# of double axis plots using many of the customization features available
 # with ggstackplot and ggplot2
 ggplot2::economics |>
   ggstackplot(
     # define shared x axis
-    x = date, 
+    x = date,
     # define the stacked y axes
     y = c(pce, pop, psavert, unemploy),
     # pick the RColorBrewer Dark2 palette (good color contrast)
@@ -212,14 +212,14 @@ ggplot2::economics |>
     # overlay the pce & pop plots (1), then make a full break (0) to the once
     # again overlaye psavert & unemploy plots (1)
     overlap = c(1, 0, 1),
-    # switch axes so unemploy and psavert are on the side where they are 
+    # switch axes so unemploy and psavert are on the side where they are
     # highest, respectively - not doing this here by changing the order of y
     # because we want pop and unemploy on the same side
     switch_axes = TRUE,
     # make shared axis space a bit smaller
     shared_axis_size = 0.15,
     # provide a base plot with shared graphics eelements among all plots
-    template = 
+    template =
       # it's a ggplot
       ggplot() +
       # use a line plot for all
@@ -233,25 +233,25 @@ ggplot2::economics |>
       # include y=0 for all plots to contextualize data better
       expand_limits(y = 0),
     # add plot specific elements
-    add = 
+    add =
       list(
-        pce = 
+        pce =
           # show pce in trillions of dollars
           scale_y_continuous(
-            "personal consumption expenditures", 
+            "personal consumption expenditures",
             # always keep the secondary axis duplicated so ggstackplot can
             # manage axis placement for you
             sec.axis = dup_axis(),
             # labeling function for the dollar units
             labels = function(x) sprintf("$%.1f T", x/1000),
           ),
-        pop = 
+        pop =
           # show population in millions
           scale_y_continuous(
             "population", sec.axis = dup_axis(),
             labels = function(x) sprintf("%.0f M", x/1000)
           ),
-        psavert = 
+        psavert =
           # savings is in %
           scale_y_continuous(
             "personal savings rate", sec.axis = dup_axis(),
@@ -259,7 +259,7 @@ ggplot2::economics |>
           ) +
           # show data points in addition to line
           geom_point(),
-        unemploy = 
+        unemploy =
           # unemploy in millions
           scale_y_continuous(
             "unemployed persons", sec.axis = dup_axis(),
